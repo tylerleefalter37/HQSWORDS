@@ -1,510 +1,768 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-[#0d0e12] select-none">
+<html lang="en" class="h-full bg-[#101216] select-none">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>KINETIC STEEL v4.0 - Historical Melee Physics Engine</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>KINETIC STEEL v4.5 - Historical Melee Physics Engine</title>
   <style>
-    /* iOS Safari Safe Area and Touch Optimizations */
+    /* -------------------------------------------------------------
+       KINETIC STEEL v4.5 - ZERO-DEPENDENCY OFFLINE MOBILE CSS ENGINE
+       ------------------------------------------------------------- */
     :root {
       --sat: env(safe-area-inset-top, 0px);
       --sab: env(safe-area-inset-bottom, 0px);
       --sal: env(safe-area-inset-left, 0px);
       --sar: env(safe-area-inset-right, 0px);
+
+      --bg-dark: #101216;
+      --bg-panel: #161920;
+      --bg-card: #1c202a;
+      --bg-inset: #0c0d11;
+
+      --steel-light: #c2c9d6;
+      --steel-mid: #7e8799;
+      --steel-dark: #373d4d;
+      --border-color: #2b3140;
+
+      --gold: #d4af37;
+      --gold-dim: #997b20;
+      --blood: #b82b2b;
+      --blood-dim: #5c1818;
+      --cyan: #38bdf8;
+      --emerald: #10b981;
+      --purple: #a855f7;
     }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", serif;
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
       -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--steel-light);
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
       padding-top: var(--sat);
       padding-bottom: var(--sab);
       padding-left: var(--sal);
       padding-right: var(--sar);
     }
-    /* Custom scrollbars */
-    ::-webkit-scrollbar {
-      width: 4px;
-    }
-    ::-webkit-scrollbar-track {
-      background: rgba(15, 23, 42, 0.6);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: rgba(180, 83, 9, 0.4);
-      border-radius: 2px;
-    }
-    /* Metallic and parchment textures */
+
+    /* Scrollbars */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg-inset); }
+    ::-webkit-scrollbar-thumb { background: var(--steel-dark); border-radius: 2px; }
+
+    /* Tactical Panels & Borders */
     .iron-panel {
-      background: linear-gradient(180deg, #181a21 0%, #111217 100%);
-      border: 1px solid #2a2d39;
+      background: linear-gradient(180deg, #1c202a 0%, #141720 100%);
+      border: 1px solid var(--border-color);
     }
-    .steel-btn {
-      background: linear-gradient(180deg, #262936 0%, #191b24 100%);
-      border: 1px solid #3d4255;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 2px 4px rgba(0,0,0,0.4);
+    .inset-panel {
+      background-color: var(--bg-inset);
+      border: 1px solid #232733;
     }
-    .steel-btn:active {
-      transform: scale(0.97);
-      background: #151720;
+
+    /* Tactile Buttons */
+    .btn-steel {
+      background: linear-gradient(180deg, #2a2f3e 0%, #1c202a 100%);
+      border: 1px solid #434c62;
+      color: #e2e8f0;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.05s ease, background-color 0.1s ease;
+      min-height: 48px;
+      padding: 6px 4px;
+      text-align: center;
     }
-    .action-btn-red {
-      background: linear-gradient(180deg, #581c1c 0%, #341111 100%);
-      border: 1px solid #842e2e;
+    .btn-steel:active {
+      transform: scale(0.96);
+      background: #151821;
+      border-color: var(--gold-dim);
     }
-    .action-btn-amber {
-      background: linear-gradient(180deg, #4d380e 0%, #2e2107 100%);
-      border: 1px solid #785817;
+
+    .btn-red {
+      background: linear-gradient(180deg, #5c1818 0%, #3a1010 100%);
+      border: 1px solid #8e2b2b;
+      color: #fecaca;
     }
-    .action-btn-blue {
-      background: linear-gradient(180deg, #1b3858 0%, #102135 100%);
-      border: 1px solid #2b5484;
+    .btn-gold {
+      background: linear-gradient(180deg, #4d380e 0%, #2b2007 100%);
+      border: 1px solid #8c6d1f;
+      color: #fef08a;
     }
-    @keyframes bloodPulse {
-      0%, 100% { opacity: 0.15; }
-      50% { opacity: 0.45; }
+    .btn-blue {
+      background: linear-gradient(180deg, #183858 0%, #0e2033 100%);
+      border: 1px solid #26598c;
+      color: #bae6fd;
     }
-    .critical-pulse {
-      animation: bloodPulse 1.4s infinite ease-in-out;
+    .btn-purple {
+      background: linear-gradient(180deg, #421c5c 0%, #241033 100%);
+      border: 1px solid #6b2f94;
+      color: #e9d5ff;
+    }
+
+    /* Layout Utility Classes */
+    .flex-col { display: flex; flex-direction: column; }
+    .flex-row { display: flex; flex-direction: row; }
+    .items-center { align-items: center; }
+    .justify-between { justify-content: space-between; }
+    .justify-center { justify-content: center; }
+    .flex-1 { flex: 1; }
+    .shrink-0 { flex-shrink: 0; }
+    .overflow-y-auto { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .grid { display: grid; }
+    .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .gap-1 { gap: 4px; }
+    .gap-2 { gap: 8px; }
+    .p-1 { padding: 4px; }
+    .p-2 { padding: 8px; }
+    .p-3 { padding: 12px; }
+    .p-4 { padding: 16px; }
+    .px-2 { padding-left: 8px; padding-right: 8px; }
+    .py-1 { padding-top: 4px; padding-bottom: 4px; }
+    .w-full { width: 100%; }
+    .text-center { text-align: center; }
+    .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* Typography & Badges */
+    .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .font-bold { font-weight: 700; }
+    .font-semibold { font-weight: 600; }
+    .text-xs { font-size: 11px; }
+    .text-sm { font-size: 13px; }
+    .text-base { font-size: 15px; }
+    .text-lg { font-size: 17px; }
+    .text-xl { font-size: 20px; }
+    .text-gold { color: var(--gold); }
+    .text-red { color: #f87171; }
+    .text-emerald { color: #34d399; }
+    .text-cyan { color: #38bdf8; }
+    .text-dim { color: var(--steel-mid); }
+    .text-white { color: #ffffff; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-gray { background: #232834; color: #94a3b8; border: 1px solid #333c4d; }
+    .badge-gold { background: #35280b; color: #fde047; border: 1px solid #715816; }
+    .badge-red { background: #3d1414; color: #fca5a5; border: 1px solid #782727; }
+    .badge-cyan { background: #0c2b3d; color: #7dd3fc; border: 1px solid #165275; }
+    .badge-purple { background: #2f1242; color: #d8b4fe; border: 1px solid #63288a; }
+
+    /* Navigation Bar */
+    .tab-bar {
+      display: flex;
+      background: #12141a;
+      border-bottom: 1px solid var(--border-color);
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: none;
+    }
+    .tab-bar::-webkit-scrollbar { display: none; }
+    .tab-item {
+      padding: 10px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--steel-mid);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+    }
+    .tab-item.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+      background: rgba(212, 175, 55, 0.06);
+    }
+
+    /* Views */
+    .view-content {
+      display: none;
+      height: 100%;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .view-content.active {
+      display: flex;
+    }
+
+    /* Modals & Popups */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: none;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    .modal-overlay.open {
+      display: flex;
+    }
+    .modal-card {
+      background: var(--bg-panel);
+      border-top: 2px solid var(--gold);
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+    }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      top: calc(var(--sat) + 12px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e2330;
+      color: var(--gold);
+      border: 1px solid var(--gold-dim);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 200;
+      text-align: center;
+      max-width: 90vw;
     }
   </style>
 </head>
-<body class="h-full text-slate-300 flex flex-col overflow-hidden text-sm">
+<body>
 
-  <!-- ================= TOP HUD: TELEMETRY & VITAL MONITOR ================= -->
-  <header class="iron-panel shrink-0 px-3 py-2 border-b border-[#2e3242] shadow-lg z-20">
-    <div class="flex items-center justify-between mb-1.5">
-      <div class="flex items-center space-x-2">
-        <span class="text-amber-500 font-bold tracking-wider text-xs uppercase flex items-center gap-1">
-          <svg class="w-3.5 h-3.5 inline text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2l2.5 5 5.5.8-4 3.9.9 5.3-4.9-2.6-4.9 2.6.9-5.3-4-3.9 5.5-.8z"/></svg>
-          KINETIC STEEL v4.0
-        </span>
-        <span id="arenaBadge" class="text-[10px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 border border-zinc-700">Arena: Ring</span>
+  <!-- ================= TOP DUAL COMBAT GAUGE BAR ================= -->
+  <header class="iron-panel shrink-0 px-3 py-2 border-b border-[#2b3140] z-20">
+    <div class="flex-row items-center justify-between" style="margin-bottom: 6px;">
+      <div class="flex-row items-center" style="gap: 6px;">
+        <span class="font-bold text-gold text-xs" style="letter-spacing: 0.5px;">⚔️ KINETIC STEEL v4.5</span>
+        <span id="headerModeBadge" class="badge badge-gray">ARENA DUEL</span>
       </div>
-      <div class="flex items-center space-x-2">
-        <button id="audioToggleBtn" onclick="toggleAudio()" class="text-xs px-2 py-0.5 rounded steel-btn text-zinc-300 hover:text-white">
-          <span id="audioIcon">🔊 Sound</span>
+      <div class="flex-row items-center" style="gap: 6px;">
+        <button onclick="toggleAudio()" class="btn-steel" style="min-height: 26px; padding: 2px 8px; font-size: 10px;">
+          <span id="audioLabel">🔊 SFX</span>
         </button>
-        <span id="godBadge" class="hidden text-[10px] px-1.5 py-0.5 rounded font-bold bg-purple-900/80 text-purple-300 border border-purple-500">GOD MODE</span>
+        <span id="godModeBadge" class="badge badge-purple" style="display: none;">GOD MODE</span>
       </div>
     </div>
 
-    <!-- Dual Combatant Gauge Matrix -->
+    <!-- Fighter Telemetry Gauges -->
     <div class="grid grid-cols-2 gap-2 text-xs">
-      <!-- Player Telemetry -->
-      <div class="bg-black/40 p-2 rounded border border-zinc-800">
-        <div class="flex justify-between items-center mb-1">
-          <span id="pName" class="font-semibold text-emerald-400 truncate max-w-[110px]">Duelist (You)</span>
-          <span id="pBalance" class="text-[10px] font-mono text-zinc-300">Bal: 100%</span>
+      <!-- Player Status -->
+      <div class="inset-panel p-2 rounded" style="border-radius: 6px;">
+        <div class="flex-row items-center justify-between" style="margin-bottom: 4px;">
+          <span id="hudPlayerName" class="font-bold text-emerald truncate" style="max-width: 105px;">You (Duelist)</span>
+          <span id="hudPlayerBal" class="font-mono text-xs text-dim">Bal: 100%</span>
         </div>
-        <!-- Stamina bar -->
-        <div class="w-full bg-zinc-900 h-1.5 rounded-full overflow-hidden mb-1 border border-zinc-800">
-          <div id="pStamBar" class="bg-emerald-500 h-full w-full transition-all duration-300"></div>
+        <div class="w-full bg-[#1e2330] rounded-full overflow-hidden" style="height: 6px; margin-bottom: 4px;">
+          <div id="hudPlayerStamBar" class="bg-emerald h-full w-full" style="transition: width 0.3s ease; height: 100%;"></div>
         </div>
-        <div class="flex justify-between text-[10px] text-zinc-400 font-mono">
-          <span id="pStatusText">Sound</span>
-          <span id="pBloodText" class="text-red-400">Bleed: 0%</span>
+        <div class="flex-row items-center justify-between font-mono" style="font-size: 10px;">
+          <span id="hudPlayerCondition" class="text-steel-mid">Steady</span>
+          <span id="hudPlayerBleed" class="text-red">Bleed: 0%</span>
         </div>
       </div>
 
-      <!-- Enemy Telemetry -->
-      <div class="bg-black/40 p-2 rounded border border-zinc-800">
-        <div class="flex justify-between items-center mb-1">
-          <span id="eName" class="font-semibold text-red-400 truncate max-w-[110px]">Opponent</span>
-          <span id="eBalance" class="text-[10px] font-mono text-zinc-300">Bal: 100%</span>
+      <!-- Enemy Status -->
+      <div class="inset-panel p-2 rounded" style="border-radius: 6px;">
+        <div class="flex-row items-center justify-between" style="margin-bottom: 4px;">
+          <span id="hudEnemyName" class="font-bold text-red truncate" style="max-width: 105px;">Adversary</span>
+          <span id="hudEnemyBal" class="font-mono text-xs text-dim">Bal: 100%</span>
         </div>
-        <!-- Stamina bar -->
-        <div class="w-full bg-zinc-900 h-1.5 rounded-full overflow-hidden mb-1 border border-zinc-800">
-          <div id="eStamBar" class="bg-red-500 h-full w-full transition-all duration-300"></div>
+        <div class="w-full bg-[#1e2330] rounded-full overflow-hidden" style="height: 6px; margin-bottom: 4px;">
+          <div id="hudEnemyStamBar" class="bg-red h-full w-full" style="transition: width 0.3s ease; height: 100%;"></div>
         </div>
-        <div class="flex justify-between text-[10px] text-zinc-400 font-mono">
-          <span id="eStatusText">Alert</span>
-          <span id="eBloodText" class="text-red-400">Bleed: 0%</span>
+        <div class="flex-row items-center justify-between font-mono" style="font-size: 10px;">
+          <span id="hudEnemyCondition" class="text-steel-mid">Sound</span>
+          <span id="hudEnemyBleed" class="text-red">Bleed: 0%</span>
         </div>
       </div>
     </div>
 
-    <!-- Distance & Blade Engagement Indicator -->
-    <div class="mt-1.5 flex items-center justify-between text-[11px] bg-zinc-900/90 px-2 py-1 rounded border border-zinc-800">
-      <div class="flex items-center space-x-1.5">
-        <span class="text-zinc-500 uppercase text-[9px] font-bold">Measure:</span>
-        <span id="distanceBadge" class="font-mono font-bold text-amber-400">Zufechten (Distance)</span>
+    <!-- Distance & Blade Bind Strip -->
+    <div class="flex-row items-center justify-between inset-panel px-2 py-1" style="border-radius: 4px; margin-top: 6px; font-size: 10px;">
+      <div class="flex-row items-center" style="gap: 4px;">
+        <span class="text-dim">MEASURE:</span>
+        <span id="hudDistance" class="font-mono font-bold text-gold">Zufechten (Out)</span>
       </div>
-      <div class="flex items-center space-x-1.5">
-        <span class="text-zinc-500 uppercase text-[9px] font-bold">Lever:</span>
-        <span id="bladeBindBadge" class="font-mono text-cyan-400">Free Blades</span>
+      <div class="flex-row items-center" style="gap: 4px;">
+        <span class="text-dim">LEVER:</span>
+        <span id="hudLever" class="font-mono font-bold text-cyan">Blades Free</span>
       </div>
     </div>
   </header>
 
-  <!-- ================= CENTER SCROLLABLE NARRATIVE / COMBAT LOG ================= -->
-  <main id="combatLog" class="flex-1 overflow-y-auto p-3 space-y-2.5 bg-[#0b0c10]">
-    <!-- Welcome card -->
-    <div class="p-3.5 rounded bg-zinc-900/70 border border-zinc-800 text-xs leading-relaxed space-y-1.5">
-      <div class="text-amber-400 font-bold text-sm tracking-wide border-b border-zinc-800 pb-1">
-        ⚔️ PROVING GROUND INITIALIZED
+  <!-- ================= PERSISTENT MOBILE NAVIGATION TABS ================= -->
+  <nav class="tab-bar shrink-0">
+    <div class="tab-item active" onclick="switchTab('arena')">⚔️ Duel Arena</div>
+    <div class="tab-item" onclick="switchTab('campaign')">🏆 Campaign Gauntlet</div>
+    <div class="tab-item" onclick="switchTab('armory')">🛡️ Armory & Gear</div>
+    <div class="tab-item" onclick="switchTab('leaderboard')">🎖️ Leaderboard</div>
+    <div class="tab-item" onclick="switchTab('codex')">📖 Codex Manual</div>
+    <div class="tab-item" onclick="switchTab('god')">⚡ God Console</div>
+  </nav>
+
+  <!-- ================= VIEW 1: DUEL ARENA (ACTIVE COMBAT) ================= -->
+  <section id="view-arena" class="view-content active flex-1">
+    <!-- Scrollable combat narrative -->
+    <div id="combatLog" class="flex-1 overflow-y-auto p-3 flex-col" style="gap: 8px; background: #0c0d11;">
+      <div class="iron-panel p-3" style="border-radius: 8px; font-size: 11px; line-height: 1.5;">
+        <div class="font-bold text-gold text-sm" style="margin-bottom: 4px; border-bottom: 1px solid #282e3d; padding-bottom: 4px;">
+          ⚔️ KINETIC MELEE PROVING GROUND READY
+        </div>
+        <p class="text-steel-light" style="margin-bottom: 6px;">
+          Choose your strikes, maintain your balance, and leverage the forte of your blade. You have access to primary weapons and off-hand shields, cloaks, and parrying daggers.
+        </p>
+        <div class="text-dim font-mono text-xs">
+          Tap <b>Campaign Gauntlet</b> above to enter "The Crucible of Steel" or configure loadouts in <b>Armory</b>.
+        </div>
       </div>
-      <p class="text-zinc-300">
-        Steel, flesh, and leverage govern all. There are no abstract Hit Points here: victory is claimed through edge alignment, point penetration, shattered limbs, or cerebral shock.
+    </div>
+
+    <!-- Dynamic Tactical Action Matrix -->
+    <footer class="iron-panel shrink-0 p-2 flex-col" style="gap: 6px; border-top: 1px solid var(--border-color);">
+      <!-- Primary Striking Matrix -->
+      <div id="primaryActionsGrid" class="grid grid-cols-4 gap-1">
+        <button onclick="handlePlayerAction('cut_high')" class="btn-steel btn-red">
+          <span class="text-xs font-bold">High Cut</span>
+          <span style="font-size: 9px; opacity: 0.8;">Cranial</span>
+        </button>
+        <button onclick="handlePlayerAction('cut_mid')" class="btn-steel btn-red">
+          <span class="text-xs font-bold">Mid Cut</span>
+          <span style="font-size: 9px; opacity: 0.8;">Torso/Arm</span>
+        </button>
+        <button onclick="handlePlayerAction('cut_low')" class="btn-steel btn-red">
+          <span class="text-xs font-bold">Low Cut</span>
+          <span style="font-size: 9px; opacity: 0.8;">Thigh/Knee</span>
+        </button>
+        <button onclick="handlePlayerAction('thrust')" class="btn-steel btn-gold">
+          <span class="text-xs font-bold">Stiff Thrust</span>
+          <span style="font-size: 9px; opacity: 0.8;">Puncture</span>
+        </button>
+      </div>
+
+      <!-- Secondary & Off-Hand Adaptive Tactical Row -->
+      <div id="adaptiveActionsGrid" class="grid grid-cols-4 gap-1">
+        <button onclick="handlePlayerAction('master_cut')" class="btn-steel btn-blue">
+          <span class="text-xs font-bold">Master Cut</span>
+          <span style="font-size: 9px; opacity: 0.8;">Winden/Riposte</span>
+        </button>
+        <button onclick="handlePlayerAction('bind')" class="btn-steel btn-blue">
+          <span class="text-xs font-bold">Bind Blade</span>
+          <span style="font-size: 9px; opacity: 0.8;">Lever Forte</span>
+        </button>
+        <!-- Dynamic contextual Off-Hand Button -->
+        <button id="dynamicOffhandBtn" onclick="handlePlayerAction('offhand_action')" class="btn-steel btn-purple">
+          <span id="dynamicOffhandTitle" class="text-xs font-bold">Grapple</span>
+          <span id="dynamicOffhandSub" style="font-size: 9px; opacity: 0.8;">Abrazare</span>
+        </button>
+        <button onclick="handlePlayerAction('void_step')" class="btn-steel">
+          <span class="text-xs font-bold text-gold">Void Step</span>
+          <span style="font-size: 9px; opacity: 0.8;">Open Distance</span>
+        </button>
+      </div>
+    </footer>
+  </section>
+
+  <!-- ================= VIEW 2: CAMPAIGN GAUNTLET ("THE CRUCIBLE") ================= -->
+  <section id="view-campaign" class="view-content flex-1 overflow-y-auto p-3 flex-col" style="gap: 12px; background: #0c0d11;">
+    <div class="iron-panel p-3" style="border-radius: 8px;">
+      <div class="flex-row items-center justify-between" style="border-bottom: 1px solid var(--border-color); padding-bottom: 6px; margin-bottom: 8px;">
+        <span class="font-bold text-gold text-sm">🏆 THE CRUCIBLE OF STEEL (CAMPAIGN)</span>
+        <span id="campaignFloorBadge" class="badge badge-gold">STAGE 1 / 20</span>
+      </div>
+      <p class="text-xs text-steel-light" style="line-height: 1.4; margin-bottom: 8px;">
+        Test your martial discipline against 20 progressive historical duelists. Fallen enemies yield glory and scavenged steel. Survive to inscribe your name in the Hall of Masters.
       </p>
-      <div class="text-[11px] text-zinc-400">
-        Choose your actions below, consult the <b class="text-zinc-200">Manual</b>, spawn opponents in <b class="text-zinc-200">Custom Duel</b>, or inspect kinematics via <b class="text-zinc-200">God Mode</b>.
+      <!-- Campaign Progress Bar -->
+      <div class="w-full bg-[#181a22] rounded-full overflow-hidden" style="height: 8px; margin-bottom: 8px; border: 1px solid #282d3b;">
+        <div id="campaignProgressBar" class="bg-gold" style="height: 100%; width: 5%; transition: width 0.3s ease;"></div>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-center font-mono" style="font-size: 10px;">
+        <div class="inset-panel p-1 rounded">Floors: <b id="campStatFloors" class="text-gold">0/20</b></div>
+        <div class="inset-panel p-1 rounded">Glory: <b id="campStatScore" class="text-cyan">0 pts</b></div>
+        <div class="inset-panel p-1 rounded">Status: <b id="campStatStatus" class="text-emerald">Active</b></div>
       </div>
     </div>
-  </main>
 
-  <!-- ================= BOTTOM INTERACTION MATRIX ================= -->
-  <footer class="iron-panel shrink-0 border-t border-[#2d303f] p-2 space-y-1.5 shadow-2xl z-20">
-    <!-- Active Turn Actions Grid -->
-    <div id="actionsGrid" class="grid grid-cols-4 gap-1.5">
-      <button onclick="handlePlayerAction('cut_high')" class="steel-btn action-btn-red py-2 px-1 rounded text-center flex flex-col items-center justify-center">
-        <span class="text-xs font-bold text-red-200">High Cut</span>
-        <span class="text-[9px] text-zinc-400 leading-none mt-0.5">Head/Neck</span>
-      </button>
-      <button onclick="handlePlayerAction('cut_mid')" class="steel-btn action-btn-red py-2 px-1 rounded text-center flex flex-col items-center justify-center">
-        <span class="text-xs font-bold text-red-200">Mid Cut</span>
-        <span class="text-[9px] text-zinc-400 leading-none mt-0.5">Torso/Arms</span>
-      </button>
-      <button onclick="handlePlayerAction('cut_low')" class="steel-btn action-btn-red py-2 px-1 rounded text-center flex flex-col items-center justify-center">
-        <span class="text-xs font-bold text-red-200">Low Cut</span>
-        <span class="text-[9px] text-zinc-400 leading-none mt-0.5">Legs/Thigh</span>
-      </button>
-      <button onclick="handlePlayerAction('thrust')" class="steel-btn action-btn-amber py-2 px-1 rounded text-center flex flex-col items-center justify-center">
-        <span class="text-xs font-bold text-amber-200">Stiff Thrust</span>
-        <span class="text-[9px] text-zinc-400 leading-none mt-0.5">Puncture</span>
-      </button>
-
-      <button onclick="handlePlayerAction('master_cut')" class="steel-btn action-btn-blue py-2 px-1 rounded text-center flex flex-col items-center justify-center">
-        <span class="text-xs font-bold text-cyan-200">Master Cut</span>
-        <span class="text-[9px] text-zinc-400 leading-none mt-0.5">Winding / Riposte</span>
-      </button>
-      <button onclick="handlePlayerAction('bind')" class="steel-btn action-btn-blue py-2 px-1 rounded text-center flex flex-col items-center justify-center">
-        <span class="text-xs font-bold text-cyan-200">Bind Blade</span>
-        <span class="text-[9px] text-zinc-400 leading-none mt-0.5">Forte Lever</span>
-      </button>
-      <button onclick="handlePlayerAction('pommel')" class="steel-btn py-2 px-1 rounded text-center flex flex-col items-center justify-center">
-        <span class="text-xs font-bold text-zinc-200">Pommel Hit</span>
-        <span class="text-[9px] text-zinc-400 leading-none mt-0.5">Blunt Shock</span>
-      </button>
-      <button onclick="handlePlayerAction('grapple')" class="steel-btn py-2 px-1 rounded text-center flex flex-col items-center justify-center">
-        <span class="text-xs font-bold text-zinc-200">Grapple</span>
-        <span class="text-[9px] text-zinc-400 leading-none mt-0.5">Clinch / Trip</span>
-      </button>
-    </div>
-
-    <!-- Secondary Utilities & Navigation Tabs -->
-    <div class="grid grid-cols-5 gap-1 pt-1 border-t border-zinc-800 text-[11px]">
-      <button onclick="handlePlayerAction('void_step')" class="steel-btn py-1.5 rounded text-amber-300 font-semibold truncate">
-        💨 Void Step
-      </button>
-      <button onclick="openModal('modalDuel')" class="steel-btn py-1.5 rounded text-zinc-300 hover:text-white truncate">
-        ⚔️ 1v1 Duel
-      </button>
-      <button onclick="openModal('modalManual')" class="steel-btn py-1.5 rounded text-zinc-300 hover:text-white truncate">
-        📖 Manual
-      </button>
-      <button onclick="openModal('modalGod')" class="steel-btn py-1.5 rounded text-purple-300 hover:text-purple-200 truncate">
-        ⚡ God Mode
-      </button>
-      <button onclick="openModal('modalSaveLoad')" class="steel-btn py-1.5 rounded text-zinc-300 hover:text-white truncate">
-        💾 Save/Load
-      </button>
-    </div>
-  </footer>
-
-  <!-- ================= MODAL: 1v1 DUEL & GEAR SETUP ================= -->
-  <div id="modalDuel" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex flex-col justify-end">
-    <div class="iron-panel rounded-t-2xl max-h-[88vh] flex flex-col p-4 border-t border-amber-600/40">
-      <div class="flex justify-between items-center pb-2 border-b border-zinc-800">
-        <h2 class="font-bold text-base text-amber-400 flex items-center gap-1.5">
-          <span>⚔️</span> Matchmaking & Gear Setup
-        </h2>
-        <button onclick="closeModal('modalDuel')" class="text-zinc-400 text-lg font-bold p-1">&times;</button>
+    <!-- Active Stage Briefing -->
+    <div class="iron-panel p-3" style="border-radius: 8px;">
+      <div class="text-xs font-bold text-steel-mid" style="margin-bottom: 6px;">CURRENT ADVERSARY BRIEFING:</div>
+      <div class="flex-row items-center justify-between" style="margin-bottom: 4px;">
+        <span id="campEnemyName" class="font-bold text-red text-base">Tier 1: Peasant Insurgent</span>
+        <span id="campEnemyStyle" class="badge badge-gray">Folk Brawler</span>
+      </div>
+      <div class="text-xs text-steel-light" id="campEnemyDetails" style="margin-bottom: 10px;">
+        Equipped with an improvised Billhook scythe. Poor edge geometry but heavy percussive mass. Unarmored.
+      </div>
+      <div class="grid grid-cols-2 gap-2 font-mono text-xs" style="margin-bottom: 12px;">
+        <div class="inset-panel p-2 rounded">
+          <div class="text-dim" style="font-size: 9px;">WEAPON & OFF-HAND:</div>
+          <div id="campEnemyGear" class="font-bold truncate text-steel-light">Billhook & Bare Fist</div>
+        </div>
+        <div class="inset-panel p-2 rounded">
+          <div class="text-dim" style="font-size: 9px;">HARNESS & PROTECTION:</div>
+          <div id="campEnemyArmor" class="font-bold truncate text-steel-light">Coarse Clothes / No Helm</div>
+        </div>
       </div>
 
-      <div class="overflow-y-auto space-y-3 py-3 pr-1 text-xs">
-        <!-- Quick Action Buttons -->
-        <div class="grid grid-cols-2 gap-2">
-          <button onclick="quickMatch(false)" class="steel-btn p-2 rounded text-center text-emerald-300 font-bold">
-            ⚡ Quick Sparring Partner
-          </button>
-          <button onclick="quickMatch(true)" class="steel-btn p-2 rounded text-center text-red-300 font-bold">
-            💀 Random Lethal Master
-          </button>
+      <button id="campEngageBtn" onclick="engageCampaignStage()" class="btn-steel btn-gold w-full" style="padding: 12px; font-size: 14px; font-weight: 700;">
+        ⚔️ Enter the List: Fight Stage <span id="campBtnStageNum">1</span>
+      </button>
+    </div>
+
+    <!-- Campaign Rules Quick Callout -->
+    <div class="inset-panel p-3" style="border-radius: 8px; font-size: 11px; color: var(--steel-mid);">
+      <b class="text-steel-light">Campaign Rules:</b> Between stages, you can execute field triage (bandage wounds, catch breath, hone edge, or scavenge arms). If you bleed out or succumb to skull fractures, your run terminates and logs to the Leaderboard.
+    </div>
+  </section>
+
+  <!-- ================= VIEW 3: ARMORY & LOADOUT SETUP ================= -->
+  <section id="view-armory" class="view-content flex-1 overflow-y-auto p-3 flex-col" style="gap: 12px; background: #0c0d11;">
+    <div class="iron-panel p-3" style="border-radius: 8px;">
+      <div class="flex-row items-center justify-between" style="border-bottom: 1px solid var(--border-color); padding-bottom: 6px; margin-bottom: 8px;">
+        <span class="font-bold text-gold text-sm">🛡️ MARTIAL LOADOUT INSPECTION</span>
+        <span class="badge badge-gray">60 WEAPONS / 12 OFF-HANDS</span>
+      </div>
+      <p class="text-xs text-steel-light" style="margin-bottom: 10px;">
+        Equip your fighter with historical fencing systems, primary arms, off-hand auxiliaries, and defensive harness. Changes apply to both Arena Duels and Campaign runs.
+      </p>
+
+      <div class="flex-col" style="gap: 8px; font-size: 11px;">
+        <!-- Fighting Style -->
+        <div>
+          <label class="font-bold text-dim" style="display: block; margin-bottom: 3px;">FIGHTING DISCIPLINE (20 STYLES):</label>
+          <select id="selPlayerStyle" onchange="updatePlayerLoadoutFromUI()" class="w-full inset-panel p-2 rounded text-steel-light font-semibold" style="border-radius: 6px;"></select>
+          <div id="styleDescription" class="font-mono text-dim" style="font-size: 10px; margin-top: 2px;"></div>
         </div>
 
-        <!-- Arena Selection -->
+        <!-- Primary Weapon -->
         <div>
-          <label class="block text-zinc-400 font-bold mb-1">Arena Terrain:</label>
-          <select id="arenaSelect" class="w-full bg-zinc-900 border border-zinc-700 rounded p-1.5 text-zinc-200">
-            <option value="Training Ring">Open Earthen Ring (Neutral)</option>
-            <option value="Muddy Courtyard">Muddy Courtyard (-15% Balance on lunges)</option>
-            <option value="Stone Hall">Stone Great Hall (Deadly hard falls, blade echoes)</option>
-            <option value="Narrow Bridge">Narrow Wooden Bridge (Voiding restricted, edge drops)</option>
+          <label class="font-bold text-dim" style="display: block; margin-bottom: 3px;">PRIMARY BLADE / WEAPON (60 HISTORICAL):</label>
+          <select id="selPlayerWeapon" onchange="updatePlayerLoadoutFromUI()" class="w-full inset-panel p-2 rounded text-steel-light font-semibold" style="border-radius: 6px;"></select>
+        </div>
+
+        <!-- Secondary Off-Hand -->
+        <div>
+          <label class="font-bold text-gold" style="display: block; margin-bottom: 3px;">SECONDARY OFF-HAND (12 AUXILIARIES):</label>
+          <select id="selPlayerOffhand" onchange="updatePlayerLoadoutFromUI()" class="w-full inset-panel p-2 rounded text-steel-light font-semibold" style="border-radius: 6px;"></select>
+          <div id="offhandDescription" class="font-mono text-dim" style="font-size: 10px; margin-top: 2px;"></div>
+        </div>
+
+        <!-- Body Armor & Helmet -->
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="font-bold text-dim" style="display: block; margin-bottom: 3px;">BODY ARMOR (16 SUITS):</label>
+            <select id="selPlayerArmor" onchange="updatePlayerLoadoutFromUI()" class="w-full inset-panel p-2 rounded text-steel-light font-semibold" style="border-radius: 6px;"></select>
+          </div>
+          <div>
+            <label class="font-bold text-dim" style="display: block; margin-bottom: 3px;">HELMET (10 HELMS):</label>
+            <select id="selPlayerHelm" onchange="updatePlayerLoadoutFromUI()" class="w-full inset-panel p-2 rounded text-steel-light font-semibold" style="border-radius: 6px;"></select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Equipment Stats Matrix -->
+    <div class="iron-panel p-3" style="border-radius: 8px;">
+      <div class="text-xs font-bold text-gold" style="margin-bottom: 8px;">ACTIVE LOADOUT KINEMATIC SPECS:</div>
+      <div class="grid grid-cols-3 gap-2 font-mono text-xs">
+        <div class="inset-panel p-2 rounded text-center">
+          <div class="text-dim" style="font-size: 9px;">MASS / REACH</div>
+          <div id="statWeaponWeight" class="font-bold text-steel-light">1.4 kg / 2</div>
+        </div>
+        <div class="inset-panel p-2 rounded text-center">
+          <div class="text-dim" style="font-size: 9px;">CUT / THRUST</div>
+          <div id="statWeaponPower" class="font-bold text-red">75 / 85</div>
+        </div>
+        <div class="inset-panel p-2 rounded text-center">
+          <div class="text-dim" style="font-size: 9px;">BIND LEVERAGE</div>
+          <div id="statWeaponBind" class="font-bold text-cyan">+20 Forte</div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-2 font-mono text-xs" style="margin-top: 6px;">
+        <div class="inset-panel p-2 rounded text-center">
+          <div class="text-dim" style="font-size: 9px;">TORSO CUT RESIST</div>
+          <div id="statArmorSlash" class="font-bold text-emerald">25% (Gambeson)</div>
+        </div>
+        <div class="inset-panel p-2 rounded text-center">
+          <div class="text-dim" style="font-size: 9px;">CRANIAL BLUNT PROT</div>
+          <div id="statHelmBlunt" class="font-bold text-emerald">40% (Spangen)</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 10px;">
+        <button onclick="startArenaWithLoadout()" class="btn-steel btn-gold w-full" style="padding: 10px; font-size: 13px;">
+          ⚔️ Test in Arena Sparring
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= VIEW 4: LOCAL LEADERBOARD ================= -->
+  <section id="view-leaderboard" class="view-content flex-1 overflow-y-auto p-3 flex-col" style="gap: 12px; background: #0c0d11;">
+    <div class="iron-panel p-3" style="border-radius: 8px;">
+      <div class="flex-row items-center justify-between" style="border-bottom: 1px solid var(--border-color); padding-bottom: 6px; margin-bottom: 8px;">
+        <span class="font-bold text-gold text-sm">🎖️ HALL OF MASTERS (LOCAL LEADERBOARD)</span>
+        <button onclick="clearLeaderboardPrompt()" class="btn-steel" style="min-height: 24px; padding: 2px 8px; font-size: 10px; color: #f87171;">
+          Clear All
+        </button>
+      </div>
+      <p class="text-xs text-steel-light" style="margin-bottom: 8px;">
+        Persistent campaign records stored in browser memory. Tracks floor progress, loadouts, glory scores, and dates.
+      </p>
+
+      <!-- Records list -->
+      <div id="leaderboardContainer" class="flex-col" style="gap: 6px;">
+        <!-- Populated via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= VIEW 5: CODEX MANUAL ================= -->
+  <section id="view-codex" class="view-content flex-1 overflow-y-auto p-3 flex-col" style="gap: 10px; background: #0c0d11;">
+    <div class="iron-panel p-3" style="border-radius: 8px;">
+      <div class="font-bold text-gold text-sm" style="margin-bottom: 6px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">
+        📖 KINETIC STEEL CODEX (HISTORICAL HEMA MANUAL)
+      </div>
+
+      <div class="flex-col" style="gap: 8px; font-size: 11px; line-height: 1.45;">
+        <div class="inset-panel p-2.5 rounded">
+          <div class="font-bold text-gold">1. The Three Distances (Mensur)</div>
+          <p class="text-steel-light" style="margin-top: 2px;">
+            <b>Zufechten (Out of Measure):</b> You cannot hit without stepping forward. Ideal for setting guards, baiting, or voiding back.<br>
+            <b>Krieg (Striking Measure):</b> True fencing range. Edge, point, and binds happen here.<br>
+            <b>Handarbeit (Infighting):</b> Clinch distance. Weapon pivots collapse. Pommel smashes, grappling, and dagger thrusts reign.
+          </p>
+        </div>
+
+        <div class="inset-panel p-2.5 rounded">
+          <div class="font-bold text-gold">2. Leverage & The Bind</div>
+          <p class="text-steel-light" style="margin-top: 2px;">
+            The <b>Forte (Strong)</b> near the hilt overpowers the <b>Foible (Weak)</b> near the tip. If you bind the enemy's weak blade with your strong, your Master Cuts and thrusts pierce through unhindered.
+          </p>
+        </div>
+
+        <div class="inset-panel p-2.5 rounded">
+          <div class="font-bold text-gold">3. Secondary Off-Hand Weapons</div>
+          <p class="text-steel-light" style="margin-top: 2px;">
+            <b>Steel Buckler:</b> High active deflection and brutal facial punch (Boselen).<br>
+            <b>Main Gauche:</b> Traps enemy blades in quillons and counter-stabs.<br>
+            <b>Highland Targe:</b> Spiked boss slam that shatters balance.<br>
+            <b>Fencing Cloak:</b> Ensnare the enemy steel to disable their next attack.<br>
+            <b>Rondel Dagger:</b> Slips into mail voiders and visor slits in close infighting.
+          </p>
+        </div>
+
+        <div class="inset-panel p-2.5 rounded">
+          <div class="font-bold text-gold">4. Anatomical Trauma Model</div>
+          <p class="text-steel-light" style="margin-top: 2px;">
+            Combatants have no abstract hit points. Carotid artery punctures trigger immediate arterial bleed. Skull concussions over 80 Joules cause immediate loss of consciousness. Severed leg tendons cause collapse to zero balance.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= VIEW 6: GOD CONSOLE ================= -->
+  <section id="view-god" class="view-content flex-1 overflow-y-auto p-3 flex-col" style="gap: 10px; background: #0c0d11;">
+    <div class="iron-panel p-3" style="border-radius: 8px;">
+      <div class="flex-row items-center justify-between" style="border-bottom: 1px solid var(--border-color); padding-bottom: 6px; margin-bottom: 8px;">
+        <span class="font-bold text-purple text-sm">⚡ DEVELOPER CONSOLE & GOD MODE</span>
+        <span class="badge badge-purple">SANDBOX ACTIVE</span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2" style="margin-bottom: 8px;">
+        <button id="godInvulnBtn" onclick="toggleGodInvulnerability()" class="btn-steel btn-purple">
+          Invulnerability: OFF
+        </button>
+        <button onclick="godInstantDecapitate()" class="btn-steel btn-red">
+          💀 Decapitate Foe
+        </button>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2" style="margin-bottom: 8px;">
+        <button onclick="godHeal('player')" class="btn-steel" style="color: #34d399;">
+          🩹 Full Heal (You)
+        </button>
+        <button onclick="godHeal('enemy')" class="btn-steel" style="color: #fca5a5;">
+          🩹 Full Heal (Foe)
+        </button>
+      </div>
+
+      <!-- Force Trauma Injection -->
+      <div class="inset-panel p-2 rounded flex-col" style="gap: 6px; margin-bottom: 8px;">
+        <div class="text-xs font-bold text-gold">INJECT ANATOMICAL TRAUMA:</div>
+        <div class="grid grid-cols-3 gap-1 text-xs">
+          <select id="godWoundTarget" class="inset-panel p-1 rounded text-steel-light">
+            <option value="enemy">Target: Foe</option>
+            <option value="player">Target: You</option>
+          </select>
+          <select id="godWoundZone" class="inset-panel p-1 rounded text-steel-light">
+            <option value="head">Head</option>
+            <option value="neck">Neck</option>
+            <option value="torso">Torso</option>
+            <option value="rArm">R-Arm</option>
+            <option value="lLeg">Leg</option>
+          </select>
+          <select id="godWoundType" class="inset-panel p-1 rounded text-steel-light">
+            <option value="arterial">Arterial</option>
+            <option value="tendon">Sever Tendon</option>
+            <option value="concussion">Concussion</option>
           </select>
         </div>
-
-        <!-- Player Loadout -->
-        <div class="bg-zinc-900/60 p-2.5 rounded border border-zinc-800 space-y-2">
-          <div class="font-bold text-emerald-400 border-b border-zinc-800 pb-1">YOUR FIGHTER</div>
-          <div>
-            <label class="text-zinc-400 text-[11px] block">Combat Style (20 Masteries):</label>
-            <select id="pStyleSelect" class="w-full bg-zinc-950 border border-zinc-700 rounded p-1 text-zinc-200"></select>
-          </div>
-          <div>
-            <label class="text-zinc-400 text-[11px] block">Weapon (60 Armory Weapons):</label>
-            <select id="pWeaponSelect" class="w-full bg-zinc-950 border border-zinc-700 rounded p-1 text-zinc-200"></select>
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="text-zinc-400 text-[11px] block">Body Armor:</label>
-              <select id="pArmorSelect" class="w-full bg-zinc-950 border border-zinc-700 rounded p-1 text-zinc-200"></select>
-            </div>
-            <div>
-              <label class="text-zinc-400 text-[11px] block">Helmet:</label>
-              <select id="pHelmSelect" class="w-full bg-zinc-950 border border-zinc-700 rounded p-1 text-zinc-200"></select>
-            </div>
-          </div>
-        </div>
-
-        <!-- Opponent Loadout -->
-        <div class="bg-zinc-900/60 p-2.5 rounded border border-zinc-800 space-y-2">
-          <div class="font-bold text-red-400 border-b border-zinc-800 pb-1">OPPONENT FIGHTER</div>
-          <div>
-            <label class="text-zinc-400 text-[11px] block">Combat Style:</label>
-            <select id="eStyleSelect" class="w-full bg-zinc-950 border border-zinc-700 rounded p-1 text-zinc-200"></select>
-          </div>
-          <div>
-            <label class="text-zinc-400 text-[11px] block">Weapon:</label>
-            <select id="eWeaponSelect" class="w-full bg-zinc-950 border border-zinc-700 rounded p-1 text-zinc-200"></select>
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="text-zinc-400 text-[11px] block">Body Armor:</label>
-              <select id="eArmorSelect" class="w-full bg-zinc-950 border border-zinc-700 rounded p-1 text-zinc-200"></select>
-            </div>
-            <div>
-              <label class="text-zinc-400 text-[11px] block">Helmet:</label>
-              <select id="eHelmSelect" class="w-full bg-zinc-950 border border-zinc-700 rounded p-1 text-zinc-200"></select>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="pt-2 border-t border-zinc-800">
-        <button onclick="startConfiguredDuel()" class="w-full py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg shadow-lg text-sm">
-          Commence Custom Duel
+        <button onclick="godInjectWound()" class="btn-steel btn-purple" style="min-height: 36px; padding: 4px;">
+          Inject Specific Anatomical Damage
         </button>
       </div>
+
+      <!-- Physics Telemetry Live Readout -->
+      <div class="inset-panel p-2 rounded font-mono text-xs flex-col" style="gap: 3px;">
+        <div class="font-bold text-cyan" style="font-size: 11px; margin-bottom: 2px;">LAST EXCHANGE TELEMETRY:</div>
+        <div>• Striking Velocity: <span id="telemVel" class="text-steel-light">0.0 m/s</span></div>
+        <div>• Kinetic Force: <span id="telemJoules" class="text-gold">0.0 Joules</span></div>
+        <div>• Deflection Angle: <span id="telemAngle" class="text-cyan">0.0°</span></div>
+        <div>• Tissue Displacement: <span id="telemDepth" class="text-red">0.0 mm</span></div>
+        <div>• Tactical Tempo: <span id="telemTempo" class="text-purple">Neutral</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MODAL: CAMPAIGN FIELD TRIAGE ================= -->
+  <div id="modalTriage" class="modal-overlay">
+    <div class="modal-card">
+      <div class="flex-row items-center justify-between" style="border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-bottom: 12px;">
+        <span class="font-bold text-gold text-base">🩹 FIELD TRIAGE & POST-BATTLE RESPITE</span>
+        <span class="badge badge-gold" id="triageStageBadge">STAGE CLEARED</span>
+      </div>
+      <p class="text-xs text-steel-light" style="margin-bottom: 12px; line-height: 1.4;">
+        The arena master grants a brief respite before your next adversary. Choose one triage action to preserve your body or sharpen your steel:
+      </p>
+
+      <div class="flex-col" style="gap: 8px; margin-bottom: 16px;">
+        <button onclick="applyTriage('bandage')" class="btn-steel btn-blue" style="padding: 10px; align-items: flex-start; text-align: left;">
+          <span class="text-xs font-bold text-emerald">1. Bandage Wounds & Suture Bleeding</span>
+          <span style="font-size: 10px; opacity: 0.8;">Cuts bleed rate by 50%, restores 25% balance stability.</span>
+        </button>
+        <button onclick="applyTriage('rest')" class="btn-steel btn-blue" style="padding: 10px; align-items: flex-start; text-align: left;">
+          <span class="text-xs font-bold text-cyan">2. Catch Breath & Clear Head</span>
+          <span style="font-size: 10px; opacity: 0.8;">Fully restores stamina, clears 40% cranial concussion.</span>
+        </button>
+        <button onclick="applyTriage('hone')" class="btn-steel btn-blue" style="padding: 10px; align-items: flex-start; text-align: left;">
+          <span class="text-xs font-bold text-gold">3. Hone Blade & Oil Harness</span>
+          <span style="font-size: 10px; opacity: 0.8;">Grants +15% kinetic cut penetration on next battle.</span>
+        </button>
+        <button onclick="applyTriage('scavenge')" class="btn-steel btn-blue" style="padding: 10px; align-items: flex-start; text-align: left;">
+          <span class="text-xs font-bold text-purple">4. Scavenge Slain Foe's Weapon</span>
+          <span style="font-size: 10px; opacity: 0.8;" id="triageScavengeText">Claim opponent's steel.</span>
+        </button>
+      </div>
+
+      <button onclick="proceedToNextStage()" class="btn-steel btn-gold w-full" style="padding: 12px; font-size: 14px; font-weight: 700;">
+        ⚔️ Advance to Next Opponent
+      </button>
     </div>
   </div>
 
-  <!-- ================= MODAL: BUILT-IN MANUAL ================= -->
-  <div id="modalManual" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex flex-col justify-end">
-    <div class="iron-panel rounded-t-2xl max-h-[88vh] flex flex-col p-4 border-t border-amber-600/40">
-      <div class="flex justify-between items-center pb-2 border-b border-zinc-800">
-        <h2 class="font-bold text-base text-amber-400 flex items-center gap-1.5">
-          <span>📖</span> Kinetic Steel Combat Manual
-        </h2>
-        <button onclick="closeModal('modalManual')" class="text-zinc-400 text-lg font-bold p-1">&times;</button>
+  <!-- ================= MODAL: CAMPAIGN VICTORY / DEFEAT LOG ================= -->
+  <div id="modalCampaignEnd" class="modal-overlay">
+    <div class="modal-card text-center">
+      <div id="campEndHeader" class="text-lg font-bold text-gold" style="margin-bottom: 6px;">CAMPAIGN RECORD</div>
+      <p id="campEndSub" class="text-xs text-steel-light" style="margin-bottom: 12px;"></p>
+
+      <div class="inset-panel p-3 rounded font-mono text-xs flex-col" style="gap: 4px; margin-bottom: 12px;">
+        <div>Floors Conquered: <b id="campEndFloors" class="text-gold">0 / 20</b></div>
+        <div>Final Glory Score: <b id="campEndScore" class="text-cyan">0 PTS</b></div>
+        <div>Finishing Strike: <b id="campEndCause" class="text-red">Exsanguination</b></div>
       </div>
 
-      <div class="overflow-y-auto space-y-3.5 py-3 pr-1 text-xs text-zinc-300 leading-relaxed">
-        <section class="bg-zinc-900/60 p-2.5 rounded border border-zinc-800">
-          <h3 class="font-bold text-amber-300 text-sm mb-1">1. The Three Measures (Mensur)</h3>
-          <p><b class="text-zinc-100">Zufechten (Out of Measure):</b> You cannot strike without taking a passing or lunging step. Attacks from here telegraph heavily. Use this distance to void, recover stamina, or reset your guard.</p>
-          <p class="mt-1"><b class="text-zinc-100">Krieg (Striking Distance):</b> Weapons can cross and strike with edge or point. Winding, master cuts, and active parries happen in this lethal window.</p>
-          <p class="mt-1"><b class="text-zinc-100">Handarbeit (Infighting):</b> Distance collapses inside the blade's pivot. Crossguards, pommels, grappling, tripping, and dagger-thrusts dominate here.</p>
-        </section>
-
-        <section class="bg-zinc-900/60 p-2.5 rounded border border-zinc-800">
-          <h3 class="font-bold text-amber-300 text-sm mb-1">2. Leverage & The Bind</h3>
-          <p><b class="text-zinc-100">The Strong (Forte):</b> The half of the blade closest to the crossguard. Possesses maximum leverage.</p>
-          <p class="mt-1"><b class="text-zinc-100">The Weak (Foible):</b> The half towards the point. Offers velocity and reach, but collapses against the forte.</p>
-          <p class="mt-1"><b class="text-zinc-100">Tactical Rule:</b> If your Forte commands the opponent's Foible, your Master Cuts and thrusts gain devastating speed and cannot be brushed aside.</p>
-        </section>
-
-        <section class="bg-zinc-900/60 p-2.5 rounded border border-zinc-800">
-          <h3 class="font-bold text-amber-300 text-sm mb-1">3. Anatomical Trauma Model</h3>
-          <p>No generic hit point bars exist. Wounds are tracked specifically by tissue layer:</p>
-          <ul class="list-disc list-inside mt-1 space-y-0.5 text-zinc-400">
-            <li><b class="text-red-400">Throat & Carotid:</b> Instant lethal exsanguination or asphyxiation.</li>
-            <li><b class="text-amber-400">Skull Trauma:</b> Concussions over 80 Joules cause instant motor collapse or blackout.</li>
-            <li><b class="text-cyan-400">Limb Tendons:</b> Severed arm or leg tendons cripple weapon manipulation and topple balance to zero.</li>
-            <li><b class="text-zinc-300">Blood Loss:</b> Arterial wounds tick every turn; exceeding 60% induces circulatory shock.</li>
-          </ul>
-        </section>
-
-        <section class="bg-zinc-900/60 p-2.5 rounded border border-zinc-800">
-          <h3 class="font-bold text-amber-300 text-sm mb-1">4. Armor & Deflection Angles</h3>
-          <p>Slashing heavy plate (Milanese, Gothic) with an edged sword merely chatters dull steel. Against rigid harness, fighters must deliver high-kinetic thrusts through openings (visor slits, maille voiders) or utilize blunt concussions (pommel strikes, war flails, poleaxes).</p>
-        </section>
+      <div style="margin-bottom: 12px; text-align: left;">
+        <label class="font-bold text-xs text-steel-mid" style="display: block; margin-bottom: 4px;">INSCRIBE YOUR DUELIST NAME:</label>
+        <input id="campDuelistNameInput" type="text" value="Iron Duelist" maxlength="20" class="w-full inset-panel p-2 rounded text-gold font-bold text-sm" style="border: 1px solid var(--gold-dim);">
       </div>
 
-      <div class="pt-2 border-t border-zinc-800">
-        <button onclick="closeModal('modalManual')" class="w-full py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold rounded">
-          Return to Bout
-        </button>
-      </div>
+      <button onclick="submitLeaderboardRecord()" class="btn-steel btn-gold w-full" style="padding: 12px; font-size: 14px; font-weight: 700;">
+        🎖️ Inscribe Into Leaderboard
+      </button>
     </div>
   </div>
 
-  <!-- ================= MODAL: GOD MODE / DEV CONSOLE ================= -->
-  <div id="modalGod" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex flex-col justify-end">
-    <div class="iron-panel rounded-t-2xl max-h-[88vh] flex flex-col p-4 border-t border-purple-600/50">
-      <div class="flex justify-between items-center pb-2 border-b border-zinc-800">
-        <h2 class="font-bold text-base text-purple-400 flex items-center gap-1.5">
-          <span>⚡</span> God Mode Console & Telemetry
-        </h2>
-        <button onclick="closeModal('modalGod')" class="text-zinc-400 text-lg font-bold p-1">&times;</button>
-      </div>
-
-      <div class="overflow-y-auto space-y-3 py-3 pr-1 text-xs">
-        <!-- Toggles -->
-        <div class="grid grid-cols-2 gap-2">
-          <button id="godToggleBtn" onclick="toggleGodInvulnerability()" class="p-2 rounded bg-purple-950/80 border border-purple-500 text-purple-200 font-bold text-center">
-            Toggle Invulnerability: OFF
-          </button>
-          <button onclick="instantKillEnemy()" class="p-2 rounded bg-red-950/80 border border-red-500 text-red-200 font-bold text-center">
-            💀 Instant Decapitate Foe
-          </button>
-        </div>
-
-        <div class="grid grid-cols-2 gap-2">
-          <button onclick="restoreDuelist('player')" class="steel-btn p-2 rounded text-emerald-300 font-bold text-center">
-            🩹 Full Heal (You)
-          </button>
-          <button onclick="restoreDuelist('enemy')" class="steel-btn p-2 rounded text-amber-300 font-bold text-center">
-            🩹 Full Heal (Opponent)
-          </button>
-        </div>
-
-        <!-- Manual Wound Injection -->
-        <div class="bg-zinc-900/60 p-2.5 rounded border border-zinc-800 space-y-2">
-          <div class="font-bold text-purple-300">Force Anatomical Trauma:</div>
-          <div class="grid grid-cols-3 gap-1.5">
-            <select id="woundTarget" class="bg-zinc-950 border border-zinc-700 rounded p-1 text-zinc-300">
-              <option value="enemy">Target: Foe</option>
-              <option value="player">Target: You</option>
-            </select>
-            <select id="woundZone" class="bg-zinc-950 border border-zinc-700 rounded p-1 text-zinc-300">
-              <option value="head">Zone: Head</option>
-              <option value="neck">Zone: Neck</option>
-              <option value="torso">Zone: Torso</option>
-              <option value="rArm">Zone: R-Arm</option>
-              <option value="lArm">Zone: L-Arm</option>
-              <option value="rLeg">Zone: R-Leg</option>
-              <option value="lLeg">Zone: L-Leg</option>
-            </select>
-            <select id="woundType" class="bg-zinc-950 border border-zinc-700 rounded p-1 text-zinc-300">
-              <option value="arterial">Arterial Cut</option>
-              <option value="severed_tendon">Sever Tendon</option>
-              <option value="fracture">Fracture Bone</option>
-              <option value="concussion">Concussion</option>
-              <option value="puncture">Visor Puncture</option>
-            </select>
-          </div>
-          <button onclick="injectWound()" class="w-full py-1.5 bg-purple-900/70 hover:bg-purple-850 text-purple-200 font-bold rounded border border-purple-700">
-            Inject Anatomical Damage
-          </button>
-        </div>
-
-        <!-- Real-Time Kinematics Telemetry -->
-        <div class="bg-zinc-900/60 p-2.5 rounded border border-zinc-800 space-y-1">
-          <div class="font-bold text-cyan-300 text-[11px] mb-1">Last Clash Physics Breakdown:</div>
-          <div id="telemetryData" class="font-mono text-[10px] space-y-0.5 text-zinc-400">
-            <div>• Striking Velocity: 0.0 m/s</div>
-            <div>• Kinetic Impact: 0.0 Joules</div>
-            <div>• Deflection Angle: 0° (Normal to plane)</div>
-            <div>• Effective Depth: 0.0 mm tissue displacement</div>
-            <div>• Tempo State: Neutral (Zufechten)</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="pt-2 border-t border-zinc-800">
-        <button onclick="closeModal('modalGod')" class="w-full py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold rounded">
-          Close Console
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ================= MODAL: SAVE / LOAD / EXPORT ================= -->
-  <div id="modalSaveLoad" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex flex-col justify-end">
-    <div class="iron-panel rounded-t-2xl max-h-[88vh] flex flex-col p-4 border-t border-amber-600/40">
-      <div class="flex justify-between items-center pb-2 border-b border-zinc-800">
-        <h2 class="font-bold text-base text-amber-400 flex items-center gap-1.5">
-          <span>💾</span> Save, Load & Export Duel Record
-        </h2>
-        <button onclick="closeModal('modalSaveLoad')" class="text-zinc-400 text-lg font-bold p-1">&times;</button>
-      </div>
-
-      <div class="overflow-y-auto space-y-3 py-3 pr-1 text-xs">
-        <div>
-          <label class="block text-zinc-400 mb-1">State String (Plaintext Code):</label>
-          <textarea id="saveLoadString" class="w-full h-24 bg-zinc-950 border border-zinc-700 rounded p-2 font-mono text-[11px] text-emerald-400 select-all" placeholder="Paste your save string here or tap Export..."></textarea>
-        </div>
-
-        <div class="grid grid-cols-2 gap-2">
-          <button onclick="exportSaveString()" class="steel-btn p-2 rounded text-amber-300 font-bold text-center">
-            📋 Generate & Copy String
-          </button>
-          <button onclick="importSaveString()" class="steel-btn p-2 rounded text-emerald-300 font-bold text-center">
-            📥 Load From String
-          </button>
-        </div>
-
-        <!-- Career Statistics -->
-        <div class="bg-zinc-900/60 p-2.5 rounded border border-zinc-800 space-y-1">
-          <div class="font-bold text-zinc-300 text-[11px]">Career Telemetry:</div>
-          <div class="grid grid-cols-2 gap-1 text-[11px] text-zinc-400">
-            <div>Bouts Won: <span id="statWins" class="text-zinc-200 font-bold">0</span></div>
-            <div>Bouts Lost: <span id="statLosses" class="text-zinc-200 font-bold">0</span></div>
-            <div>Decapitations: <span id="statDecaps" class="text-zinc-200 font-bold">0</span></div>
-            <div>Master Ripostes: <span id="statRipostes" class="text-zinc-200 font-bold">0</span></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="pt-2 border-t border-zinc-800">
-        <button onclick="closeModal('modalSaveLoad')" class="w-full py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold rounded">
-          Close Window
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Custom In-App Notification Toast -->
-  <div id="toast" class="fixed top-3 left-1/2 -translate-x-1/2 bg-zinc-900 border border-amber-500/60 text-amber-300 px-4 py-2 rounded-full text-xs shadow-2xl transition-all duration-300 opacity-0 pointer-events-none z-50">
-    Notification
-  </div>
+  <!-- Custom In-App Toast -->
+  <div id="toast">Notification</div>
 
   <!-- ================= JAVASCRIPT GAME ENGINE ================= -->
   <script>
     /* =====================================================================
-       1. COMPLETE DATA CATALOG (20 STYLES, 60 WEAPONS, 15 ARMORS, 9 HELMS)
+       1. EXTENDED HISTORICAL ARMORY, OFF-HANDS & STYLES DATA
        ===================================================================== */
 
     const STYLES = {
-      "Liechtenauer": { name: "German Liechtenauer", desc: "Aggressive master cuts (Vier Versetzen) and winden inside the bind.", bindBonus: 20, counterBonus: 15, voidBonus: 5 },
-      "Armizare": { name: "Italian Armizare", desc: "Close-quarter grappling, dagger counters, half-sword leverage.", bindBonus: 15, counterBonus: 10, voidBonus: 10, grappleBonus: 25 },
-      "Destreza": { name: "La Verdadera Destreza", desc: "Mathematical footwork, circle angles, subtle deflection thrusts.", bindBonus: 10, counterBonus: 15, voidBonus: 25 },
-      "CapoFerro": { name: "Italian Capo Ferro", desc: "Lightning linear lunges and counter-thrusts in the tempo of the foe.", bindBonus: 5, counterBonus: 25, voidBonus: 15 },
-      "SztukaKrzyzowa": { name: "Polish Sztuka Krzyżowa", desc: "Circular wrist snaps, hanging guards, and devastating curved cuts.", bindBonus: 15, counterBonus: 15, voidBonus: 10, cutBonus: 20 },
-      "KatoriShinto": { name: "Tenshin Shōden Katori Shintō-ryū", desc: "Low rushing postures, explosive line transitions, deceptive strikes.", bindBonus: 10, counterBonus: 20, voidBonus: 15 },
-      "Battojutsu": { name: "Iaijutsu / Battōjutsu", desc: "Instantaneous scabbard-clearing strikes designed to sever on arrival.", bindBonus: 0, counterBonus: 35, voidBonus: 10 },
-      "WudangJian": { name: "Wudang Jianfa", desc: "Fluid redirection, sticking to the blade, precise tendon slices.", bindBonus: 20, counterBonus: 15, voidBonus: 20 },
-      "Dandao": { name: "Chinese Dandao / Miaodao", desc: "Extended reach two-handed chops and low angular defense.", bindBonus: 10, counterBonus: 10, voidBonus: 15, cutBonus: 15 },
-      "CateranBroadsword": { name: "Highland Cateran Broadsword", desc: "Heavy circular cuts with targe checks and iron basket protection.", bindBonus: 15, counterBonus: 15, voidBonus: 5 },
-      "GeorgeSilver": { name: "George Silver Backsword", desc: "Calculated distance keeping and instant recovery counter-blows.", bindBonus: 15, counterBonus: 20, voidBonus: 15 },
-      "Smallsword": { name: "French Court Smallsword", desc: "Ultra-fast finger point play, rapid parries in quarte/tierce.", bindBonus: 5, counterBonus: 30, voidBonus: 20 },
-      "Janissary": { name: "Ottoman Janissary", desc: "Deep horizontal draw-cuts, fluid retreating diagonal footwork.", bindBonus: 10, counterBonus: 15, voidBonus: 20, cutBonus: 15 },
-      "ShastarVidya": { name: "Indian Shastar Vidya", desc: "Penthar figure-eight stepping and locked-wrist shearing draw-cuts.", bindBonus: 15, counterBonus: 15, voidBonus: 15 },
-      "Gladiatorial": { name: "Roman Thraex Gladiatorial", desc: "Shield-rim hooks, inside cuts with curved blade, suffocating pressure.", bindBonus: 20, counterBonus: 10, voidBonus: 5, grappleBonus: 20 },
-      "Messerfechten": { name: "Johannes Lecküchner Messerfechten", desc: "Trapping with the Nagel lug, rapid limb severing, arm locks.", bindBonus: 25, counterBonus: 10, voidBonus: 10, grappleBonus: 20 },
-      "Bolognese": { name: "Bolognese Sidesword", desc: "Elegant cut-and-thrust balance with buckler binding and passes.", bindBonus: 15, counterBonus: 20, voidBonus: 15 },
-      "Eskrima": { name: "Filipino Eskrima / Kali", desc: "Defanging the snake: rapid limb targeting and continuous angular checks.", bindBonus: 10, counterBonus: 25, voidBonus: 20 },
-      "Montante": { name: "Iberian Montante", desc: "Massive rotational kinetic circles clearing space with raw momentum.", bindBonus: 15, counterBonus: 10, voidBonus: 0, cutBonus: 30 },
-      "Holmganga": { name: "Viking Hólmganga", desc: "Vicious shield-edge strikes, boss traps, and over-the-rim chops.", bindBonus: 20, counterBonus: 10, voidBonus: 10, grappleBonus: 15 }
+      "Liechtenauer": { name: "German Liechtenauer", desc: "Vier Versetzen master cuts, winding in the bind, seizing the Vor.", bind: 20, counter: 15, void: 5, cut: 10 },
+      "Armizare": { name: "Italian Armizare (Fiore)", desc: "Close wrestling (abrazare), joint locks, dagger counters, half-sword hooks.", bind: 15, counter: 10, void: 10, grapple: 25 },
+      "Destreza": { name: "La Verdadera Destreza", desc: "Euclidean circles, angles of deflection, line of diameter thrusts.", bind: 10, counter: 15, void: 25, thrust: 15 },
+      "CapoFerro": { name: "Italian Capo Ferro", desc: "Linear thrusts, counter-time strikes (stesso tempo), swift voids.", bind: 5, counter: 25, void: 15, thrust: 20 },
+      "SztukaKrzyzowa": { name: "Polish Sztuka Krzyżowa", desc: "High-speed cross-cutting sabre with circular wrist-snaps.", bind: 15, counter: 15, void: 10, cut: 25 },
+      "KatoriShinto": { name: "Tenshin Shōden Katori Shintō-ryū", desc: "Low stances, explosive flow transitions, deceptive line changes.", bind: 10, counter: 20, void: 15, cut: 15 },
+      "Battojutsu": { name: "Iaijutsu / Battōjutsu", desc: "Instantaneous draw-cut counters, lethal unannounced strikes.", bind: 0, counter: 35, void: 10, cut: 20 },
+      "WudangJian": { name: "Wudang Jianfa", desc: "Fluid redirection, adhering to enemy steel, precise tendon cuts.", bind: 20, counter: 15, void: 20, thrust: 10 },
+      "Dandao": { name: "Chinese Dandao / Miaodao", desc: "Two-handed sweeping saber blending reach with heavy descending chops.", bind: 10, counter: 10, void: 15, cut: 20 },
+      "CateranBroadsword": { name: "Highland Broadsword (Cateran)", desc: "Basket-hilt circular cuts supported by heavy targe boss checks.", bind: 15, counter: 15, void: 5, cut: 15 },
+      "GeorgeSilver": { name: "George Silver Backsword", desc: "Four Governors (Judgment, Measure, Time, Place) with fast recoveries.", bind: 15, counter: 20, void: 15, cut: 10 },
+      "Smallsword": { name: "French Court Smallsword", desc: "Rapid point play, tierce/quarte parries, deceptive flèches.", bind: 5, counter: 30, void: 20, thrust: 25 },
+      "Janissary": { name: "Ottoman Janissary", desc: "Sweeping curved draw-cuts with retreating diagonal passes.", bind: 10, counter: 15, void: 20, cut: 20 },
+      "ShastarVidya": { name: "Indian Shastar Vidya", desc: "Penthar figure-eight motion with locked-wrist shearing draw-cuts.", bind: 15, counter: 15, void: 15, cut: 15 },
+      "Gladiatorial": { name: "Roman Thraex Gladiatorial", desc: "Shield rim hooks, curved sica inside cuts, smothering infighting.", bind: 20, counter: 10, void: 5, grapple: 20 },
+      "Messerfechten": { name: "Messerfechten (Lecküchner)", desc: "Nagel thumb-lug trapping, rapid disarms, brutal arm fractures.", bind: 25, counter: 10, void: 10, grapple: 20 },
+      "Bolognese": { name: "Bolognese Sidesword", desc: "Cut-and-thrust fencing combining versatile strikes with buckler binds.", bind: 15, counter: 20, void: 15, cut: 10 },
+      "Eskrima": { name: "Filipino Eskrima / Kali", desc: "Defanging the snake: rapid weapon-hand snipes and angular checks.", bind: 10, counter: 25, void: 20, cut: 15 },
+      "Montante": { name: "Iberian Montante", desc: "Massive orbital momentum clearing space against all opposition.", bind: 15, counter: 10, void: 0, cut: 30 },
+      "Holmganga": { name: "Viking Hólmganga", desc: "Aggressive shield-rim binds, boss traps, and heavy cleaves.", bind: 20, counter: 10, void: 10, grapple: 15 }
+    };
+
+    const OFFHANDS = {
+      "none": { name: "None (Free Hand / Abrazare)", type: "free", desc: "Maximizes wrestling leverage, pommel strikes, and half-sword grips.", bind: 0, def: 0, special: "grapple" },
+      "buckler": { name: "Steel Buckler", type: "shield", desc: "High active deflection, vicious facial punch (Boselen).", bind: 20, def: 25, special: "buckler_punch" },
+      "mainGauche": { name: "Main Gauche / Parrying Dagger", type: "dagger", desc: "Quillon blade trapper, high bind advantage, quick thrust.", bind: 35, def: 15, special: "dagger_riposte" },
+      "targe": { name: "Highland Targe", type: "shield", desc: "Spiked boss check; knocks opponent balance backwards.", bind: 15, def: 30, special: "targe_slam" },
+      "cloak": { name: "Fencing Cloak / Duelling Cape", type: "cloth", desc: "Entangles enemy steel and blinds incoming sight lines.", bind: 25, def: 10, special: "cloak_snare" },
+      "rondel": { name: "Left-Hand Rondel Dagger", type: "dagger", desc: "Infighting armor penetrator for mail voiders and visors.", bind: 10, def: 5, special: "rondel_thrust" },
+      "lanternShield": { name: "Italian Lantern Shield", type: "shield", desc: "Defensive gauntlet buckler with blade traps and protruding spike.", bind: 30, def: 35, special: "lantern_spike" },
+      "wakizashi": { name: "Left-Hand Wakizashi", type: "blade", desc: "Daisho twin-blade parry and simultaneous riposte.", bind: 15, def: 15, special: "daisho_cut" },
+      "scutum": { name: "Roman Scutum / Tower Shield", type: "shield", desc: "Massive kinetic wall; negates cuts and shoves to Zufechten.", bind: 10, def: 50, special: "scutum_bash" },
+      "seax": { name: "Left-Hand Seax / Sax", type: "blade", desc: "Broad hacking knife delivering vicious infighting lacerations.", bind: 10, def: 10, special: "seax_slash" },
+      "madu": { name: "Indian Madu (Horn Buckler)", type: "shield", desc: "Dual blackbuck horn buckler with steel counter-jabs.", bind: 20, def: 20, special: "madu_jab" },
+      "hatchet": { name: "Light Throwing Hatchet / Axe", type: "axe", desc: "Hook enemy crossguards and deliver crushing close blows.", bind: 20, def: 10, special: "hatchet_hook" }
     };
 
     const WEAPONS = {
@@ -538,7 +796,7 @@
       "baselard": { name: "Swiss Baselard", cat: "Short Sword", reach: 0, mass: 0.6, cut: 55, thrust: 85, blunt: 20, bind: 10 },
       "spatha": { name: "Roman Spatha", cat: "Short Sword", reach: 1, mass: 0.9, cut: 72, thrust: 70, blunt: 25, bind: 10 },
       "celticShort": { name: "Celtic Anthropomorphic Sword", cat: "Short Sword", reach: 0, mass: 0.7, cut: 70, thrust: 65, blunt: 25, bind: 10 },
-      "wakizashi": { name: "Japanese Wakizashi", cat: "Short Sword", reach: 0, mass: 0.7, cut: 78, thrust: 68, blunt: 25, bind: 10 },
+      "wakizashiMain": { name: "Japanese Wakizashi (Main)", cat: "Short Sword", reach: 0, mass: 0.7, cut: 78, thrust: 68, blunt: 25, bind: 10 },
       "falcata": { name: "Iberian Falcata", cat: "Short Sword", reach: 0, mass: 1.0, cut: 86, thrust: 60, blunt: 45, bind: 15 },
       "kindjal": { name: "Caucasian Kindjal", cat: "Short Sword", reach: 0, mass: 0.6, cut: 70, thrust: 80, blunt: 20, bind: 10 },
 
@@ -569,15 +827,16 @@
       "meteorHammer": { name: "Meteor Hammer", cat: "Exotic Weapon", reach: 3, mass: 1.5, cut: 10, thrust: 20, blunt: 95, bind: 15 },
       "hookSwords": { name: "Chinese Shuang Gou (Hook Swords)", cat: "Exotic Weapon", reach: 1, mass: 1.4, cut: 70, thrust: 65, blunt: 30, bind: 35 },
       "kanabo": { name: "Japanese Kanabō", cat: "Exotic Weapon", reach: 2, mass: 4.5, cut: 15, thrust: 15, blunt: 100, bind: 20 },
-      "lanternShield": { name: "Italian Lantern Shield", cat: "Exotic Weapon", reach: 1, mass: 2.2, cut: 45, thrust: 75, blunt: 60, bind: 30 },
+      "lanternShieldWeap": { name: "Italian Lantern Shield Blade", cat: "Exotic Weapon", reach: 1, mass: 2.2, cut: 45, thrust: 75, blunt: 60, bind: 30 },
       "deerHorn": { name: "Chinese Deer Horn Knives", cat: "Exotic Weapon", reach: 0, mass: 1.1, cut: 75, thrust: 75, blunt: 30, bind: 35 },
-      "madu": { name: "Indian Madu (Horn Buckler)", cat: "Exotic Weapon", reach: 0, mass: 1.3, cut: 40, thrust: 80, blunt: 50, bind: 25 },
+      "maduWeap": { name: "Indian Madu (Weapon)", cat: "Exotic Weapon", reach: 0, mass: 1.3, cut: 40, thrust: 80, blunt: 50, bind: 25 },
       "lucerne": { name: "Lucerne Hammer", cat: "Exotic Weapon", reach: 3, mass: 2.8, cut: 30, thrust: 90, blunt: 95, bind: 20 },
       "flail": { name: "Bohemian Flail", cat: "Exotic Weapon", reach: 2, mass: 2.2, cut: 20, thrust: 10, blunt: 98, bind: 5 },
       "ngombe": { name: "African Ngombe Ngulu", cat: "Exotic Weapon", reach: 1, mass: 1.8, cut: 90, thrust: 30, blunt: 60, bind: 15 }
     };
 
     const ARMORS = {
+      "unarmored": { name: "Unarmored (Silk / Linen Shirt)", tier: "None", slashResist: 0, thrustResist: 0, bluntResist: 0, weight: 0 },
       // 5 Light
       "gambeson": { name: "Quilted Linen Gambeson", tier: "Light", slashResist: 25, thrustResist: 15, bluntResist: 20, weight: 3 },
       "linothorax": { name: "Silk & Linen Linothorax", tier: "Light", slashResist: 30, thrustResist: 20, bluntResist: 15, weight: 4 },
@@ -599,6 +858,7 @@
     };
 
     const HELMS = {
+      "unarmored": { name: "Unarmored (Bare Head)", tier: "None", slashResist: 0, thrustResist: 0, bluntResist: 0, faceExposed: true },
       // 3 Light
       "cervelliere": { name: "Steel Cervelliere", tier: "Light", slashResist: 40, thrustResist: 35, bluntResist: 30, faceExposed: true },
       "spangenhelm": { name: "Open-Face Spangenhelm", tier: "Light", slashResist: 50, thrustResist: 45, bluntResist: 40, faceExposed: true },
@@ -614,17 +874,41 @@
     };
 
     /* =====================================================================
-       2. SOUND SYNTHESIS ENGINE (WEB AUDIO API - ZERO EXTERNAL ASSETS)
+       2. CAMPAIGN GAUNTLET 20 PROGRESSIVE HISTORICAL ADVERSARIES
+       ===================================================================== */
+    const CAMPAIGN_STAGES = [
+      { name: "Levied Peasant Insurgent", style: "Messerfechten", weap: "messer", off: "none", arm: "unarmored", helm: "unarmored", desc: "Wild swings with an agricultural heavy knife. Zero armor." },
+      { name: "Town Watch Militia", style: "GeorgeSilver", weap: "katzbalger", off: "buckler", arm: "gambeson", helm: "cervelliere", desc: "Sturdy buckler puncher with a mercenary katzbalger." },
+      { name: "Thracian Peltast", style: "Gladiatorial", weap: "sica", off: "buckler", arm: "linothorax", helm: "spangenhelm", desc: "Curved sica hooks behind shields to slice neck arteries." },
+      { name: "Roman Legionary Veteran", style: "Gladiatorial", weap: "gladius", off: "scutum", arm: "mailleHauberk", helm: "normanNasal", desc: "Disciplined tower shield wall and devastating linear punching thrusts." },
+      { name: "Celtic Highland Reiver", style: "CateranBroadsword", weap: "claymore", off: "targe", arm: "buffCoat", helm: "unarmored", desc: "Fierce charges with a claymore backed by a spiked center boss." },
+      { name: "Bolognese Sword-Brother", style: "Bolognese", weap: "sidesword", off: "buckler", arm: "armingDoublet", helm: "kettleHat", desc: "Fluid cut-and-thrust fencing with rapid buckler binds." },
+      { name: "Norse Hersir Berserkr", style: "Holmganga", weap: "typeXIV", off: "targe", arm: "mailleHauberk", helm: "spangenhelm", desc: "Unforgiving shield rim traps and high-kinetic chops." },
+      { name: "Ottoman Sipahi Dismounted", style: "Janissary", weap: "kilic", off: "mainGauche", arm: "charAina", helm: "kettleHat", desc: "Forward flared kilic delivering shearing cleaves over defense." },
+      { name: "Shaolin Rogue Disciple", style: "WudangJian", weap: "hookSwords", off: "none", arm: "linothorax", helm: "unarmored", desc: "Twin hook blades that snare weapons and slice tendons." },
+      { name: "Visby Man-at-Arms", style: "Liechtenauer", weap: "typeXVIIIb", off: "rondel", arm: "coatOfPlates", helm: "kettleHat", desc: "Rigid longsword thrusts with coat-of-plates chest defense." },
+      { name: "Masterless Ronin", style: "KatoriShinto", weap: "katana", off: "wakizashi", arm: "tatamiDo", helm: "barbuta", desc: "Daisho dual wielding with explosive transitions and razor edges." },
+      { name: "Polish Hussar Szlachcic", style: "SztukaKrzyzowa", weap: "karabela", off: "seax", arm: "brigandine", helm: "normanNasal", desc: "High velocity circular wrist cuts that bypass linear parries." },
+      { name: "Spanish Bilbo Duelist", style: "Destreza", weap: "rapier", off: "cloak", arm: "buffCoat", helm: "barbuta", desc: "Geometric footwork with a swirling cloak to blind incoming blades." },
+      { name: "Swiss Reisläufer Mercenary", style: "Liechtenauer", weap: "swissDegen", off: "rondel", arm: "blackAndWhite", helm: "salletBevor", desc: "Hardened mercenary equipped with heavy municipal half-plate." },
+      { name: "French Court Grand Duelist", style: "CapoFerro", weap: "colichemarde", off: "mainGauche", arm: "armingDoublet", helm: "barbuta", desc: "Stiff triangular blade and dagger trapping in microsecond tempos." },
+      { name: "Iberian Greatsword Champion", style: "Montante", weap: "montante", off: "none", arm: "brigandine", helm: "salletBevor", desc: "Continuous unbroken orbital swings that crush incoming guards." },
+      { name: "Maratha Peshwa Warrior", style: "ShastarVidya", weap: "khanda", off: "madu", arm: "krugArmor", helm: "normanNasal", desc: "Heavy spatulate khanda with horned shield counter-punches." },
+      { name: "Venetian Condottiero Captain", style: "Armizare", weap: "typeXVIIIb", off: "lanternShield", arm: "milanesePlate", helm: "armet", desc: "Flawless Italian plate harness, lantern shield traps, and wrestling locks." },
+      { name: "Landsknecht Veteran Master", style: "Liechtenauer", weap: "zweihander", off: "rondel", arm: "maximilianPlate", helm: "salletBevor", desc: "Flamberge greatsword and fluted steel impervious to light cuts." },
+      { name: "The Iron Grandmaster", style: "Liechtenauer", weap: "zweihander", off: "rondel", arm: "gothicPlate", helm: "sugarloaf", desc: "The supreme avatar of steel. Full gothic fluting and fatal precision." }
+    ];
+
+    /* =====================================================================
+       3. AUDIO SYNTHESIZER & HAPTICS (ZERO ASSETS / OFFLINE)
        ===================================================================== */
     let audioCtx = null;
-    let audioMuted = false;
+    let audioEnabled = true;
 
     function initAudio() {
       if (!audioCtx) {
-        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-        if (AudioContextClass) {
-          audioCtx = new AudioContextClass();
-        }
+        const AudioClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioClass) audioCtx = new AudioClass();
       }
       if (audioCtx && audioCtx.state === 'suspended') {
         audioCtx.resume();
@@ -633,896 +917,963 @@
 
     function toggleAudio() {
       initAudio();
-      audioMuted = !audioMuted;
-      document.getElementById('audioIcon').textContent = audioMuted ? "🔇 Muted" : "🔊 Sound";
-      showToast(audioMuted ? "Sound Muted" : "Sound Enabled");
+      audioEnabled = !audioEnabled;
+      document.getElementById('audioLabel').textContent = audioEnabled ? "🔊 SFX" : "🔇 Mute";
+      showToast(audioEnabled ? "Sound Effects Enabled" : "Sound Effects Muted");
+    }
+
+    function triggerHaptic(type) {
+      if (navigator.vibrate) {
+        try {
+          if (type === 'hit') navigator.vibrate([25, 30, 40]);
+          else if (type === 'clash') navigator.vibrate(20);
+          else if (type === 'fatal') navigator.vibrate([60, 40, 90]);
+        } catch (e) {}
+      }
     }
 
     function playSound(type) {
-      if (audioMuted) return;
+      if (!audioEnabled) return;
       initAudio();
       if (!audioCtx) return;
 
       const now = audioCtx.currentTime;
 
-      if (type === 'clang') {
-        // Metallic blade collision
+      if (type === 'clash') {
         const osc1 = audioCtx.createOscillator();
         const osc2 = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
 
         osc1.type = 'triangle';
         osc2.type = 'sine';
+        osc1.frequency.setValueAtTime(1200, now);
+        osc1.frequency.exponentialRampToValueAtTime(320, now + 0.3);
 
-        osc1.frequency.setValueAtTime(1400, now);
-        osc1.frequency.exponentialRampToValueAtTime(320, now + 0.35);
+        osc2.frequency.setValueAtTime(2400, now);
+        osc2.frequency.exponentialRampToValueAtTime(600, now + 0.2);
 
-        osc2.frequency.setValueAtTime(2600, now);
-        osc2.frequency.exponentialRampToValueAtTime(540, now + 0.25);
-
-        gain.gain.setValueAtTime(0.3, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
 
         osc1.connect(gain);
         osc2.connect(gain);
         gain.connect(audioCtx.destination);
 
-        osc1.start(now);
-        osc2.start(now);
-        osc1.stop(now + 0.35);
-        osc2.stop(now + 0.35);
-      } else if (type === 'slash') {
-        // High speed blade cut
-        const bufferSize = audioCtx.sampleRate * 0.2;
-        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-        const data = buffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-          data[i] = Math.random() * 2 - 1;
-        }
-        const noise = audioCtx.createBufferSource();
-        noise.buffer = buffer;
-
-        const filter = audioCtx.createBiquadFilter();
-        filter.type = 'bandpass';
-        filter.frequency.setValueAtTime(1200, now);
-        filter.frequency.exponentialRampToValueAtTime(300, now + 0.2);
-        filter.Q.value = 3.0;
-
-        const gain = audioCtx.createGain();
-        gain.gain.setValueAtTime(0.25, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
-
-        noise.connect(filter);
-        filter.connect(gain);
-        gain.connect(audioCtx.destination);
-
-        noise.start(now);
-        noise.stop(now + 0.2);
+        osc1.start(now); osc2.start(now);
+        osc1.stop(now + 0.3); osc2.stop(now + 0.3);
+        triggerHaptic('clash');
       } else if (type === 'flesh') {
-        // Visceral laceration / wound
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(180, now);
-        osc.frequency.exponentialRampToValueAtTime(40, now + 0.3);
+        osc.frequency.setValueAtTime(160, now);
+        osc.frequency.exponentialRampToValueAtTime(35, now + 0.28);
 
-        gain.gain.setValueAtTime(0.4, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        gain.gain.setValueAtTime(0.45, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
 
         osc.connect(gain);
         gain.connect(audioCtx.destination);
-
         osc.start(now);
-        osc.stop(now + 0.3);
+        osc.stop(now + 0.28);
+        triggerHaptic('hit');
       } else if (type === 'thud') {
-        // Blunt impact / takedown
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(120, now);
-        osc.frequency.exponentialRampToValueAtTime(25, now + 0.25);
+        osc.frequency.setValueAtTime(110, now);
+        osc.frequency.exponentialRampToValueAtTime(20, now + 0.25);
 
         gain.gain.setValueAtTime(0.5, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
 
         osc.connect(gain);
         gain.connect(audioCtx.destination);
-
         osc.start(now);
         osc.stop(now + 0.25);
+        triggerHaptic('hit');
+      } else if (type === 'victory') {
+        [523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+          gain.gain.setValueAtTime(0.25, now + idx * 0.12);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.12 + 0.4);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now + idx * 0.12);
+          osc.stop(now + idx * 0.12 + 0.4);
+        });
+        triggerHaptic('fatal');
       }
     }
 
     /* =====================================================================
-       3. COMBAT STATE & ANATOMICAL ENGINE
+       4. FIGHTER INSTANTIATION & STATE MANAGEMENT
        ===================================================================== */
-
+    let isGodMode = false;
     let roundNumber = 1;
-    let distanceState = 'zufechten'; // 'zufechten' (Far), 'krieg' (Melee), 'handarbeit' (Infight)
-    let bladeLeverState = 'free'; // 'free', 'bound_neutral', 'player_forte', 'enemy_forte'
-    let currentArena = 'Training Ring';
-    let isGodModeActive = false;
+    let combatDistance = 'zufechten'; // 'zufechten', 'krieg', 'handarbeit'
+    let bladeLever = 'free'; // 'free', 'neutral_bind', 'player_forte', 'enemy_forte', 'snared'
+    let isCampaignActive = false;
+    let currentCampaignFloor = 1; // 1 to 20
+    let campaignScore = 0;
+    let campaignBuffHone = 0; // extra cut/thrust %
 
-    // Career Stats
-    let stats = {
-      wins: 0,
-      losses: 0,
-      decaps: 0,
-      ripostes: 0
-    };
+    let lastPhysics = { vel: 0, joules: 0, angle: 0, depth: 0, tempo: "Neutral" };
 
-    // Last Turn Telemetry
-    let lastTelemetry = {
-      velocity: 0,
-      joules: 0,
-      deflectionAngle: 0,
-      depthMm: 0,
-      tempo: "Neutral (Zufechten)"
-    };
-
-    function createFighter(name, isPlayer, styleKey, weaponKey, armorKey, helmKey) {
+    function createFighter(name, isPlayer, styleKey, weapKey, offKey, armKey, helmKey) {
       return {
         name: name,
         isPlayer: isPlayer,
-        style: STYLES[styleKey] || STYLES["Liechtenauer"],
         styleKey: styleKey,
-        weapon: WEAPONS[weaponKey] || WEAPONS["typeXVIIIb"],
-        weaponKey: weaponKey,
-        armor: ARMORS[armorKey] || ARMORS["gambeson"],
-        armorKey: armorKey,
-        helm: HELMS[helmKey] || HELMS["spangenhelm"],
+        style: STYLES[styleKey] || STYLES["Liechtenauer"],
+        weapKey: weapKey,
+        weap: WEAPONS[weapKey] || WEAPONS["typeXVIIIb"],
+        offKey: offKey,
+        off: OFFHANDS[offKey] || OFFHANDS["none"],
+        armKey: armKey,
+        arm: ARMORS[armKey] || ARMORS["gambeson"],
         helmKey: helmKey,
-        balance: 100, // 0 - 100
-        stamina: 100, // 0 - 100
-        bloodLoss: 0, // 0 - 100%
-        concussion: 0, // 0 - 100
-        wounds: {
-          head: [],
-          neck: [],
-          torso: [],
-          rArm: [],
-          lArm: [],
-          rLeg: [],
-          lLeg: []
-        },
-        guard: 'High (Vom Tag)',
-        isDown: false
+        helm: HELMS[helmKey] || HELMS["spangenhelm"],
+        balance: 100,
+        stamina: 100,
+        bloodLoss: 0,
+        concussion: 0,
+        isGrounded: false,
+        wounds: { head: [], neck: [], torso: [], rArm: [], lArm: [], legs: [] }
       };
     }
 
-    let player = createFighter("You", true, "Liechtenauer", "typeXVIIIb", "gambeson", "spangenhelm");
-    let enemy = createFighter("Imperial Fencer", false, "Liechtenauer", "typeXVIIIb", "gambeson", "spangenhelm");
+    let player = createFighter("You", true, "Liechtenauer", "typeXVIIIb", "buckler", "gambeson", "spangenhelm");
+    let enemy = createFighter("Adversary", false, "Liechtenauer", "typeXVIIIb", "none", "gambeson", "spangenhelm");
 
     /* =====================================================================
-       4. UI SYNCHRONIZATION & TOAST
+       5. UI SYNCHRONIZATION & TOAST
        ===================================================================== */
 
     function showToast(msg) {
       const toast = document.getElementById('toast');
       toast.textContent = msg;
       toast.style.opacity = '1';
-      setTimeout(() => {
-        toast.style.opacity = '0';
-      }, 2200);
+      setTimeout(() => { toast.style.opacity = '0'; }, 2200);
+    }
+
+    function switchTab(tabId) {
+      initAudio();
+      document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.view-content').forEach(el => el.classList.remove('active'));
+
+      const activeView = document.getElementById('view-' + tabId);
+      if (activeView) activeView.classList.add('active');
+
+      const tabs = document.querySelectorAll('.tab-item');
+      if (tabId === 'arena') tabs[0].classList.add('active');
+      else if (tabId === 'campaign') tabs[1].classList.add('active');
+      else if (tabId === 'armory') tabs[2].classList.add('active');
+      else if (tabId === 'leaderboard') { tabs[3].classList.add('active'); renderLeaderboard(); }
+      else if (tabId === 'codex') tabs[4].classList.add('active');
+      else if (tabId === 'god') tabs[5].classList.add('active');
+
+      updateHUD();
     }
 
     function updateHUD() {
       // Player HUD
-      document.getElementById('pName').textContent = player.name + (player.isDown ? " (GROUNDED)" : "");
-      document.getElementById('pBalance').textContent = `Bal: ${Math.round(player.balance)}%`;
-      const pStamBar = document.getElementById('pStamBar');
-      pStamBar.style.width = `${Math.max(0, player.stamina)}%`;
-      pStamBar.className = player.stamina < 30 ? "bg-red-600 h-full transition-all duration-300" : "bg-emerald-500 h-full transition-all duration-300";
-
-      document.getElementById('pBloodText').textContent = `Bleed: ${Math.round(player.bloodLoss)}%`;
-      document.getElementById('pStatusText').textContent = player.concussion > 30 ? `Dazed (${Math.round(player.concussion)}%)` : (player.isDown ? "Fallen" : "Steady");
+      document.getElementById('hudPlayerName').textContent = player.name + (player.isGrounded ? " (DOWN)" : "");
+      document.getElementById('hudPlayerBal').textContent = `Bal: ${Math.round(player.balance)}%`;
+      const pStam = document.getElementById('hudPlayerStamBar');
+      pStam.style.width = `${Math.max(0, player.stamina)}%`;
+      pStam.style.backgroundColor = player.stamina < 30 ? "#b82b2b" : "#10b981";
+      document.getElementById('hudPlayerBleed').textContent = `Bleed: ${Math.round(player.bloodLoss)}%`;
+      document.getElementById('hudPlayerCondition').textContent = player.concussion > 35 ? `Dazed (${Math.round(player.concussion)}%)` : (player.isGrounded ? "Fallen" : "Steady");
 
       // Enemy HUD
-      document.getElementById('eName').textContent = enemy.name + (enemy.isDown ? " (GROUNDED)" : "");
-      document.getElementById('eBalance').textContent = `Bal: ${Math.round(enemy.balance)}%`;
-      const eStamBar = document.getElementById('eStamBar');
-      eStamBar.style.width = `${Math.max(0, enemy.stamina)}%`;
-      eStamBar.className = enemy.stamina < 30 ? "bg-red-600 h-full transition-all duration-300" : "bg-red-500 h-full transition-all duration-300";
+      document.getElementById('hudEnemyName').textContent = enemy.name + (enemy.isGrounded ? " (DOWN)" : "");
+      document.getElementById('hudEnemyBal').textContent = `Bal: ${Math.round(enemy.balance)}%`;
+      const eStam = document.getElementById('hudEnemyStamBar');
+      eStam.style.width = `${Math.max(0, enemy.stamina)}%`;
+      document.getElementById('hudEnemyBleed').textContent = `Bleed: ${Math.round(enemy.bloodLoss)}%`;
+      document.getElementById('hudEnemyCondition').textContent = enemy.concussion > 35 ? `Dazed (${Math.round(enemy.concussion)}%)` : (enemy.isGrounded ? "Fallen" : "Sound");
 
-      document.getElementById('eBloodText').textContent = `Bleed: ${Math.round(enemy.bloodLoss)}%`;
-      document.getElementById('eStatusText').textContent = enemy.concussion > 30 ? `Dazed (${Math.round(enemy.concussion)}%)` : (enemy.isDown ? "Fallen" : "Alert");
-
-      // Arena & Measure
-      document.getElementById('arenaBadge').textContent = `Arena: ${currentArena}`;
-      
-      const distBadge = document.getElementById('distanceBadge');
-      if (distanceState === 'zufechten') {
-        distBadge.textContent = "Zufechten (Measure: Out)";
-        distBadge.className = "font-mono font-bold text-amber-400";
-      } else if (distanceState === 'krieg') {
-        distBadge.textContent = "Krieg (Striking Distance)";
-        distBadge.className = "font-mono font-bold text-red-400";
+      // Distance & Blade Bind
+      const dElem = document.getElementById('hudDistance');
+      if (combatDistance === 'zufechten') {
+        dElem.textContent = "Zufechten (Measure: Out)";
+        dElem.className = "font-mono font-bold text-gold";
+      } else if (combatDistance === 'krieg') {
+        dElem.textContent = "Krieg (Striking Measure)";
+        dElem.className = "font-mono font-bold text-red";
       } else {
-        distBadge.textContent = "Handarbeit (Infighting/Clinch)";
-        distBadge.className = "font-mono font-bold text-purple-400";
+        dElem.textContent = "Handarbeit (Clinch/Infight)";
+        dElem.className = "font-mono font-bold text-purple";
       }
 
-      // Blade Leverage
-      const leverBadge = document.getElementById('bladeBindBadge');
-      if (bladeLeverState === 'free') {
-        leverBadge.textContent = "Blades Disengaged";
-        leverBadge.className = "font-mono text-zinc-400";
-      } else if (bladeLeverState === 'bound_neutral') {
-        leverBadge.textContent = "Locked in Bind (Center)";
-        leverBadge.className = "font-mono text-amber-400 font-bold";
-      } else if (bladeLeverState === 'player_forte') {
-        leverBadge.textContent = "You Command (Forte > Foible)";
-        leverBadge.className = "font-mono text-emerald-400 font-bold";
-      } else if (bladeLeverState === 'enemy_forte') {
-        leverBadge.textContent = "Opponent Commands Forte";
-        leverBadge.className = "font-mono text-red-400 font-bold";
+      const lElem = document.getElementById('hudLever');
+      if (bladeLever === 'free') {
+        lElem.textContent = "Blades Free";
+        lElem.className = "font-mono font-bold text-steel-mid";
+      } else if (bladeLever === 'neutral_bind') {
+        lElem.textContent = "Deadlocked Bind";
+        lElem.className = "font-mono font-bold text-gold";
+      } else if (bladeLever === 'player_forte') {
+        lElem.textContent = "Your Forte Over Foible";
+        lElem.className = "font-mono font-bold text-emerald";
+      } else if (bladeLever === 'enemy_forte') {
+        lElem.textContent = "Opponent Forte Over Weak";
+        lElem.className = "font-mono font-bold text-red";
+      } else if (bladeLever === 'snared') {
+        lElem.textContent = "Opponent Blade Snared";
+        lElem.className = "font-mono font-bold text-cyan";
       }
 
-      // God Badge
-      document.getElementById('godBadge').classList.toggle('hidden', !isGodModeActive);
+      // God Badge & Header
+      document.getElementById('godModeBadge').style.display = isGodMode ? 'inline-flex' : 'none';
+      document.getElementById('headerModeBadge').textContent = isCampaignActive ? `CAMPAIGN: STAGE ${currentCampaignFloor}/20` : "ARENA DUEL";
 
-      // Stats
-      document.getElementById('statWins').textContent = stats.wins;
-      document.getElementById('statLosses').textContent = stats.losses;
-      document.getElementById('statDecaps').textContent = stats.decaps;
-      document.getElementById('statRipostes').textContent = stats.ripostes;
+      // Contextual Off-Hand Button text
+      const offBtnTitle = document.getElementById('dynamicOffhandTitle');
+      const offBtnSub = document.getElementById('dynamicOffhandSub');
+      const offType = player.off.special;
+
+      if (offType === 'buckler_punch') {
+        offBtnTitle.textContent = "Buckler Punch";
+        offBtnSub.textContent = "Boselen (Facial)";
+      } else if (offType === 'dagger_riposte') {
+        offBtnTitle.textContent = "Dagger Bind";
+        offBtnSub.textContent = "Trap & Riposte";
+      } else if (offType === 'targe_slam') {
+        offBtnTitle.textContent = "Targe Slam";
+        offBtnSub.textContent = "Spiked Boss Push";
+      } else if (offType === 'cloak_snare') {
+        offBtnTitle.textContent = "Cloak Wrap";
+        offBtnSub.textContent = "Ensnare Steel";
+      } else if (offType === 'rondel_thrust') {
+        offBtnTitle.textContent = "Rondel Chasm";
+        offBtnSub.textContent = "Armor Joint Void";
+      } else if (offType === 'lantern_spike') {
+        offBtnTitle.textContent = "Lantern Spike";
+        offBtnSub.textContent = "Shield Counter";
+      } else if (offType === 'daisho_cut') {
+        offBtnTitle.textContent = "Daisho Counter";
+        offBtnSub.textContent = "Wakizashi Slice";
+      } else if (offType === 'scutum_bash') {
+        offBtnTitle.textContent = "Scutum Shove";
+        offBtnSub.textContent = "Wall Reset";
+      } else if (offType === 'seax_slash') {
+        offBtnTitle.textContent = "Seax Slash";
+        offBtnSub.textContent = "Infighting Hook";
+      } else if (offType === 'madu_jab') {
+        offBtnTitle.textContent = "Madu Horn Jab";
+        offBtnSub.textContent = "Dual Counter";
+      } else if (offType === 'hatchet_hook') {
+        offBtnTitle.textContent = "Hatchet Hook";
+        offBtnSub.textContent = "Rip Guard Down";
+      } else {
+        offBtnTitle.textContent = "Grapple";
+        offBtnSub.textContent = "Abrazare Takedown";
+      }
 
       // Telemetry
-      const telemDiv = document.getElementById('telemetryData');
-      telemDiv.innerHTML = `
-        <div>• Striking Velocity: <span class="text-zinc-200">${lastTelemetry.velocity.toFixed(1)} m/s</span></div>
-        <div>• Kinetic Energy: <span class="text-amber-300">${lastTelemetry.joules.toFixed(1)} Joules</span></div>
-        <div>• Deflection Angle: <span class="text-cyan-300">${lastTelemetry.deflectionAngle.toFixed(1)}°</span></div>
-        <div>• Effective Tissue Depth: <span class="text-red-300">${lastTelemetry.depthMm.toFixed(1)} mm</span></div>
-        <div>• Tactical Tempo: <span class="text-purple-300">${lastTelemetry.tempo}</span></div>
-      `;
+      document.getElementById('telemVel').textContent = `${lastPhysics.vel.toFixed(1)} m/s`;
+      document.getElementById('telemJoules').textContent = `${lastPhysics.joules.toFixed(1)} Joules`;
+      document.getElementById('telemAngle').textContent = `${lastPhysics.angle.toFixed(1)}°`;
+      document.getElementById('telemDepth').textContent = `${lastPhysics.depth.toFixed(1)} mm`;
+      document.getElementById('telemTempo').textContent = lastPhysics.tempo;
     }
 
-    function appendLog(htmlContent) {
+    function appendCombatLog(html) {
       const log = document.getElementById('combatLog');
-      const card = document.createElement('div');
-      card.className = "p-2.5 rounded bg-zinc-900/80 border border-zinc-800 text-xs leading-relaxed transition-all";
-      card.innerHTML = htmlContent;
-      log.appendChild(card);
+      const box = document.createElement('div');
+      box.className = "iron-panel p-2.5 rounded text-xs flex-col";
+      box.style.gap = "4px";
+      box.style.borderRadius = "6px";
+      box.innerHTML = html;
+      log.appendChild(box);
       log.scrollTop = log.scrollHeight;
     }
 
     /* =====================================================================
-       5. COMBAT RESOLUTION & KINEMATIC SIMULATOR
+       6. COMBAT RESOLUTION & KINEMATIC SIMULATION ENGINE
        ===================================================================== */
 
     function getAiAction() {
-      // Smart contextual opponent AI based on distance, stamina, balance
+      if (enemy.isGrounded) return 'recover';
+
       const rand = Math.random();
-
-      if (enemy.isDown) {
-        return 'recover_stand';
-      }
-
-      if (distanceState === 'zufechten') {
-        if (enemy.weapon.reach >= 2 && rand > 0.4) {
-          return 'thrust';
-        }
-        return rand > 0.5 ? 'cut_high' : 'close_distance';
-      } else if (distanceState === 'krieg') {
-        if (bladeLeverState === 'player_forte') {
-          return rand > 0.5 ? 'void_step' : 'bind';
-        }
-        if (enemy.stamina < 25) {
-          return 'void_step';
-        }
-        if (rand < 0.25) return 'master_cut';
-        if (rand < 0.5) return 'cut_high';
-        if (rand < 0.75) return 'thrust';
+      if (combatDistance === 'zufechten') {
+        if (enemy.weap.reach >= 2 && rand > 0.4) return 'thrust';
+        return rand > 0.5 ? 'cut_high' : 'close_in';
+      } else if (combatDistance === 'krieg') {
+        if (bladeLever === 'player_forte') return rand > 0.4 ? 'void_step' : 'bind';
+        if (enemy.stamina < 25) return 'void_step';
+        if (rand < 0.2) return 'master_cut';
+        if (rand < 0.45) return 'cut_high';
+        if (rand < 0.7) return 'thrust';
         return 'bind';
       } else {
         // Handarbeit
-        if (rand < 0.45) return 'pommel';
+        if (rand < 0.4) return 'pommel';
         if (rand < 0.8) return 'grapple';
         return 'void_step';
       }
     }
 
-    function handlePlayerAction(pAct) {
+    function handlePlayerAction(act) {
       initAudio();
 
-      if (checkDuelConcluded()) {
-        showToast("Bout has concluded. Start a new 1v1 duel!");
+      if (checkDuelFinished()) {
+        showToast("Bout has concluded.");
         return;
       }
 
-      // Check standing
-      if (player.isDown && pAct !== 'void_step') {
-        appendLog(`<span class="text-amber-400 font-bold">⚠️ You are grounded!</span> You scramble through the grit, burning stamina to regain your footing.`);
-        player.isDown = false;
-        player.balance = 55;
+      if (player.isGrounded && act !== 'void_step') {
+        appendCombatLog(`<span class="text-gold font-bold">⚠️ Grounded!</span> You push off the earth through grit, burning stamina to regain stance.`);
+        player.isGrounded = false;
+        player.balance = 60;
         player.stamina = Math.max(10, player.stamina - 20);
         updateHUD();
         return;
       }
 
-      const eAct = getAiAction();
-      resolveExchange(pAct, eAct);
+      const enemyAct = getAiAction();
+      resolveRound(act, enemyAct);
       roundNumber++;
-      checkBleedAndFatigue();
+
+      // Passive bleed and balance ticks
+      if (player.bloodLoss > 0 && !isGodMode) player.bloodLoss = Math.min(100, player.bloodLoss + 2.5);
+      if (enemy.bloodLoss > 0) enemy.bloodLoss = Math.min(100, enemy.bloodLoss + 2.5);
+
       updateHUD();
-      checkDuelConcluded();
+      checkDuelFinished();
     }
 
-    function resolveExchange(pAct, eAct) {
-      let narrative = `<div class="font-bold text-zinc-400 border-b border-zinc-800 pb-1 mb-1.5 flex justify-between">
-        <span>ROUND ${roundNumber} [${distanceState.toUpperCase()}]</span>
-        <span class="text-[10px] text-zinc-500">${player.weapon.name} vs ${enemy.weapon.name}</span>
+    function resolveRound(pAct, eAct) {
+      let narrative = `<div class="flex-row items-center justify-between font-mono text-dim" style="border-bottom: 1px solid #282e3d; padding-bottom: 3px;">
+        <span>ROUND ${roundNumber} [${combatDistance.toUpperCase()}]</span>
+        <span style="font-size: 10px;">${player.weap.name} vs ${enemy.weap.name}</span>
       </div>`;
 
-      // Stamina costs
-      player.stamina = Math.max(0, player.stamina - 8);
-      enemy.stamina = Math.max(0, enemy.stamina - 8);
+      // Stamina drain
+      player.stamina = Math.max(0, player.stamina - 7);
+      enemy.stamina = Math.max(0, enemy.stamina - 7);
 
-      // Handle Distance & Disengage
+      // Handle Void Step
       if (pAct === 'void_step') {
-        distanceState = 'zufechten';
-        bladeLeverState = 'free';
-        player.balance = Math.min(100, player.balance + 15);
-        player.stamina = Math.min(100, player.stamina + 18);
-        narrative += `<p class="text-amber-300">💨 You execute a rapid voiding step, opening measure to Zufechten while drawing deep breath to recover your balance and poise.</p>`;
-        playSound('whoosh');
-        lastTelemetry = { velocity: 1.5, joules: 0, deflectionAngle: 90, depthMm: 0, tempo: "Nach (Disengaged)" };
-        appendLog(narrative);
+        combatDistance = 'zufechten';
+        bladeLever = 'free';
+        player.balance = Math.min(100, player.balance + 20);
+        player.stamina = Math.min(100, player.stamina + 22);
+        narrative += `<p class="text-gold">💨 <b>Void Step:</b> You step off line on a forty-five degree angle, breaking the bind to Zufechten to catch breath and steady your legs.</p>`;
+        playSound('clash');
+        lastPhysics = { vel: 1.8, joules: 0, angle: 90, depth: 0, tempo: "Nach (Disengaged)" };
+        appendCombatLog(narrative);
         return;
       }
 
-      if (eAct === 'recover_stand') {
-        enemy.isDown = false;
+      if (eAct === 'recover') {
+        enemy.isGrounded = false;
         enemy.balance = 50;
-        enemy.stamina = Math.max(10, enemy.stamina - 15);
-        narrative += `<p class="text-zinc-400">${enemy.name} scrambles desperately off the earth, raising their guard in disarray.</p>`;
+        narrative += `<p class="text-steel-mid">${enemy.name} scrambles up from the ground, breathing heavily.</p>`;
       }
 
-      // Handle Infighting transition
-      if (pAct === 'grapple' || eAct === 'grapple' || pAct === 'pommel' || eAct === 'pommel') {
-        if (distanceState !== 'handarbeit') {
-          distanceState = 'handarbeit';
-          narrative += `<p class="text-purple-400 font-semibold">⚡ Distance collapses violently! Forearms smash together in close Handarbeit infighting.</p>`;
-        }
-      } else if (distanceState === 'zufechten') {
-        distanceState = 'krieg';
-        narrative += `<p class="text-zinc-400">Footwork carries both duelists into the striking measure of Krieg.</p>`;
+      // Distance Shifts
+      if (pAct === 'offhand_action' && player.off.special === 'grapple') {
+        combatDistance = 'handarbeit';
+      } else if (combatDistance === 'zufechten') {
+        combatDistance = 'krieg';
       }
 
-      // Calculate Physical Strikes
-      const pVelocity = (12 + (player.stamina / 10) + (player.weapon.reach * 1.5)) * (pAct === 'thrust' ? 1.2 : 1.0);
-      const eVelocity = (12 + (enemy.stamina / 10) + (enemy.weapon.reach * 1.5)) * (eAct === 'thrust' ? 1.2 : 1.0);
+      // Kinematics calculations
+      const pMass = player.weap.mass;
+      const eMass = enemy.weap.mass;
+      const pVel = (12 + (player.stamina / 10) + player.weap.reach * 1.5);
+      const eVel = (12 + (enemy.stamina / 10) + enemy.weap.reach * 1.5);
+      const pJoules = 0.5 * pMass * (pVel * pVel) * (1 + campaignBuffHone / 100);
+      const eJoules = 0.5 * eMass * (eVel * eVel);
 
-      const pMass = player.weapon.mass;
-      const eMass = enemy.weapon.mass;
+      // 1. Off-Hand Specialized Actions
+      if (pAct === 'offhand_action') {
+        const spec = player.off.special;
 
-      // Kinetic Energy = 0.5 * m * v^2
-      const pJoules = 0.5 * pMass * (pVelocity * pVelocity);
-      const eJoules = 0.5 * eMass * (eVelocity * eVelocity);
-
-      // Bind Mechanics
-      if (pAct === 'bind' || eAct === 'bind') {
-        playSound('clang');
-        const pLeverScore = (player.weapon.bind + (player.style.bindBonus || 0)) * (player.balance / 100);
-        const eLeverScore = (enemy.weapon.bind + (enemy.style.bindBonus || 0)) * (enemy.balance / 100);
-
-        if (pLeverScore > eLeverScore + 10) {
-          bladeLeverState = 'player_forte';
-          enemy.balance = Math.max(0, enemy.balance - 25);
-          narrative += `<p class="text-emerald-400">🛡️ <b class="font-bold">Superior Lever:</b> You drive your heavy Forte across the foe's foible, twisting their point wide and commanding the centerline!</p>`;
-        } else if (eLeverScore > pLeverScore + 10) {
-          bladeLeverState = 'enemy_forte';
-          player.balance = Math.max(0, player.balance - 25);
-          narrative += `<p class="text-red-400">⚠️ <b class="font-bold">Bind Crushed:</b> ${enemy.name} binds over your weak edge with overwhelming mechanical advantage!</p>`;
-        } else {
-          bladeLeverState = 'bound_neutral';
-          narrative += `<p class="text-amber-400">⚔️ Steel grinds violently against steel in a deadlocked bind. Both blades shudder with stored kinetic torque.</p>`;
-        }
-        lastTelemetry = { velocity: pVelocity, joules: pJoules * 0.4, deflectionAngle: 45, depthMm: 0, tempo: "Indes (The Bind)" };
-        appendLog(narrative);
-        return;
-      }
-
-      // Pommel & Grappling
-      if (pAct === 'pommel') {
-        playSound('thud');
-        const bluntDmg = player.weapon.blunt + 35;
-        applyBluntStrike(enemy, bluntDmg, 'head', narrative, true);
-        lastTelemetry = { velocity: 8.5, joules: 65, deflectionAngle: 10, depthMm: 4, tempo: "Vor (Infight Shock)" };
-        return;
-      }
-
-      if (pAct === 'grapple') {
-        playSound('thud');
-        const pGrip = player.balance + (player.style.grappleBonus || 0);
-        const eGrip = enemy.balance + (enemy.style.grappleBonus || 0);
-        if (pGrip >= eGrip) {
-          enemy.isDown = true;
+        if (spec === 'buckler_punch') {
+          playSound('thud');
+          const bluntDmg = 45;
+          enemy.concussion = Math.min(100, enemy.concussion + bluntDmg);
+          enemy.balance = Math.max(0, enemy.balance - 40);
+          narrative += `<p class="text-gold font-bold">🛡️ BOSELEN (BUCKLER PUNCH): You thrust the iron rim of your buckler directly into ${enemy.name}'s facial bones! Concussive shockwave fractures bone.</p>`;
+          lastPhysics = { vel: 8.5, joules: 60, angle: 10, depth: 3, tempo: "Indes (Shield Punch)" };
+          appendCombatLog(narrative);
+          return;
+        } else if (spec === 'dagger_riposte') {
+          playSound('clash');
+          bladeLever = 'player_forte';
+          enemy.balance = Math.max(0, enemy.balance - 30);
+          narrative += `<p class="text-cyan font-bold">🗡️ MAIN GAUCHE TRAP: The flared quillons of your parrying dagger catch ${enemy.name}'s incoming edge in a vise grip! Centerline is yours.</p>`;
+          executePenetration(player, enemy, 'thrust', pJoules, 'torso', narrative);
+          return;
+        } else if (spec === 'targe_slam') {
+          playSound('thud');
           enemy.balance = 0;
-          enemy.stamina = Math.max(0, enemy.stamina - 30);
-          narrative += `<p class="text-emerald-400 font-bold">🤼 Mechanical Takedown! You hook the foe's lead heel, wrenching their elbow and slamming them violently into the earth!</p>`;
+          enemy.isGrounded = true;
+          narrative += `<p class="text-gold font-bold">🛡️ TARGE CHARGE: You slam the steel center spike and heavy wood of your targe into the foe's chest! ${enemy.name} crashes to the earth!</p>`;
+          appendCombatLog(narrative);
+          return;
+        } else if (spec === 'cloak_snare') {
+          playSound('clash');
+          bladeLever = 'snared';
+          narrative += `<p class="text-cyan font-bold">🧥 CLOAK WRAP: You whip the weighted wool around the enemy's blade, snaring their weapon hand in heavy fabric folds!</p>`;
+          appendCombatLog(narrative);
+          return;
+        } else if (spec === 'rondel_thrust') {
+          combatDistance = 'handarbeit';
+          narrative += `<p class="text-purple font-bold">🗡️ RONDEL SLIP: Slipping under the guard in tight infighting, you drive the stiff triangular spike towards armor seams!</p>`;
+          executePenetration(player, enemy, 'thrust', pJoules * 1.2, 'neck', narrative, true);
+          return;
+        } else if (spec === 'scutum_bash') {
+          playSound('thud');
+          combatDistance = 'zufechten';
+          enemy.balance = Math.max(0, enemy.balance - 45);
+          narrative += `<p class="text-gold font-bold">🛡️ SCUTUM WALL: You drive your entire shoulder behind the tower shield, blasting ${enemy.name} clean back to Zufechten!</p>`;
+          appendCombatLog(narrative);
+          return;
         } else {
-          player.balance = Math.max(10, player.balance - 20);
-          narrative += `<p class="text-zinc-400">Clinch breaks apart in a flurry of tangled elbows and crossguard shoves.</p>`;
-        }
-        appendLog(narrative);
-        return;
-      }
-
-      // Master Cut / Counter Resolution
-      if (pAct === 'master_cut') {
-        const bonus = (player.style.counterBonus || 0) + (bladeLeverState === 'player_forte' ? 30 : 0);
-        if (Math.random() * 100 < 55 + bonus) {
-          playSound('clang');
-          setTimeout(() => playSound('slash'), 80);
-          stats.ripostes++;
-          narrative += `<p class="text-emerald-300 font-bold">⚔️ MASTER CUT (WINDEN): In the single tempo of the incoming strike, you displace the enemy's line and drive your edge clean home!</p>`;
-          applyPenetrationStrike(player, enemy, 'cut', pJoules * 1.3, 'neck', narrative);
+          // Free Hand Grapple (Abrazare)
+          playSound('thud');
+          if (player.balance + player.style.grapple > enemy.balance) {
+            enemy.isGrounded = true;
+            enemy.balance = 0;
+            narrative += `<p class="text-emerald font-bold">🤼 ABRAZARE TAKEDOWN: Under-hooking the elbow and wrapping the lead thigh, you throw ${enemy.name} hard against the earth!</p>`;
+          } else {
+            player.balance = Math.max(10, player.balance - 20);
+            narrative += `<p class="text-steel-mid">Grappling clinch broken as both fencers push apart with crossguards.</p>`;
+          }
+          appendCombatLog(narrative);
           return;
         }
       }
 
-      // Simultaneous Exchanges
-      const pSuccess = Math.random() * 100 < (60 + (bladeLeverState === 'player_forte' ? 20 : 0) - (player.concussion / 2));
-      const eSuccess = Math.random() * 100 < (55 + (bladeLeverState === 'enemy_forte' ? 20 : 0) - (enemy.concussion / 2));
+      // 2. Bind & Lever Resolution
+      if (pAct === 'bind' || eAct === 'bind') {
+        playSound('clash');
+        const pLever = (player.weap.bind + player.off.bind + player.style.bind) * (player.balance / 100);
+        const eLever = (enemy.weap.bind + enemy.off.bind + enemy.style.bind) * (enemy.balance / 100);
 
-      let hitOccurred = false;
-
-      if (pSuccess) {
-        hitOccurred = true;
-        const targetZone = pAct === 'cut_high' ? (Math.random() > 0.4 ? 'head' : 'neck') : (pAct === 'cut_low' ? (Math.random() > 0.5 ? 'rLeg' : 'lLeg') : (pAct === 'thrust' ? 'torso' : 'rArm'));
-        const strikeType = pAct === 'thrust' ? 'thrust' : 'cut';
-        applyPenetrationStrike(player, enemy, strikeType, pJoules, targetZone, narrative);
-      }
-
-      if (eSuccess && !enemy.isDown && enemy.bloodLoss < 95) {
-        hitOccurred = true;
-        const eTarget = eAct === 'cut_high' ? 'head' : (eAct === 'thrust' ? 'torso' : (eAct === 'cut_low' ? 'rLeg' : 'rArm'));
-        const eStrikeType = eAct === 'thrust' ? 'thrust' : 'cut';
-        applyPenetrationStrike(enemy, player, eStrikeType, eJoules, eTarget, narrative);
-      }
-
-      if (!hitOccurred) {
-        playSound('clang');
-        narrative += `<p class="text-zinc-400">Both blades meet at high speed in the centerline, sparks showering off hardened fuller flutes with no blood drawn.</p>`;
-        bladeLeverState = 'bound_neutral';
-        lastTelemetry = { velocity: pVelocity, joules: pJoules * 0.8, deflectionAngle: 52, depthMm: 0, tempo: "Simultaneous Displacement" };
-        appendLog(narrative);
-      }
-    }
-
-    function applyBluntStrike(target, bluntVal, zone, narrativeBase, isPlayerAttacker) {
-      const helmProt = target.helm.bluntResist;
-      const effectiveBlunt = Math.max(10, bluntVal - (helmProt * 0.4));
-
-      target.concussion = Math.min(100, target.concussion + effectiveBlunt);
-      target.balance = Math.max(0, target.balance - (effectiveBlunt * 1.2));
-
-      let text = narrativeBase + `<p class="text-amber-400 font-bold">🔨 CRUSHING BLOW: The steel pommel smashes into the ${target.helm.name}! Cranial shockwave induces ${Math.round(effectiveBlunt)} Joules of blunt concussion.</p>`;
-
-      if (target.concussion >= 80) {
-        target.isDown = true;
-        text += `<p class="text-red-500 font-bold">💀 CEREBRAL COLLAPSE: ${target.name}'s eyes roll back into their skull as motor function fails completely!</p>`;
-      }
-      appendLog(text);
-    }
-
-    function applyPenetrationStrike(attacker, defender, strikeType, joules, zone, narrativeBase) {
-      if (defender.isPlayer && isGodModeActive) {
-        playSound('clang');
-        appendLog(narrativeBase + `<p class="text-purple-400 font-bold">⚡ GOD MODE SHIELD: Kinetic impact (${joules.toFixed(1)}J) harmlessly disintegrates against divine invulnerability!</p>`);
+        if (pLever > eLever + 10) {
+          bladeLever = 'player_forte';
+          enemy.balance = Math.max(0, enemy.balance - 25);
+          narrative += `<p class="text-emerald">⚔️ <b>Mastery of Forte:</b> You wind your forte over the enemy's weak, commanding their weapon wide and exposing their throat!</p>`;
+        } else if (eLever > pLever + 10) {
+          bladeLever = 'enemy_forte';
+          player.balance = Math.max(0, player.balance - 25);
+          narrative += `<p class="text-red">⚠️ <b>Bind Collapsed:</b> ${enemy.name} crushes your blade under superior mechanical leverage!</p>`;
+        } else {
+          bladeLever = 'neutral_bind';
+          narrative += `<p class="text-gold">⚔️ Steel grinds hard in the center. Both swords locked in tension.</p>`;
+        }
+        lastPhysics = { vel: pVel, joules: pJoules * 0.4, angle: 45, depth: 0, tempo: "Indes (The Bind)" };
+        appendCombatLog(narrative);
         return;
       }
 
-      // Calculate Armor Protection
+      // 3. Master Cut / Riposte
+      if (pAct === 'master_cut') {
+        const bonus = player.style.counter + (bladeLever === 'player_forte' ? 25 : 0) + player.off.bind;
+        if (Math.random() * 100 < 50 + bonus) {
+          playSound('clash');
+          narrative += `<p class="text-emerald font-bold">⚔️ MASTER CUT (WINDEN): In the single tempo of the incoming attack, your edge displaces their point and shears cleanly home!</p>`;
+          executePenetration(player, enemy, 'cut', pJoules * 1.3, 'neck', narrative);
+          return;
+        }
+      }
+
+      // 4. Simultaneous Attacks
+      const pHitRoll = Math.random() * 100 < (60 + (bladeLever === 'player_forte' ? 25 : 0) - (player.concussion / 2));
+      const eHitRoll = Math.random() * 100 < (55 + (bladeLever === 'enemy_forte' ? 25 : 0) - (bladeLever === 'snared' ? 35 : 0) - (enemy.concussion / 2));
+
+      if (bladeLever === 'snared') bladeLever = 'free'; // reset snare after turn
+
+      let hitLanded = false;
+
+      if (pHitRoll) {
+        hitLanded = true;
+        const targetZone = pAct === 'cut_high' ? 'head' : (pAct === 'cut_low' ? 'legs' : (pAct === 'thrust' ? 'torso' : 'rArm'));
+        const strikeType = pAct === 'thrust' ? 'thrust' : 'cut';
+        executePenetration(player, enemy, strikeType, pJoules, targetZone, narrative);
+      }
+
+      if (eHitRoll && !enemy.isGrounded && enemy.bloodLoss < 95) {
+        hitLanded = true;
+        const eTarget = eAct === 'cut_high' ? 'head' : (eAct === 'thrust' ? 'torso' : 'legs');
+        const eType = eAct === 'thrust' ? 'thrust' : 'cut';
+        executePenetration(enemy, player, eType, eJoules, eTarget, narrative);
+      }
+
+      if (!hitLanded) {
+        playSound('clash');
+        narrative += `<p class="text-steel-mid">Blades collide in high velocity deflection! Steel rings as neither combatant finds flesh.</p>`;
+        bladeLever = 'neutral_bind';
+        lastPhysics = { vel: pVel, joules: pJoules * 0.7, angle: 50, depth: 0, tempo: "Simul Deflection" };
+        appendCombatLog(narrative);
+      }
+    }
+
+    function executePenetration(attacker, defender, strikeType, joules, zone, baseNarrative, bypassArmor = false) {
+      if (defender.isPlayer && isGodMode) {
+        playSound('clash');
+        appendCombatLog(baseNarrative + `<p class="text-purple font-bold">⚡ GOD SHIELD: Divine power vaporizes the incoming ${joules.toFixed(1)}J kinetic strike!</p>`);
+        return;
+      }
+
+      // Off-Hand active shield deflection check
+      if (defender.off.def > 0 && Math.random() * 100 < defender.off.def) {
+        playSound('clash');
+        defender.balance = Math.max(0, defender.balance - (joules * 0.1));
+        appendCombatLog(baseNarrative + `<p class="text-cyan">🛡️ <b>SHIELD DEFLECTED:</b> ${defender.name} intercepts the strike flush on the ${defender.off.name}! Force dispersed.</p>`);
+        return;
+      }
+
+      // Armor calculation
       let armorResist = 0;
       let armorName = "";
-      let isFaceStrike = false;
+      let faceBypassed = false;
 
       if (zone === 'head' || zone === 'neck') {
         armorName = defender.helm.name;
         armorResist = strikeType === 'cut' ? defender.helm.slashResist : defender.helm.thrustResist;
-        if (defender.helm.faceExposed && Math.random() < 0.4) {
-          isFaceStrike = true;
-          armorResist = 0; // bypassed helmet!
+        if (defender.helm.faceExposed && Math.random() < 0.45) {
+          faceBypassed = true;
+          armorResist = 0;
         }
       } else {
-        armorName = defender.armor.name;
-        armorResist = strikeType === 'cut' ? defender.armor.slashResist : defender.armor.thrustResist;
+        armorName = defender.arm.name;
+        armorResist = strikeType === 'cut' ? defender.arm.slashResist : defender.arm.thrustResist;
       }
 
-      // Deflection Physics
-      const incidenceAngle = Math.random() * 60; // 0 to 60 degrees
-      const kineticMultiplier = Math.cos(incidenceAngle * Math.PI / 180);
-      const effectiveJoules = joules * kineticMultiplier;
+      if (bypassArmor) armorResist = 0;
 
-      lastTelemetry = {
-        velocity: Math.sqrt((2 * joules) / attacker.weapon.mass),
+      // Deflection incidence angle
+      const angle = Math.random() * 55;
+      const angleMultiplier = Math.cos(angle * Math.PI / 180);
+      const effectiveJoules = joules * angleMultiplier;
+
+      lastPhysics = {
+        vel: Math.sqrt((2 * joules) / attacker.weap.mass),
         joules: joules,
-        deflectionAngle: incidenceAngle,
-        depthMm: Math.max(0, (effectiveJoules - armorResist) * 0.8),
+        angle: angle,
+        depth: Math.max(0, (effectiveJoules - armorResist) * 0.85),
         tempo: attacker.isPlayer ? "Vor (Decisive Strike)" : "Nach (Enemy Reprisal)"
       };
 
-      if (effectiveJoules < armorResist && !isFaceStrike) {
-        // Armor held!
-        playSound('clang');
+      if (effectiveJoules <= armorResist && !faceBypassed) {
+        playSound('clash');
         defender.balance = Math.max(0, defender.balance - (joules * 0.15));
-        const defText = `<p class="text-cyan-400">🛡️ <b class="font-bold">DEFLECTED:</b> The blade screeches violently across ${defender.name}'s ${armorName} at a ${incidenceAngle.toFixed(1)}° glance. Steel turns aside!</p>`;
-        appendLog(narrativeBase + defText);
+        appendCombatLog(baseNarrative + `<p class="text-steel-light">🛡️ <b>ARMOR DEFLECTED:</b> Edge glances off ${defender.name}'s ${armorName} at a ${angle.toFixed(1)}° angle! Sparks fly.</p>`);
         return;
       }
 
-      // Penetration occurred!
+      // Real Anatomical Penetration
       playSound('flesh');
-      let woundSeverity = effectiveJoules - armorResist;
-      let traumaText = "";
-
+      let text = "";
       if (zone === 'head') {
-        if (isFaceStrike && strikeType === 'thrust') {
-          traumaText = `<b class="text-red-500 font-bold">FATAL FACIAL PUNCTURE:</b> The needle tip pierces straight through the open nasal opening, driving into the brain stem!`;
+        if (faceBypassed && strikeType === 'thrust') {
+          text = `<b class="text-red font-bold">FATAL FACIAL PUNCTURE:</b> Blade drives straight through the unarmored visor into the cerebral cortex!`;
           defender.bloodLoss = 100;
-          stats.decaps++;
         } else {
-          traumaText = `<b class="text-red-400">CRANIAL SPLIT:</b> Hardened edge cleaves the skull bone, spraying arterial crimson and shattering consciousness!`;
+          text = `<b class="text-red font-bold">CRANIAL SPLIT:</b> Hardened steel breaches skull bone! Severe concussive bleeding.`;
           defender.concussion = 100;
           defender.bloodLoss += 40;
         }
       } else if (zone === 'neck') {
-        traumaText = `<b class="text-red-500 font-bold">CAROTID ARTERY SEVERED:</b> A catastrophic shearing laceration opens the throat. Blood fountains under massive hydrostatic pressure!`;
+        text = `<b class="text-red font-bold">CAROTID SEVERED:</b> Catastrophic shearing cut tears the carotid artery! Blood sprays under high pressure!`;
         defender.bloodLoss += 65;
-        stats.decaps++;
       } else if (zone === 'torso') {
         if (strikeType === 'thrust') {
-          traumaText = `<b class="text-red-400">PULMONARY PUNCTURE:</b> The blade drives four inches deep between the ribs, collapsing the lung!`;
+          text = `<b class="text-red">PULMONARY PUNCTURE:</b> Needle point plunges deep between the ribs, puncturing lungs!`;
           defender.bloodLoss += 35;
           defender.stamina = 0;
         } else {
-          traumaText = `<b class="text-red-300">TORSO LACERATION:</b> Deep diagonal wound slicing muscle tissue across the abdomen.`;
-          defender.bloodLoss += 20;
+          text = `<b class="text-red">DEEP TORSO LACERATION:</b> Heavy cutting arc opens a visceral wound across the ribs.`;
+          defender.bloodLoss += 25;
         }
-      } else if (zone.includes('Arm')) {
-        traumaText = `<b class="text-amber-300">TENDONS SEVERED:</b> Weapon arm maimed by the shearing edge! Grip fails as nerves are cut.`;
-        defender.stamina = Math.max(0, defender.stamina - 45);
-        defender.bloodLoss += 15;
+      } else if (zone === 'rArm' || zone === 'lArm') {
+        text = `<b class="text-gold">TENDONS SEVERED:</b> Arm tendons cleanly parted by the razor edge! Grip strength collapses.`;
+        defender.stamina = Math.max(0, defender.stamina - 40);
+        defender.bloodLoss += 18;
       } else {
-        traumaText = `<b class="text-amber-300">FEMORAL / LEG FRACTURE:</b> Leg collapsed under the violent kinetic blow; footing dissolves completely!`;
+        text = `<b class="text-gold">FEMORAL / KNEE CRUSH:</b> Leg bones fractured and knee tendons mangled. Balance ruined!`;
         defender.balance = 0;
-        defender.isDown = true;
+        defender.isGrounded = true;
         defender.bloodLoss += 25;
       }
 
       defender.wounds[zone].push(strikeType);
-      defender.balance = Math.max(0, defender.balance - (woundSeverity * 0.4));
+      defender.balance = Math.max(0, defender.balance - 35);
 
-      appendLog(narrativeBase + `<p class="text-red-400">${traumaText}</p>`);
+      if (attacker.isPlayer && isCampaignActive) {
+        campaignScore += Math.round(joules * 1.5);
+      }
+
+      appendCombatLog(baseNarrative + `<p class="text-red">${text}</p>`);
     }
 
-    function checkBleedAndFatigue() {
-      // Natural blood loss tick
-      if (player.bloodLoss > 0 && !(player.isPlayer && isGodModeActive)) {
-        player.bloodLoss = Math.min(100, player.bloodLoss + 3);
-      }
-      if (enemy.bloodLoss > 0) {
-        enemy.bloodLoss = Math.min(100, enemy.bloodLoss + 3);
-      }
-
-      // Arena hazards
-      if (currentArena === 'Muddy Courtyard') {
-        player.balance = Math.max(0, player.balance - 5);
-        enemy.balance = Math.max(0, enemy.balance - 5);
-      }
-    }
-
-    function checkDuelConcluded() {
-      let ended = false;
+    function checkDuelFinished() {
+      let finished = false;
 
       if (enemy.bloodLoss >= 100 || enemy.concussion >= 100) {
-        ended = true;
-        stats.wins++;
-        playSound('flesh');
-        appendLog(`<div class="p-3 rounded bg-emerald-950/80 border border-emerald-500 text-emerald-200 text-center font-bold">
-          🏆 VICTORY CLAIMED: ${enemy.name} has collapsed in the dust, life bleeding away into the proving ground.
+        finished = true;
+        playSound('victory');
+        appendCombatLog(`<div class="p-2.5 rounded bg-[#102a1e] border border-emerald text-emerald font-bold text-center">
+          🏆 VICTORY CLAIMED: ${enemy.name} has fallen motionless in the dust!
         </div>`);
-        saveStats();
+
+        if (isCampaignActive) {
+          handleCampaignStageWon();
+        }
       } else if (player.bloodLoss >= 100 || player.concussion >= 100) {
-        if (!isGodModeActive) {
-          ended = true;
-          stats.losses++;
+        if (!isGodMode) {
+          finished = true;
           playSound('thud');
-          appendLog(`<div class="p-3 rounded bg-red-950/80 border border-red-500 text-red-200 text-center font-bold">
-            💀 FATAL COLLAPSE: Darkness overtakes your vision as your heart falters from catastrophic trauma. You have fallen.
+          appendCombatLog(`<div class="p-2.5 rounded bg-[#2e1010] border border-red text-red font-bold text-center">
+            💀 FATAL TRAUMA: Darkness takes your vision as your heart stops. You have perished.
           </div>`);
-          saveStats();
+
+          if (isCampaignActive) {
+            handleCampaignDefeat();
+          }
         }
       }
-      return ended;
+
+      return finished;
     }
 
     /* =====================================================================
-       6. GOD MODE & SANDBOX UTILITIES
+       7. CAMPAIGN ENGINE ("THE CRUCIBLE OF STEEL")
        ===================================================================== */
 
-    function toggleGodInvulnerability() {
-      isGodModeActive = !isGodModeActive;
-      const btn = document.getElementById('godToggleBtn');
-      btn.textContent = `Toggle Invulnerability: ${isGodModeActive ? 'ON' : 'OFF'}`;
-      btn.className = isGodModeActive ? "p-2 rounded bg-purple-700 border border-purple-300 text-white font-bold text-center" : "p-2 rounded bg-purple-950/80 border border-purple-500 text-purple-200 font-bold text-center";
-      updateHUD();
-      showToast(isGodModeActive ? "God Mode Invulnerable" : "God Mode Disabled");
-    }
+    function engageCampaignStage() {
+      initAudio();
+      isCampaignActive = true;
+      const stage = CAMPAIGN_STAGES[currentCampaignFloor - 1];
 
-    function instantKillEnemy() {
-      enemy.bloodLoss = 100;
-      enemy.concussion = 100;
-      enemy.isDown = true;
-      playSound('flesh');
-      stats.decaps++;
-      appendLog(`<p class="text-purple-400 font-bold">⚡ [DEV CONSOLE]: God command invoked. Severed the cervical vertebrae of ${enemy.name}. Immediate cessation of vitals.</p>`);
-      updateHUD();
-      checkDuelConcluded();
-      closeModal('modalGod');
-    }
-
-    function restoreDuelist(who) {
-      const target = who === 'player' ? player : enemy;
-      target.balance = 100;
-      target.stamina = 100;
-      target.bloodLoss = 0;
-      target.concussion = 0;
-      target.isDown = false;
-      target.wounds = { head: [], neck: [], torso: [], rArm: [], lArm: [], rLeg: [], lLeg: [] };
-      updateHUD();
-      showToast(`${target.name} Completely Restored`);
-    }
-
-    function injectWound() {
-      const targetKey = document.getElementById('woundTarget').value;
-      const target = targetKey === 'player' ? player : enemy;
-      const zone = document.getElementById('woundZone').value;
-      const type = document.getElementById('woundType').value;
-
-      target.wounds[zone].push(type);
-      if (type === 'arterial') target.bloodLoss = Math.min(100, target.bloodLoss + 40);
-      if (type === 'concussion') target.concussion = Math.min(100, target.concussion + 50);
-      if (type === 'severed_tendon') target.balance = 0;
-      if (type === 'fracture') target.balance = Math.max(0, target.balance - 50);
-
-      playSound('flesh');
-      appendLog(`<p class="text-purple-400 font-mono">[DEV INJECT] Inflicted ${type.toUpperCase()} on ${target.name}'s ${zone.toUpperCase()}.</p>`);
-      updateHUD();
-      closeModal('modalGod');
-    }
-
-    /* =====================================================================
-       7. 1V1 DUEL BUILDER & CATALOG POPULATION
-       ===================================================================== */
-
-    function populateSelects() {
-      const pStyle = document.getElementById('pStyleSelect');
-      const eStyle = document.getElementById('eStyleSelect');
-      const pWeap = document.getElementById('pWeaponSelect');
-      const eWeap = document.getElementById('eWeaponSelect');
-      const pArm = document.getElementById('pArmorSelect');
-      const eArm = document.getElementById('eArmorSelect');
-      const pHelm = document.getElementById('pHelmSelect');
-      const eHelm = document.getElementById('eHelmSelect');
-
-      // Styles
-      for (let k in STYLES) {
-        const opt = `<option value="${k}">${STYLES[k].name}</option>`;
-        pStyle.innerHTML += opt;
-        eStyle.innerHTML += opt;
-      }
-
-      // Weapons (categorized)
-      for (let k in WEAPONS) {
-        const w = WEAPONS[k];
-        const opt = `<option value="${k}">[${w.cat}] ${w.name}</option>`;
-        pWeap.innerHTML += opt;
-        eWeap.innerHTML += opt;
-      }
-
-      // Armors
-      for (let k in ARMORS) {
-        const a = ARMORS[k];
-        const opt = `<option value="${k}">[${a.tier}] ${a.name}</option>`;
-        pArm.innerHTML += opt;
-        eArm.innerHTML += opt;
-      }
-
-      // Helms
-      for (let k in HELMS) {
-        const h = HELMS[k];
-        const opt = `<option value="${k}">[${h.tier}] ${h.name}</option>`;
-        pHelm.innerHTML += opt;
-        eHelm.innerHTML += opt;
-      }
-
-      // Set defaults
-      pStyle.value = "Liechtenauer";
-      pWeap.value = "typeXVIIIb";
-      pArm.value = "gambeson";
-      pHelm.value = "spangenhelm";
-
-      eStyle.value = "Liechtenauer";
-      eWeap.value = "typeXVIIIb";
-      eArm.value = "gambeson";
-      eHelm.value = "spangenhelm";
-    }
-
-    function quickMatch(isLethalMaster) {
-      const weaponKeys = Object.keys(WEAPONS);
-      const styleKeys = Object.keys(STYLES);
-      const armorKeys = Object.keys(ARMORS);
-      const helmKeys = Object.keys(HELMS);
-
-      const rWeap = weaponKeys[Math.floor(Math.random() * weaponKeys.length)];
-      const rStyle = styleKeys[Math.floor(Math.random() * styleKeys.length)];
-      const rArmor = isLethalMaster ? "milanesePlate" : armorKeys[Math.floor(Math.random() * armorKeys.length)];
-      const rHelm = isLethalMaster ? "sugarloaf" : helmKeys[Math.floor(Math.random() * helmKeys.length)];
-
-      const oppTitle = isLethalMaster ? "Master Veteran" : "Sparring Duelist";
-      enemy = createFighter(oppTitle, false, rStyle, rWeap, rArmor, rHelm);
-      resetMatchParameters();
-      closeModal('modalDuel');
-      showToast(`Engaged: ${enemy.name}`);
-    }
-
-    function startConfiguredDuel() {
-      currentArena = document.getElementById('arenaSelect').value;
-
-      const pS = document.getElementById('pStyleSelect').value;
-      const pW = document.getElementById('pWeaponSelect').value;
-      const pA = document.getElementById('pArmorSelect').value;
-      const pH = document.getElementById('pHelmSelect').value;
-
-      const eS = document.getElementById('eStyleSelect').value;
-      const eW = document.getElementById('eWeaponSelect').value;
-      const eA = document.getElementById('eArmorSelect').value;
-      const eH = document.getElementById('eHelmSelect').value;
-
-      player = createFighter("You", true, pS, pW, pA, pH);
-      enemy = createFighter("Custom Opponent", false, eS, eW, eA, eH);
-
-      resetMatchParameters();
-      closeModal('modalDuel');
-      showToast("Custom Bout Initiated");
-    }
-
-    function resetMatchParameters() {
-      roundNumber = 1;
-      distanceState = 'zufechten';
-      bladeLeverState = 'free';
-      player.bloodLoss = 0;
-      player.concussion = 0;
+      enemy = createFighter(stage.name, false, stage.style, stage.weap, stage.off, stage.arm, stage.helm);
       player.balance = 100;
       player.stamina = 100;
-      player.isDown = false;
-
-      enemy.bloodLoss = 0;
-      enemy.concussion = 0;
-      enemy.balance = 100;
-      enemy.stamina = 100;
-      enemy.isDown = false;
+      roundNumber = 1;
+      combatDistance = 'zufechten';
+      bladeLever = 'free';
 
       const log = document.getElementById('combatLog');
       log.innerHTML = '';
-      appendLog(`<div class="p-3 rounded bg-zinc-900 border border-amber-600/40 text-xs leading-relaxed">
-        <div class="text-amber-400 font-bold text-sm mb-1">⚔️ NEW DUEL: ${player.weapon.name} vs ${enemy.weapon.name}</div>
-        <p class="text-zinc-300">Duelists square off in the <b class="text-white">${currentArena}</b>. Opponent adopts the stance of <b class="text-amber-300">${enemy.style.name}</b> clad in ${enemy.armor.name} and ${enemy.helm.name}.</p>
+      appendCombatLog(`<div class="p-3 iron-panel" style="border-radius: 6px;">
+        <div class="text-gold font-bold text-sm">🏆 CAMPAIGN STAGE ${currentCampaignFloor} / 20</div>
+        <p class="text-steel-light">You face <b>${enemy.name}</b> wielding ${enemy.weap.name} and ${enemy.off.name}.</p>
       </div>`);
+
+      switchTab('arena');
       updateHUD();
     }
 
-    /* =====================================================================
-       8. SAVE / LOAD / EXPORT SYSTEM
-       ===================================================================== */
+    function handleCampaignStageWon() {
+      campaignScore += (currentCampaignFloor * 250);
+      document.getElementById('campStatScore').textContent = `${campaignScore} pts`;
+      document.getElementById('campStatFloors').textContent = `${currentCampaignFloor}/20`;
+      document.getElementById('campaignProgressBar').style.width = `${(currentCampaignFloor / 20) * 100}%`;
 
-    function exportSaveString() {
-      const stateObj = {
-        ver: "KS4.0",
-        pStyle: player.styleKey,
-        pWeapon: player.weaponKey,
-        pArmor: player.armorKey,
-        pHelm: player.helmKey,
-        wins: stats.wins,
-        losses: stats.losses,
-        decaps: stats.decaps,
-        ripostes: stats.ripostes
-      };
-
-      const plainString = `[KS4-SAVE|STYLE=${stateObj.pStyle}|WEAPON=${stateObj.pWeapon}|ARMOR=${stateObj.pArmor}|HELM=${stateObj.pHelm}|WINS=${stateObj.wins}|LOSS=${stateObj.losses}|DECAP=${stateObj.decaps}|RIP=${stateObj.ripostes}]`;
-
-      const area = document.getElementById('saveLoadString');
-      area.value = plainString;
-      area.select();
-
-      // Clipboard copy helper
-      try {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(plainString);
-        } else {
-          document.execCommand('copy');
-        }
-        showToast("Save String Copied to Clipboard!");
-      } catch (e) {
-        showToast("String Generated. Copy it manually.");
+      if (currentCampaignFloor >= 20) {
+        // Complete Victory!
+        openCampaignEndModal(true, "Conquered all 20 Champions of the Crucible!");
+      } else {
+        // Open Triage Modal
+        document.getElementById('triageStageBadge').textContent = `STAGE ${currentCampaignFloor} CLEARED`;
+        document.getElementById('triageScavengeText').textContent = `Equip fallen ${enemy.name}'s ${enemy.weap.name}.`;
+        document.getElementById('modalTriage').classList.add('open');
       }
     }
 
-    function importSaveString() {
-      const raw = document.getElementById('saveLoadString').value.trim();
-      if (!raw.startsWith('[KS4-SAVE|') || !raw.endsWith(']')) {
-        showToast("Invalid Save String format!");
+    function applyTriage(type) {
+      if (type === 'bandage') {
+        player.bloodLoss = Math.max(0, player.bloodLoss - 45);
+        player.balance = Math.min(100, player.balance + 30);
+        showToast("Wounds Sutured: -45% Bleed");
+      } else if (type === 'rest') {
+        player.stamina = 100;
+        player.concussion = Math.max(0, player.concussion - 40);
+        showToast("Rested: Full Stamina / Clear Head");
+      } else if (type === 'hone') {
+        campaignBuffHone += 20;
+        showToast("Blade Honed: +20% Next Damage");
+      } else if (type === 'scavenge') {
+        player.weapKey = enemy.weapKey;
+        player.weap = enemy.weap;
+        player.offKey = enemy.offKey;
+        player.off = enemy.off;
+        showToast(`Equipped: ${enemy.weap.name}`);
+        syncUISelections();
+      }
+      document.getElementById('modalTriage').classList.remove('open');
+      proceedToNextStage();
+    }
+
+    function proceedToNextStage() {
+      currentCampaignFloor++;
+      document.getElementById('modalTriage').classList.remove('open');
+      document.getElementById('campaignFloorBadge').textContent = `STAGE ${currentCampaignFloor} / 20`;
+      document.getElementById('campBtnStageNum').textContent = currentCampaignFloor;
+
+      const nextAdversary = CAMPAIGN_STAGES[currentCampaignFloor - 1];
+      document.getElementById('campEnemyName').textContent = `Tier ${currentCampaignFloor}: ${nextAdversary.name}`;
+      document.getElementById('campEnemyStyle').textContent = STYLES[nextAdversary.style].name;
+      document.getElementById('campEnemyDetails').textContent = nextAdversary.desc;
+      document.getElementById('campEnemyGear').textContent = `${WEAPONS[nextAdversary.weap].name} & ${OFFHANDS[nextAdversary.off].name}`;
+      document.getElementById('campEnemyArmor').textContent = `${ARMORS[nextAdversary.arm].name} / ${HELMS[nextAdversary.helm].name}`;
+
+      switchTab('campaign');
+    }
+
+    function handleCampaignDefeat() {
+      openCampaignEndModal(false, `Fell on Floor ${currentCampaignFloor} against ${enemy.name}`);
+    }
+
+    function openCampaignEndModal(isWin, summary) {
+      document.getElementById('campEndHeader').textContent = isWin ? "🏆 CRUCIBLE CHAMPION!" : "💀 DEFEAT IN THE LISTS";
+      document.getElementById('campEndHeader').className = isWin ? "text-lg font-bold text-gold" : "text-lg font-bold text-red";
+      document.getElementById('campEndSub').textContent = summary;
+      document.getElementById('campEndFloors').textContent = `${isWin ? 20 : currentCampaignFloor} / 20`;
+      document.getElementById('campEndScore').textContent = `${campaignScore} PTS`;
+      document.getElementById('campEndCause').textContent = isWin ? "Crown of Steel" : `Slain by ${enemy.name}`;
+      document.getElementById('modalCampaignEnd').classList.add('open');
+    }
+
+    /* =====================================================================
+       8. LOCAL LEADERBOARD PERSISTENCE
+       ===================================================================== */
+    const LEADERBOARD_KEY = 'kinetic_steel_leaderboard';
+
+    function getLeaderboard() {
+      try {
+        const data = localStorage.getItem(LEADERBOARD_KEY);
+        return data ? JSON.parse(data) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveLeaderboard(list) {
+      try {
+        localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(list));
+      } catch (e) {}
+    }
+
+    function submitLeaderboardRecord() {
+      const name = document.getElementById('campDuelistNameInput').value.trim() || "Nameless Duelist";
+      const record = {
+        name: name,
+        floor: currentCampaignFloor,
+        score: campaignScore,
+        weap: player.weap.name,
+        off: player.off.name,
+        style: player.style.name,
+        date: new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+      };
+
+      const board = getLeaderboard();
+      board.push(record);
+      board.sort((a, b) => b.score - a.score);
+      saveLeaderboard(board);
+
+      document.getElementById('modalCampaignEnd').classList.remove('open');
+      isCampaignActive = false;
+      currentCampaignFloor = 1;
+      campaignScore = 0;
+      switchTab('leaderboard');
+      showToast("Record Inscribed in Hall of Masters!");
+    }
+
+    function renderLeaderboard() {
+      const list = getLeaderboard();
+      const container = document.getElementById('leaderboardContainer');
+      container.innerHTML = '';
+
+      if (list.length === 0) {
+        container.innerHTML = `<div class="p-3 text-center text-dim text-xs">No campaign records recorded yet. Complete or attempt The Crucible of Steel to log your name.</div>`;
         return;
       }
 
-      try {
-        const parts = raw.slice(10, -1).split('|');
-        const map = {};
-        parts.forEach(p => {
-          const [k, v] = p.split('=');
-          map[k] = v;
-        });
-
-        if (map.STYLE && STYLES[map.STYLE]) player.styleKey = map.STYLE;
-        if (map.WEAPON && WEAPONS[map.WEAPON]) player.weaponKey = map.WEAPON;
-        if (map.ARMOR && ARMORS[map.ARMOR]) player.armorKey = map.ARMOR;
-        if (map.HELM && HELMS[map.HELM]) player.helmKey = map.HELM;
-
-        stats.wins = parseInt(map.WINS) || 0;
-        stats.losses = parseInt(map.LOSS) || 0;
-        stats.decaps = parseInt(map.DECAP) || 0;
-        stats.ripostes = parseInt(map.RIP) || 0;
-
-        player = createFighter("You", true, player.styleKey, player.weaponKey, player.armorKey, player.helmKey);
-        saveStats();
-        updateHUD();
-        closeModal('modalSaveLoad');
-        showToast("Character & Records Loaded!");
-      } catch (err) {
-        showToast("Failed to parse save string!");
-      }
+      list.forEach((rec, idx) => {
+        const item = document.createElement('div');
+        item.className = "inset-panel p-2 rounded flex-col";
+        item.style.gap = "2px";
+        item.innerHTML = `
+          <div class="flex-row items-center justify-between">
+            <span class="font-bold text-gold text-xs">#${idx + 1} ${rec.name}</span>
+            <span class="font-mono font-bold text-cyan text-xs">${rec.score} pts</span>
+          </div>
+          <div class="flex-row items-center justify-between text-steel-light" style="font-size: 10px;">
+            <span>${rec.floor >= 20 ? '🏆 CHAMPION (20/20)' : `Floor ${rec.floor}/20`}</span>
+            <span class="text-dim">${rec.date}</span>
+          </div>
+          <div class="text-dim truncate" style="font-size: 9px;">${rec.weap} & ${rec.off} • ${rec.style}</div>
+        `;
+        container.appendChild(item);
+      });
     }
 
-    function saveStats() {
-      try {
-        localStorage.setItem('KS4_STATS', JSON.stringify(stats));
-      } catch (e) {}
-    }
-
-    function loadSavedStats() {
-      try {
-        const s = localStorage.getItem('KS4_STATS');
-        if (s) {
-          const parsed = JSON.parse(s);
-          stats.wins = parsed.wins || 0;
-          stats.losses = parsed.losses || 0;
-          stats.decaps = parsed.decaps || 0;
-          stats.ripostes = parsed.ripostes || 0;
-        }
-      } catch (e) {}
+    function clearLeaderboardPrompt() {
+      saveLeaderboard([]);
+      renderLeaderboard();
+      showToast("Leaderboard Cleared");
     }
 
     /* =====================================================================
-       9. MODAL CONTROLS
+       9. ARMORY & LOADOUT SETUP
        ===================================================================== */
 
-    function openModal(id) {
-      initAudio();
-      document.getElementById(id).classList.remove('hidden');
+    function populateSelects() {
+      const pStyle = document.getElementById('selPlayerStyle');
+      const pWeap = document.getElementById('selPlayerWeapon');
+      const pOff = document.getElementById('selPlayerOffhand');
+      const pArm = document.getElementById('selPlayerArmor');
+      const pHelm = document.getElementById('selPlayerHelm');
+
+      for (let k in STYLES) {
+        pStyle.innerHTML += `<option value="${k}">${STYLES[k].name}</option>`;
+      }
+      for (let k in WEAPONS) {
+        const w = WEAPONS[k];
+        pWeap.innerHTML += `<option value="${k}">[${w.cat}] ${w.name}</option>`;
+      }
+      for (let k in OFFHANDS) {
+        pOff.innerHTML += `<option value="${k}">${OFFHANDS[k].name}</option>`;
+      }
+      for (let k in ARMORS) {
+        const a = ARMORS[k];
+        pArm.innerHTML += `<option value="${k}">[${a.tier}] ${a.name}</option>`;
+      }
+      for (let k in HELMS) {
+        const h = HELMS[k];
+        pHelm.innerHTML += `<option value="${k}">[${h.tier}] ${h.name}</option>`;
+      }
+
+      syncUISelections();
     }
 
-    function closeModal(id) {
-      document.getElementById(id).classList.add('hidden');
+    function syncUISelections() {
+      document.getElementById('selPlayerStyle').value = player.styleKey;
+      document.getElementById('selPlayerWeapon').value = player.weapKey;
+      document.getElementById('selPlayerOffhand').value = player.offKey;
+      document.getElementById('selPlayerArmor').value = player.armKey;
+      document.getElementById('selPlayerHelm').value = player.helmKey;
+      updateArmoryCard();
     }
 
-    // Initialize application on window load
+    function updatePlayerLoadoutFromUI() {
+      const s = document.getElementById('selPlayerStyle').value;
+      const w = document.getElementById('selPlayerWeapon').value;
+      const o = document.getElementById('selPlayerOffhand').value;
+      const a = document.getElementById('selPlayerArmor').value;
+      const h = document.getElementById('selPlayerHelm').value;
+
+      player = createFighter(player.name, true, s, w, o, a, h);
+      updateArmoryCard();
+      updateHUD();
+    }
+
+    function updateArmoryCard() {
+      document.getElementById('styleDescription').textContent = player.style.desc;
+      document.getElementById('offhandDescription').textContent = player.off.desc;
+
+      document.getElementById('statWeaponWeight').textContent = `${player.weap.mass} kg / Reach ${player.weap.reach}`;
+      document.getElementById('statWeaponPower').textContent = `Cut ${player.weap.cut} / Thrust ${player.weap.thrust}`;
+      document.getElementById('statWeaponBind').textContent = `+${player.weap.bind + player.off.bind} Bind`;
+
+      document.getElementById('statArmorSlash').textContent = `${player.arm.slashResist}% (${player.arm.name})`;
+      document.getElementById('statHelmBlunt').textContent = `${player.helm.bluntResist}% (${player.helm.name})`;
+    }
+
+    function startArenaWithLoadout() {
+      updatePlayerLoadoutFromUI();
+      isCampaignActive = false;
+      enemy = createFighter("Sparring Partner", false, "Liechtenauer", "typeXVIIIb", "buckler", "gambeson", "spangenhelm");
+      player.balance = 100;
+      player.stamina = 100;
+      player.bloodLoss = 0;
+      player.concussion = 0;
+      player.isGrounded = false;
+      roundNumber = 1;
+      combatDistance = 'zufechten';
+      bladeLever = 'free';
+
+      const log = document.getElementById('combatLog');
+      log.innerHTML = '';
+      appendCombatLog(`<div class="p-3 iron-panel" style="border-radius: 6px;">
+        <div class="text-gold font-bold text-sm">⚔️ ARENA SPARRING INITIATED</div>
+        <p class="text-steel-light">Custom loadout active: <b>${player.weap.name}</b> and <b>${player.off.name}</b>.</p>
+      </div>`);
+
+      switchTab('arena');
+      showToast("Arena Duel Started");
+    }
+
+    /* =====================================================================
+       10. GOD MODE DEV CONSOLE
+       ===================================================================== */
+
+    function toggleGodInvulnerability() {
+      isGodMode = !isGodMode;
+      const btn = document.getElementById('godInvulnBtn');
+      btn.textContent = `Invulnerability: ${isGodMode ? 'ON' : 'OFF'}`;
+      btn.className = isGodMode ? "btn-steel btn-purple" : "btn-steel";
+      updateHUD();
+      showToast(isGodMode ? "God Mode Invulnerable" : "God Mode Disabled");
+    }
+
+    function godInstantDecapitate() {
+      enemy.bloodLoss = 100;
+      enemy.concussion = 100;
+      enemy.isGrounded = true;
+      playSound('flesh');
+      appendCombatLog(`<p class="text-purple font-bold">⚡ [GOD COMMAND]: Instant decapitation executed upon ${enemy.name}.</p>`);
+      updateHUD();
+      checkDuelFinished();
+    }
+
+    function godHeal(who) {
+      const tgt = who === 'player' ? player : enemy;
+      tgt.balance = 100;
+      tgt.stamina = 100;
+      tgt.bloodLoss = 0;
+      tgt.concussion = 0;
+      tgt.isGrounded = false;
+      tgt.wounds = { head: [], neck: [], torso: [], rArm: [], lArm: [], legs: [] };
+      updateHUD();
+      showToast(`${tgt.name} Fully Restored`);
+    }
+
+    function godInjectWound() {
+      const targetKey = document.getElementById('godWoundTarget').value;
+      const tgt = targetKey === 'player' ? player : enemy;
+      const zone = document.getElementById('godWoundZone').value;
+      const type = document.getElementById('godWoundType').value;
+
+      tgt.wounds[zone].push(type);
+      if (type === 'arterial') tgt.bloodLoss = Math.min(100, tgt.bloodLoss + 45);
+      if (type === 'concussion') tgt.concussion = Math.min(100, tgt.concussion + 50);
+      if (type === 'tendon') tgt.balance = 0;
+
+      playSound('flesh');
+      appendCombatLog(`<p class="text-purple font-mono">[GOD INJECT] Inflicted ${type.toUpperCase()} on ${tgt.name}'s ${zone}.</p>`);
+      updateHUD();
+      checkDuelFinished();
+    }
+
+    /* =====================================================================
+       11. INITIALIZATION ON WINDOW LOAD
+       ===================================================================== */
     window.onload = function() {
       populateSelects();
-      loadSavedStats();
+      renderLeaderboard();
       updateHUD();
     };
   </script>

@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>KINETIC STEEL v4.5 - Historical Melee Physics Engine</title>
+  <title>KINETIC STEEL v5.0 - Historical Melee Physics Engine & Fechtschule</title>
   <style>
     /* -------------------------------------------------------------
-       KINETIC STEEL v4.5 - ZERO-DEPENDENCY OFFLINE MOBILE CSS ENGINE
+       KINETIC STEEL v5.0 - ZERO-DEPENDENCY EXPANDED OFFLINE ENGINE
        ------------------------------------------------------------- */
     :root {
       --sat: env(safe-area-inset-top, 0px);
@@ -14,14 +14,14 @@
       --sal: env(safe-area-inset-left, 0px);
       --sar: env(safe-area-inset-right, 0px);
 
-      --bg-dark: #101216;
-      --bg-panel: #161920;
-      --bg-card: #1c202a;
-      --bg-inset: #0c0d11;
+      --bg-dark: #0e1014;
+      --bg-panel: #151821;
+      --bg-card: #1c202c;
+      --bg-inset: #090a0d;
 
-      --steel-light: #c2c9d6;
+      --steel-light: #cdd4e2;
       --steel-mid: #7e8799;
-      --steel-dark: #373d4d;
+      --steel-dark: #323745;
       --border-color: #2b3140;
 
       --gold: #d4af37;
@@ -31,6 +31,7 @@
       --cyan: #38bdf8;
       --emerald: #10b981;
       --purple: #a855f7;
+      --amber: #f59e0b;
     }
 
     * {
@@ -56,25 +57,23 @@
       padding-right: var(--sar);
     }
 
-    /* Scrollbars */
     ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-track { background: var(--bg-inset); }
     ::-webkit-scrollbar-thumb { background: var(--steel-dark); border-radius: 2px; }
 
-    /* Tactical Panels & Borders */
     .iron-panel {
-      background: linear-gradient(180deg, #1c202a 0%, #141720 100%);
+      background: linear-gradient(180deg, #1a1e28 0%, #12151d 100%);
       border: 1px solid var(--border-color);
     }
     .inset-panel {
-      background-color: var(--bg-inset);
-      border: 1px solid #232733;
-    }
+      background-color: #161922 !important;
+  color: #f1f5f9 !important;
+  border: 1px solid #3b4254 !important;
+}
 
-    /* Tactile Buttons */
     .btn-steel {
-      background: linear-gradient(180deg, #2a2f3e 0%, #1c202a 100%);
-      border: 1px solid #434c62;
+      background: linear-gradient(180deg, #282e3e 0%, #1a1e28 100%);
+      border: 1px solid #414a60;
       color: #e2e8f0;
       border-radius: 6px;
       font-weight: 600;
@@ -84,38 +83,48 @@
       align-items: center;
       justify-content: center;
       transition: transform 0.05s ease, background-color 0.1s ease;
-      min-height: 48px;
-      padding: 6px 4px;
+      min-height: 46px;
+      padding: 4px 6px;
       text-align: center;
+      user-select: none;
     }
     .btn-steel:active {
       transform: scale(0.96);
-      background: #151821;
+      background: #13161f;
       border-color: var(--gold-dim);
     }
 
     .btn-red {
-      background: linear-gradient(180deg, #5c1818 0%, #3a1010 100%);
+      background: linear-gradient(180deg, #5c1818 0%, #350f0f 100%);
       border: 1px solid #8e2b2b;
       color: #fecaca;
     }
     .btn-gold {
-      background: linear-gradient(180deg, #4d380e 0%, #2b2007 100%);
+      background: linear-gradient(180deg, #4d380e 0%, #261c06 100%);
       border: 1px solid #8c6d1f;
       color: #fef08a;
     }
     .btn-blue {
-      background: linear-gradient(180deg, #183858 0%, #0e2033 100%);
+      background: linear-gradient(180deg, #183858 0%, #0d1e30 100%);
       border: 1px solid #26598c;
       color: #bae6fd;
     }
     .btn-purple {
-      background: linear-gradient(180deg, #421c5c 0%, #241033 100%);
+      background: linear-gradient(180deg, #421c5c 0%, #220e30 100%);
       border: 1px solid #6b2f94;
       color: #e9d5ff;
     }
+    .btn-emerald {
+      background: linear-gradient(180deg, #134e38 0%, #0a291e 100%);
+      border: 1px solid #1a7f5a;
+      color: #a7f3d0;
+    }
+    .btn-amber {
+      background: linear-gradient(180deg, #663d08 0%, #362004 100%);
+      border: 1px solid #a3630f;
+      color: #fde68a;
+    }
 
-    /* Layout Utility Classes */
     .flex-col { display: flex; flex-direction: column; }
     .flex-row { display: flex; flex-direction: row; }
     .items-center { align-items: center; }
@@ -128,6 +137,7 @@
     .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
     .gap-1 { gap: 4px; }
     .gap-2 { gap: 8px; }
     .p-1 { padding: 4px; }
@@ -140,7 +150,6 @@
     .text-center { text-align: center; }
     .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-    /* Typography & Badges */
     .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
     .font-bold { font-weight: 700; }
     .font-semibold { font-weight: 600; }
@@ -148,7 +157,6 @@
     .text-sm { font-size: 13px; }
     .text-base { font-size: 15px; }
     .text-lg { font-size: 17px; }
-    .text-xl { font-size: 20px; }
     .text-gold { color: var(--gold); }
     .text-red { color: #f87171; }
     .text-emerald { color: #34d399; }
@@ -171,11 +179,11 @@
     .badge-red { background: #3d1414; color: #fca5a5; border: 1px solid #782727; }
     .badge-cyan { background: #0c2b3d; color: #7dd3fc; border: 1px solid #165275; }
     .badge-purple { background: #2f1242; color: #d8b4fe; border: 1px solid #63288a; }
+    .badge-emerald { background: #0e3022; color: #6ee7b7; border: 1px solid #1c6648; }
 
-    /* Navigation Bar */
     .tab-bar {
       display: flex;
-      background: #12141a;
+      background: #111319;
       border-bottom: 1px solid var(--border-color);
       overflow-x: auto;
       white-space: nowrap;
@@ -183,7 +191,7 @@
     }
     .tab-bar::-webkit-scrollbar { display: none; }
     .tab-item {
-      padding: 10px 12px;
+      padding: 9px 12px;
       font-size: 11px;
       font-weight: 700;
       color: var(--steel-mid);
@@ -198,10 +206,9 @@
     .tab-item.active {
       color: var(--gold);
       border-bottom-color: var(--gold);
-      background: rgba(212, 175, 55, 0.06);
+      background: rgba(212, 175, 55, 0.08);
     }
 
-    /* Views */
     .view-content {
       display: none;
       height: 100%;
@@ -212,20 +219,17 @@
       display: flex;
     }
 
-    /* Modals & Popups */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(5px);
       z-index: 100;
       display: none;
       flex-direction: column;
       justify-content: flex-end;
     }
-    .modal-overlay.open {
-      display: flex;
-    }
+    .modal-overlay.open { display: flex; }
     .modal-card {
       background: var(--bg-panel);
       border-top: 2px solid var(--gold);
@@ -237,27 +241,58 @@
       padding: 16px;
     }
 
-    /* Toast */
     #toast {
       position: fixed;
       top: calc(var(--sat) + 12px);
       left: 50%;
       transform: translateX(-50%);
-      background: #1e2330;
+      background: #1a1e29;
       color: var(--gold);
       border: 1px solid var(--gold-dim);
       padding: 8px 16px;
       border-radius: 20px;
       font-size: 12px;
       font-weight: 600;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.7);
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.25s ease;
+      transition: opacity 0.2s ease;
       z-index: 200;
       text-align: center;
       max-width: 90vw;
     }
+
+    /* Stance Toggle Pills */
+    .stance-pill {
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: #1c212e;
+      border: 1px solid #333a4d;
+      color: var(--steel-mid);
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .stance-pill.active {
+      background: #3a2c0c;
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* SVG Anatomical Paperdoll */
+    .paperdoll-svg {
+      width: 70px;
+      height: 120px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    }
+    .doll-part {
+      fill: #222735;
+      stroke: #3c4458;
+      stroke-width: 1.5;
+      transition: fill 0.3s ease;
+    }
+    .doll-part.wounded { fill: #8b2525; stroke: #e04545; }
+    .doll-part.critical { fill: #b91c1c; stroke: #f87171; }
   </style>
 </head>
 <body>
@@ -266,55 +301,64 @@
   <header class="iron-panel shrink-0 px-3 py-2 border-b border-[#2b3140] z-20">
     <div class="flex-row items-center justify-between" style="margin-bottom: 6px;">
       <div class="flex-row items-center" style="gap: 6px;">
-        <span class="font-bold text-gold text-xs" style="letter-spacing: 0.5px;">⚔️ KINETIC STEEL v4.5</span>
+        <span class="font-bold text-gold text-xs" style="letter-spacing: 0.5px;">⚔️ KINETIC STEEL v5.0</span>
         <span id="headerModeBadge" class="badge badge-gray">ARENA DUEL</span>
       </div>
       <div class="flex-row items-center" style="gap: 6px;">
-        <button onclick="toggleAudio()" class="btn-steel" style="min-height: 26px; padding: 2px 8px; font-size: 10px;">
+        <span id="masteryRankBadge" class="badge badge-gold" title="Fechtschule Rank">SCHOLAR</span>
+        <button onclick="toggleAudio()" class="btn-steel" style="min-height: 24px; padding: 2px 7px; font-size: 10px;">
           <span id="audioLabel">🔊 SFX</span>
         </button>
         <span id="godModeBadge" class="badge badge-purple" style="display: none;">GOD MODE</span>
       </div>
     </div>
 
-    <!-- Fighter Telemetry Gauges -->
+    <!-- Fighter Telemetry Gauges with Anatomical Paperdolls -->
     <div class="grid grid-cols-2 gap-2 text-xs">
       <!-- Player Status -->
       <div class="inset-panel p-2 rounded" style="border-radius: 6px;">
-        <div class="flex-row items-center justify-between" style="margin-bottom: 4px;">
-          <span id="hudPlayerName" class="font-bold text-emerald truncate" style="max-width: 105px;">You (Duelist)</span>
+        <div class="flex-row items-center justify-between" style="margin-bottom: 3px;">
+          <span id="hudPlayerName" class="font-bold text-emerald truncate" style="max-width: 100px;">You</span>
           <span id="hudPlayerBal" class="font-mono text-xs text-dim">Bal: 100%</span>
         </div>
-        <div class="w-full bg-[#1e2330] rounded-full overflow-hidden" style="height: 6px; margin-bottom: 4px;">
-          <div id="hudPlayerStamBar" class="bg-emerald h-full w-full" style="transition: width 0.3s ease; height: 100%;"></div>
+        <div class="w-full bg-[#1b202c] rounded-full overflow-hidden" style="height: 6px; margin-bottom: 4px;">
+          <div id="hudPlayerStamBar" class="bg-emerald h-full w-full" style="transition: width 0.25s ease; height: 100%;"></div>
         </div>
         <div class="flex-row items-center justify-between font-mono" style="font-size: 10px;">
           <span id="hudPlayerCondition" class="text-steel-mid">Steady</span>
           <span id="hudPlayerBleed" class="text-red">Bleed: 0%</span>
         </div>
+        <div class="flex-row items-center justify-between font-mono" style="font-size: 9px; margin-top: 3px;">
+          <span class="text-cyan">Stance: <b id="hudPlayerStance">Vom Tag</b></span>
+          <span id="hudPlayerWeaponTip" class="text-dim truncate" style="max-width: 80px;">Longsword</span>
+        </div>
       </div>
 
       <!-- Enemy Status -->
       <div class="inset-panel p-2 rounded" style="border-radius: 6px;">
-        <div class="flex-row items-center justify-between" style="margin-bottom: 4px;">
-          <span id="hudEnemyName" class="font-bold text-red truncate" style="max-width: 105px;">Adversary</span>
+        <div class="flex-row items-center justify-between" style="margin-bottom: 3px;">
+          <span id="hudEnemyName" class="font-bold text-red truncate" style="max-width: 100px;">Adversary</span>
           <span id="hudEnemyBal" class="font-mono text-xs text-dim">Bal: 100%</span>
         </div>
-        <div class="w-full bg-[#1e2330] rounded-full overflow-hidden" style="height: 6px; margin-bottom: 4px;">
-          <div id="hudEnemyStamBar" class="bg-red h-full w-full" style="transition: width 0.3s ease; height: 100%;"></div>
+        <div class="w-full bg-[#1b202c] rounded-full overflow-hidden" style="height: 6px; margin-bottom: 4px;">
+          <div id="hudEnemyStamBar" class="bg-red h-full w-full" style="transition: width 0.25s ease; height: 100%;"></div>
         </div>
         <div class="flex-row items-center justify-between font-mono" style="font-size: 10px;">
           <span id="hudEnemyCondition" class="text-steel-mid">Sound</span>
           <span id="hudEnemyBleed" class="text-red">Bleed: 0%</span>
         </div>
+        <div class="flex-row items-center justify-between font-mono" style="font-size: 9px; margin-top: 3px;">
+          <span class="text-red">Stance: <b id="hudEnemyStance">Pflug</b></span>
+          <span id="hudEnemyWeaponTip" class="text-dim truncate" style="max-width: 80px;">Adversary Weap</span>
+        </div>
       </div>
     </div>
 
     <!-- Distance & Blade Bind Strip -->
-    <div class="flex-row items-center justify-between inset-panel px-2 py-1" style="border-radius: 4px; margin-top: 6px; font-size: 10px;">
+    <div class="flex-row items-center justify-between inset-panel px-2 py-1" style="border-radius: 4px; margin-top: 5px; font-size: 10px;">
       <div class="flex-row items-center" style="gap: 4px;">
-        <span class="text-dim">MEASURE:</span>
-        <span id="hudDistance" class="font-mono font-bold text-gold">Zufechten (Out)</span>
+        <span class="text-dim">MENSUR:</span>
+        <span id="hudDistance" class="font-mono font-bold text-gold">Zufechten (Measure: Out)</span>
       </div>
       <div class="flex-row items-center" style="gap: 4px;">
         <span class="text-dim">LEVER:</span>
@@ -326,84 +370,209 @@
   <!-- ================= PERSISTENT MOBILE NAVIGATION TABS ================= -->
   <nav class="tab-bar shrink-0">
     <div class="tab-item active" onclick="switchTab('arena')">⚔️ Duel Arena</div>
-    <div class="tab-item" onclick="switchTab('campaign')">🏆 Campaign Gauntlet</div>
-    <div class="tab-item" onclick="switchTab('armory')">🛡️ Armory & Gear</div>
-    <div class="tab-item" onclick="switchTab('leaderboard')">🎖️ Leaderboard</div>
-    <div class="tab-item" onclick="switchTab('codex')">📖 Codex Manual</div>
-    <div class="tab-item" onclick="switchTab('god')">⚡ God Console</div>
+    <div class="tab-item" onclick="switchTab('fechtschule')">🥋 Fechtschule (Pell)</div>
+    <div class="tab-item" onclick="switchTab('campaign')">🏆 Crucible Gauntlet</div>
+    <div class="tab-item" onclick="switchTab('armory')">🛡️ Expanded Armory</div>
+    <div class="tab-item" onclick="switchTab('leaderboard')">🎖️ Hall of Masters</div>
+    <div class="tab-item" onclick="switchTab('codex')">📖 Historical Codex</div>
+    <div class="tab-item" onclick="switchTab('god')">⚡ God Sandbox</div>
   </nav>
 
   <!-- ================= VIEW 1: DUEL ARENA (ACTIVE COMBAT) ================= -->
   <section id="view-arena" class="view-content active flex-1">
+    <!-- Active Stance Quick Bar -->
+    <div class="iron-panel shrink-0 px-2 py-1 flex-row items-center justify-between border-b border-[#2b3140]">
+      <span class="text-dim font-bold" style="font-size: 10px;">HÜTEN (GUARDS):</span>
+      <div class="flex-row" style="gap: 4px;">
+        <button class="stance-pill active" id="btnStanceVomTag" onclick="setPlayerStance('vomTag')">Vom Tag (High)</button>
+        <button class="stance-pill" id="btnStanceOchs" onclick="setPlayerStance('ochs')">Ochs (Window)</button>
+        <button class="stance-pill" id="btnStancePflug" onclick="setPlayerStance('pflug')">Pflug (Plow)</button>
+        <button class="stance-pill" id="btnStanceAlber" onclick="setPlayerStance('alber')">Alber (Fool)</button>
+      </div>
+    </div>
+
     <!-- Scrollable combat narrative -->
-    <div id="combatLog" class="flex-1 overflow-y-auto p-3 flex-col" style="gap: 8px; background: #0c0d11;">
+    <div id="combatLog" class="flex-1 overflow-y-auto p-3 flex-col" style="gap: 8px; background: #0a0b0e;">
       <div class="iron-panel p-3" style="border-radius: 8px; font-size: 11px; line-height: 1.5;">
         <div class="font-bold text-gold text-sm" style="margin-bottom: 4px; border-bottom: 1px solid #282e3d; padding-bottom: 4px;">
-          ⚔️ KINETIC MELEE PROVING GROUND READY
+          ⚔️ KINETIC STEEL MELEE SIMULATOR v5.0 READY
         </div>
         <p class="text-steel-light" style="margin-bottom: 6px;">
-          Choose your strikes, maintain your balance, and leverage the forte of your blade. You have access to primary weapons and off-hand shields, cloaks, and parrying daggers.
+          Fencing mechanics include anatomical penetration thresholds, blade forte/foible leverage, master cuts (*Meisterhaue*), mordhau pommel smashes, half-swording (*Halbschwert*), off-hand shield punchers, and grappling takedowns.
         </p>
         <div class="text-dim font-mono text-xs">
-          Tap <b>Campaign Gauntlet</b> above to enter "The Crucible of Steel" or configure loadouts in <b>Armory</b>.
+          Visit the <b>🥋 Fechtschule</b> tab to train on the pell and unlock Master Perquisites, or configure weapons in <b>Armory</b>.
         </div>
       </div>
     </div>
 
     <!-- Dynamic Tactical Action Matrix -->
-    <footer class="iron-panel shrink-0 p-2 flex-col" style="gap: 6px; border-top: 1px solid var(--border-color);">
+    <footer class="iron-panel shrink-0 p-2 flex-col" style="gap: 5px; border-top: 1px solid var(--border-color);">
       <!-- Primary Striking Matrix -->
       <div id="primaryActionsGrid" class="grid grid-cols-4 gap-1">
         <button onclick="handlePlayerAction('cut_high')" class="btn-steel btn-red">
-          <span class="text-xs font-bold">High Cut</span>
-          <span style="font-size: 9px; opacity: 0.8;">Cranial</span>
+          <span class="text-xs font-bold">Oberhau</span>
+          <span style="font-size: 9px; opacity: 0.8;">High Cranial Cut</span>
         </button>
         <button onclick="handlePlayerAction('cut_mid')" class="btn-steel btn-red">
-          <span class="text-xs font-bold">Mid Cut</span>
-          <span style="font-size: 9px; opacity: 0.8;">Torso/Arm</span>
+          <span class="text-xs font-bold">Mittelhau</span>
+          <span style="font-size: 9px; opacity: 0.8;">Torso / Arm</span>
         </button>
         <button onclick="handlePlayerAction('cut_low')" class="btn-steel btn-red">
-          <span class="text-xs font-bold">Low Cut</span>
-          <span style="font-size: 9px; opacity: 0.8;">Thigh/Knee</span>
+          <span class="text-xs font-bold">Unterhau</span>
+          <span style="font-size: 9px; opacity: 0.8;">Rising Leg Cut</span>
         </button>
         <button onclick="handlePlayerAction('thrust')" class="btn-steel btn-gold">
-          <span class="text-xs font-bold">Stiff Thrust</span>
-          <span style="font-size: 9px; opacity: 0.8;">Puncture</span>
+          <span class="text-xs font-bold">Stechen</span>
+          <span style="font-size: 9px; opacity: 0.8;">Stiff Thrust</span>
         </button>
       </div>
 
-      <!-- Secondary & Off-Hand Adaptive Tactical Row -->
-      <div id="adaptiveActionsGrid" class="grid grid-cols-4 gap-1">
-        <button onclick="handlePlayerAction('master_cut')" class="btn-steel btn-blue">
-          <span class="text-xs font-bold">Master Cut</span>
-          <span style="font-size: 9px; opacity: 0.8;">Winden/Riposte</span>
+      <!-- Historical Master Cuts & Advanced Tactics -->
+      <div class="grid grid-cols-4 gap-1">
+        <button onclick="handlePlayerAction('master_cut')" class="btn-steel btn-blue" title="Cross/Winding Counter">
+          <span class="text-xs font-bold">Meisterhau</span>
+          <span style="font-size: 9px; opacity: 0.8;">Master Winden</span>
+        </button>
+        <button onclick="handlePlayerAction('mordhau')" class="btn-steel btn-amber" title="Invert sword: Pommel smash against heavy plate">
+          <span class="text-xs font-bold">Mordhau</span>
+          <span style="font-size: 9px; opacity: 0.8;">Murder Stroke</span>
+        </button>
+        <button onclick="handlePlayerAction('halbschwert')" class="btn-steel btn-blue" title="Grip blade for armor gap penetration">
+          <span class="text-xs font-bold">Half-Sword</span>
+          <span style="font-size: 9px; opacity: 0.8;">Gap Puncture</span>
         </button>
         <button onclick="handlePlayerAction('bind')" class="btn-steel btn-blue">
-          <span class="text-xs font-bold">Bind Blade</span>
-          <span style="font-size: 9px; opacity: 0.8;">Lever Forte</span>
+          <span class="text-xs font-bold">Anbinden</span>
+          <span style="font-size: 9px; opacity: 0.8;">Forte Leverage</span>
         </button>
-        <!-- Dynamic contextual Off-Hand Button -->
+      </div>
+
+      <!-- Off-Hand, Disarm, and Footwork Row -->
+      <div id="adaptiveActionsGrid" class="grid grid-cols-3 gap-1">
         <button id="dynamicOffhandBtn" onclick="handlePlayerAction('offhand_action')" class="btn-steel btn-purple">
           <span id="dynamicOffhandTitle" class="text-xs font-bold">Grapple</span>
-          <span id="dynamicOffhandSub" style="font-size: 9px; opacity: 0.8;">Abrazare</span>
+          <span id="dynamicOffhandSub" style="font-size: 9px; opacity: 0.8;">Abrazare Takedown</span>
+        </button>
+        <button onclick="handlePlayerAction('disarm')" class="btn-steel btn-emerald">
+          <span class="text-xs font-bold">Entwaffnen</span>
+          <span style="font-size: 9px; opacity: 0.8;">Disarm Foe</span>
         </button>
         <button onclick="handlePlayerAction('void_step')" class="btn-steel">
-          <span class="text-xs font-bold text-gold">Void Step</span>
-          <span style="font-size: 9px; opacity: 0.8;">Open Distance</span>
+          <span class="text-xs font-bold text-gold">Ausweichen</span>
+          <span style="font-size: 9px; opacity: 0.8;">Void & Reset</span>
         </button>
       </div>
     </footer>
   </section>
 
-  <!-- ================= VIEW 2: CAMPAIGN GAUNTLET ("THE CRUCIBLE") ================= -->
-  <section id="view-campaign" class="view-content flex-1 overflow-y-auto p-3 flex-col" style="gap: 12px; background: #0c0d11;">
+  <!-- ================= VIEW 2: FECHTSCHULE & PELL TRAINING ================= -->
+  <section id="view-fechtschule" class="view-content flex-1 overflow-y-auto p-3 flex-col" style="gap: 12px; background: #090a0d;">
     <div class="iron-panel p-3" style="border-radius: 8px;">
       <div class="flex-row items-center justify-between" style="border-bottom: 1px solid var(--border-color); padding-bottom: 6px; margin-bottom: 8px;">
-        <span class="font-bold text-gold text-sm">🏆 THE CRUCIBLE OF STEEL (CAMPAIGN)</span>
+        <span class="font-bold text-gold text-sm">🥋 HISTORICAL FECHTSCHULE (TRAINING HALL)</span>
+        <span id="fechtschuleRankBadge" class="badge badge-gold">RANK: SCHOLAR</span>
+      </div>
+      <p class="text-xs text-steel-light" style="margin-bottom: 8px; line-height: 1.4;">
+        Welcome to the brotherhood of the Guild of Saint Mark. Drill on the oak pell mannequin to master edge alignment and hone muscle memory. Earn mastery tokens to unlock historical martial perquisites.
+      </p>
+
+      <div class="grid grid-cols-3 gap-2 text-center font-mono" style="font-size: 10px;">
+        <div class="inset-panel p-2 rounded">Pell Strikes: <b id="statPellStrikes" class="text-gold">0</b></div>
+        <div class="inset-panel p-2 rounded">Discipline Pts: <b id="statDisciplinePts" class="text-cyan">0</b></div>
+        <div class="inset-panel p-2 rounded">Mastery Tier: <b id="statMasteryTier" class="text-emerald">Novice</b></div>
+      </div>
+    </div>
+
+    <!-- The Oak Pell Mannequin & Live Biomechanical Readout -->
+    <div class="iron-panel p-3" style="border-radius: 8px;">
+      <div class="text-xs font-bold text-gold" style="margin-bottom: 6px;">1. THE ANATOMICAL PELL (OAK & BOAR-HIDE TRAINER)</div>
+      <p class="text-xs text-steel-mid" style="margin-bottom: 10px;">
+        Strike specific zones to measure kinetic energy transfer, deflection resistance, and edge alignment against simulated tissue and armor.
+      </p>
+
+      <div class="grid grid-cols-2 gap-2">
+        <div class="flex-col" style="gap: 6px;">
+          <button onclick="strikePell('cranium')" class="btn-steel btn-red" style="min-height: 38px;">
+            <span class="font-bold text-xs">Cranial Apex (Scheitelhau)</span>
+          </button>
+          <button onclick="strikePell('temple')" class="btn-steel btn-red" style="min-height: 38px;">
+            <span class="font-bold text-xs">Temple / Ear (Zwerchhau)</span>
+          </button>
+          <button onclick="strikePell('neck')" class="btn-steel btn-red" style="min-height: 38px;">
+            <span class="font-bold text-xs">Neck / Carotid (Krumphau)</span>
+          </button>
+          <button onclick="strikePell('sternum')" class="btn-steel btn-gold" style="min-height: 38px;">
+            <span class="font-bold text-xs">Sternum (Linear Thrust)</span>
+          </button>
+          <button onclick="strikePell('knee')" class="btn-steel btn-blue" style="min-height: 38px;">
+            <span class="font-bold text-xs">Knee / Joint (Unterhau)</span>
+          </button>
+        </div>
+
+        <!-- Live Readout Box -->
+        <div class="inset-panel p-2 rounded flex-col justify-between font-mono text-xs">
+          <div>
+            <div class="font-bold text-gold text-xs" style="margin-bottom: 4px;">PELL TELEMETRY:</div>
+            <div>• Target: <span id="pellTarget" class="text-steel-light">None</span></div>
+            <div>• Cut Velocity: <span id="pellVel" class="text-cyan">0.0 m/s</span></div>
+            <div>• Impact Energy: <span id="pellJoules" class="text-gold">0.0 Joules</span></div>
+            <div>• Edge Alignment: <span id="pellAlignment" class="text-emerald">0% Perfect</span></div>
+            <div>• Oak Penetration: <span id="pellDepth" class="text-red">0.0 mm</span></div>
+          </div>
+          <div id="pellFeedback" class="text-dim" style="font-size: 10px; margin-top: 6px; border-top: 1px solid #282e3d; padding-top: 4px;">
+            Strike the pell above to measure blade mechanics.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fechtbuch Trials & Master Lessons -->
+    <div class="iron-panel p-3" style="border-radius: 8px;">
+      <div class="text-xs font-bold text-gold" style="margin-bottom: 6px;">2. HISTORICAL FECHTBUCH DRILLS & TRIALS</div>
+      <div class="flex-col" style="gap: 8px;">
+        <div class="inset-panel p-2 rounded flex-row items-center justify-between">
+          <div class="flex-col" style="gap: 2px;">
+            <span class="font-bold text-steel-light text-xs">Zwerchhau Breaks Vom Tag</span>
+            <span class="text-dim" style="font-size: 10px;">Horizontal thwart cut parrying overhead cleaves (+10% Master Cut).</span>
+          </div>
+          <button id="btnTrialZwerch" onclick="executeFechtbuchTrial('zwerch')" class="btn-steel btn-blue" style="min-height: 32px; padding: 4px 10px; font-size: 11px;">
+            Drill (20 Pts)
+          </button>
+        </div>
+
+        <div class="inset-panel p-2 rounded flex-row items-center justify-between">
+          <div class="flex-col" style="gap: 2px;">
+            <span class="font-bold text-steel-light text-xs">Krumphau Breaks the Ochs</span>
+            <span class="text-dim" style="font-size: 10px;">Crooked wrist cut striking the opponent's flat (+15% Lever Bind).</span>
+          </div>
+          <button id="btnTrialKrump" onclick="executeFechtbuchTrial('krump')" class="btn-steel btn-blue" style="min-height: 32px; padding: 4px 10px; font-size: 11px;">
+            Drill (40 Pts)
+          </button>
+        </div>
+
+        <div class="inset-panel p-2 rounded flex-row items-center justify-between">
+          <div class="flex-col" style="gap: 2px;">
+            <span class="font-bold text-steel-light text-xs">Fiore's Abrazare Disarm Lock</span>
+            <span class="text-dim" style="font-size: 10px;">Joint lever to strip primary weapon in infighting (+20% Disarm Chance).</span>
+          </div>
+          <button id="btnTrialDisarm" onclick="executeFechtbuchTrial('disarm')" class="btn-steel btn-purple" style="min-height: 32px; padding: 4px 10px; font-size: 11px;">
+            Drill (60 Pts)
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= VIEW 3: CAMPAIGN GAUNTLET ("THE CRUCIBLE") ================= -->
+  <section id="view-campaign" class="view-content flex-1 overflow-y-auto p-3 flex-col" style="gap: 12px; background: #090a0d;">
+    <div class="iron-panel p-3" style="border-radius: 8px;">
+      <div class="flex-row items-center justify-between" style="border-bottom: 1px solid var(--border-color); padding-bottom: 6px; margin-bottom: 8px;">
+        <span class="font-bold text-gold text-sm">🏆 THE CRUCIBLE OF STEEL (20 DUELISTS)</span>
         <span id="campaignFloorBadge" class="badge badge-gold">STAGE 1 / 20</span>
       </div>
       <p class="text-xs text-steel-light" style="line-height: 1.4; margin-bottom: 8px;">
-        Test your martial discipline against 20 progressive historical duelists. Fallen enemies yield glory and scavenged steel. Survive to inscribe your name in the Hall of Masters.
+        A gauntlet against 20 progressive historical champions. Fallen enemies yield glory and scavenged steel. Survive to inscribe your name in the Hall of Masters.
       </p>
       <!-- Campaign Progress Bar -->
       <div class="w-full bg-[#181a22] rounded-full overflow-hidden" style="height: 8px; margin-bottom: 8px; border: 1px solid #282d3b;">
@@ -424,16 +593,16 @@
         <span id="campEnemyStyle" class="badge badge-gray">Folk Brawler</span>
       </div>
       <div class="text-xs text-steel-light" id="campEnemyDetails" style="margin-bottom: 10px;">
-        Equipped with an improvised Billhook scythe. Poor edge geometry but heavy percussive mass. Unarmored.
+        Equipped with an improvised Messer. Poor edge geometry but heavy percussive mass. Unarmored.
       </div>
       <div class="grid grid-cols-2 gap-2 font-mono text-xs" style="margin-bottom: 12px;">
         <div class="inset-panel p-2 rounded">
           <div class="text-dim" style="font-size: 9px;">WEAPON & OFF-HAND:</div>
-          <div id="campEnemyGear" class="font-bold truncate text-steel-light">Billhook & Bare Fist</div>
+          <div id="campEnemyGear" class="font-bold truncate text-steel-light">Messer & Bare Fist</div>
         </div>
         <div class="inset-panel p-2 rounded">
           <div class="text-dim" style="font-size: 9px;">HARNESS & PROTECTION:</div>
-          <div id="campEnemyArmor" class="font-bold truncate text-steel-light">Coarse Clothes / No Helm</div>
+          <div id="campEnemyArmor" class="font-bold truncate text-steel-light">Unarmored / Bare Head</div>
         </div>
       </div>
 
@@ -444,38 +613,38 @@
 
     <!-- Campaign Rules Quick Callout -->
     <div class="inset-panel p-3" style="border-radius: 8px; font-size: 11px; color: var(--steel-mid);">
-      <b class="text-steel-light">Campaign Rules:</b> Between stages, you can execute field triage (bandage wounds, catch breath, hone edge, or scavenge arms). If you bleed out or succumb to skull fractures, your run terminates and logs to the Leaderboard.
+      <b class="text-steel-light">Crucible Rules:</b> Between stages, you can execute field triage (bandage wounds, catch breath, hone edge, or scavenge weapons). If you bleed out or succumb to skull fractures, your run terminates.
     </div>
   </section>
 
-  <!-- ================= VIEW 3: ARMORY & LOADOUT SETUP ================= -->
-  <section id="view-armory" class="view-content flex-1 overflow-y-auto p-3 flex-col" style="gap: 12px; background: #0c0d11;">
+  <!-- ================= VIEW 4: EXPANDED ARMORY & LOADOUT SETUP ================= -->
+  <section id="view-armory" class="view-content flex-1 overflow-y-auto p-3 flex-col" style="gap: 12px; background: #090a0d;">
     <div class="iron-panel p-3" style="border-radius: 8px;">
       <div class="flex-row items-center justify-between" style="border-bottom: 1px solid var(--border-color); padding-bottom: 6px; margin-bottom: 8px;">
         <span class="font-bold text-gold text-sm">🛡️ MARTIAL LOADOUT INSPECTION</span>
-        <span class="badge badge-gray">60 WEAPONS / 12 OFF-HANDS</span>
+        <span class="badge badge-gray">90+ WEAPONS / 20 OFF-HANDS</span>
       </div>
       <p class="text-xs text-steel-light" style="margin-bottom: 10px;">
-        Equip your fighter with historical fencing systems, primary arms, off-hand auxiliaries, and defensive harness. Changes apply to both Arena Duels and Campaign runs.
+        Configure historical fighting disciplines, primary weapons (swords, polearms, axes, maces, daggers), off-hands, and defensive harnesses.
       </p>
 
       <div class="flex-col" style="gap: 8px; font-size: 11px;">
         <!-- Fighting Style -->
         <div>
-          <label class="font-bold text-dim" style="display: block; margin-bottom: 3px;">FIGHTING DISCIPLINE (20 STYLES):</label>
+          <label class="font-bold text-dim" style="display: block; margin-bottom: 3px;">FIGHTING DISCIPLINE (30 HISTORICAL STYLES):</label>
           <select id="selPlayerStyle" onchange="updatePlayerLoadoutFromUI()" class="w-full inset-panel p-2 rounded text-steel-light font-semibold" style="border-radius: 6px;"></select>
           <div id="styleDescription" class="font-mono text-dim" style="font-size: 10px; margin-top: 2px;"></div>
         </div>
 
         <!-- Primary Weapon -->
         <div>
-          <label class="font-bold text-dim" style="display: block; margin-bottom: 3px;">PRIMARY BLADE / WEAPON (60 HISTORICAL):</label>
+          <label class="font-bold text-dim" style="display: block; margin-bottom: 3px;">PRIMARY WEAPON (90+ HISTORICAL WEAPONS):</label>
           <select id="selPlayerWeapon" onchange="updatePlayerLoadoutFromUI()" class="w-full inset-panel p-2 rounded text-steel-light font-semibold" style="border-radius: 6px;"></select>
         </div>
 
         <!-- Secondary Off-Hand -->
         <div>
-          <label class="font-bold text-gold" style="display: block; margin-bottom: 3px;">SECONDARY OFF-HAND (12 AUXILIARIES):</label>
+          <label class="font-bold text-gold" style="display: block; margin-bottom: 3px;">SECONDARY OFF-HAND (20 AUXILIARIES):</label>
           <select id="selPlayerOffhand" onchange="updatePlayerLoadoutFromUI()" class="w-full inset-panel p-2 rounded text-steel-light font-semibold" style="border-radius: 6px;"></select>
           <div id="offhandDescription" class="font-mono text-dim" style="font-size: 10px; margin-top: 2px;"></div>
         </div>
@@ -483,11 +652,11 @@
         <!-- Body Armor & Helmet -->
         <div class="grid grid-cols-2 gap-2">
           <div>
-            <label class="font-bold text-dim" style="display: block; margin-bottom: 3px;">BODY ARMOR (16 SUITS):</label>
+            <label class="font-bold text-dim" style="display: block; margin-bottom: 3px;">BODY ARMOR (20 SUITS):</label>
             <select id="selPlayerArmor" onchange="updatePlayerLoadoutFromUI()" class="w-full inset-panel p-2 rounded text-steel-light font-semibold" style="border-radius: 6px;"></select>
           </div>
           <div>
-            <label class="font-bold text-dim" style="display: block; margin-bottom: 3px;">HELMET (10 HELMS):</label>
+            <label class="font-bold text-dim" style="display: block; margin-bottom: 3px;">HELMET (15 HELMS):</label>
             <select id="selPlayerHelm" onchange="updatePlayerLoadoutFromUI()" class="w-full inset-panel p-2 rounded text-steel-light font-semibold" style="border-radius: 6px;"></select>
           </div>
         </div>
@@ -503,8 +672,8 @@
           <div id="statWeaponWeight" class="font-bold text-steel-light">1.4 kg / 2</div>
         </div>
         <div class="inset-panel p-2 rounded text-center">
-          <div class="text-dim" style="font-size: 9px;">CUT / THRUST</div>
-          <div id="statWeaponPower" class="font-bold text-red">75 / 85</div>
+          <div class="text-dim" style="font-size: 9px;">CUT / THRUST / BLUNT</div>
+          <div id="statWeaponPower" class="font-bold text-red">75 / 85 / 40</div>
         </div>
         <div class="inset-panel p-2 rounded text-center">
           <div class="text-dim" style="font-size: 9px;">BIND LEVERAGE</div>
@@ -513,12 +682,12 @@
       </div>
       <div class="grid grid-cols-2 gap-2 font-mono text-xs" style="margin-top: 6px;">
         <div class="inset-panel p-2 rounded text-center">
-          <div class="text-dim" style="font-size: 9px;">TORSO CUT RESIST</div>
-          <div id="statArmorSlash" class="font-bold text-emerald">25% (Gambeson)</div>
+          <div class="text-dim" style="font-size: 9px;">TORSO RESIST (SLASH/THRUST)</div>
+          <div id="statArmorSlash" class="font-bold text-emerald">25% / 15%</div>
         </div>
         <div class="inset-panel p-2 rounded text-center">
           <div class="text-dim" style="font-size: 9px;">CRANIAL BLUNT PROT</div>
-          <div id="statHelmBlunt" class="font-bold text-emerald">40% (Spangen)</div>
+          <div id="statHelmBlunt" class="font-bold text-emerald">40%</div>
         </div>
       </div>
 
@@ -530,8 +699,8 @@
     </div>
   </section>
 
-  <!-- ================= VIEW 4: LOCAL LEADERBOARD ================= -->
-  <section id="view-leaderboard" class="view-content flex-1 overflow-y-auto p-3 flex-col" style="gap: 12px; background: #0c0d11;">
+  <!-- ================= VIEW 5: LOCAL LEADERBOARD ================= -->
+  <section id="view-leaderboard" class="view-content flex-1 overflow-y-auto p-3 flex-col" style="gap: 12px; background: #090a0d;">
     <div class="iron-panel p-3" style="border-radius: 8px;">
       <div class="flex-row items-center justify-between" style="border-bottom: 1px solid var(--border-color); padding-bottom: 6px; margin-bottom: 8px;">
         <span class="font-bold text-gold text-sm">🎖️ HALL OF MASTERS (LOCAL LEADERBOARD)</span>
@@ -543,60 +712,49 @@
         Persistent campaign records stored in browser memory. Tracks floor progress, loadouts, glory scores, and dates.
       </p>
 
-      <!-- Records list -->
-      <div id="leaderboardContainer" class="flex-col" style="gap: 6px;">
-        <!-- Populated via JS -->
-      </div>
+      <div id="leaderboardContainer" class="flex-col" style="gap: 6px;"></div>
     </div>
   </section>
 
-  <!-- ================= VIEW 5: CODEX MANUAL ================= -->
-  <section id="view-codex" class="view-content flex-1 overflow-y-auto p-3 flex-col" style="gap: 10px; background: #0c0d11;">
+  <!-- ================= VIEW 6: CODEX MANUAL ================= -->
+  <section id="view-codex" class="view-content flex-1 overflow-y-auto p-3 flex-col" style="gap: 10px; background: #090a0d;">
     <div class="iron-panel p-3" style="border-radius: 8px;">
       <div class="font-bold text-gold text-sm" style="margin-bottom: 6px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">
-        📖 KINETIC STEEL CODEX (HISTORICAL HEMA MANUAL)
+        📖 KINETIC STEEL CODEX (HISTORICAL HEMA & ARMS MANUAL)
       </div>
 
       <div class="flex-col" style="gap: 8px; font-size: 11px; line-height: 1.45;">
         <div class="inset-panel p-2.5 rounded">
-          <div class="font-bold text-gold">1. The Three Distances (Mensur)</div>
+          <div class="font-bold text-gold">1. Die Vier Huten (The Four Guards)</div>
           <p class="text-steel-light" style="margin-top: 2px;">
-            <b>Zufechten (Out of Measure):</b> You cannot hit without stepping forward. Ideal for setting guards, baiting, or voiding back.<br>
-            <b>Krieg (Striking Measure):</b> True fencing range. Edge, point, and binds happen here.<br>
-            <b>Handarbeit (Infighting):</b> Clinch distance. Weapon pivots collapse. Pommel smashes, grappling, and dagger thrusts reign.
+            <b>Vom Tag (Day/Roof):</b> High shoulder or overhead threat. Highest kinetic cutting velocity; slow recovery.<br>
+            <b>Ochs (Ox):</b> High point forward at eye level. Shuts down incoming high cuts with simultaneous point threat.<br>
+            <b>Pflug (Plow):</b> Low hip ward point at the groin/chest. Exceptional bind defense and swift rising thrusts.<br>
+            <b>Alber (Fool):</b> Grounded point baiting the opponent into overcommitting against an apparent void.
           </p>
         </div>
 
         <div class="inset-panel p-2.5 rounded">
-          <div class="font-bold text-gold">2. Leverage & The Bind</div>
+          <div class="font-bold text-gold">2. Advanced Historical Maneuvers</div>
           <p class="text-steel-light" style="margin-top: 2px;">
-            The <b>Forte (Strong)</b> near the hilt overpowers the <b>Foible (Weak)</b> near the tip. If you bind the enemy's weak blade with your strong, your Master Cuts and thrusts pierce through unhindered.
+            <b>Mordhau (Murder Stroke):</b> Inverting the longsword to strike with pommel and crossguard like a mace against heavy plate.<br>
+            <b>Halbschwert (Half-Sword):</b> Clamping the left hand onto the central blade to maximize tip rigidity against mail voiders and visors.<br>
+            <b>Entwaffnen (Disarm):</b> Wrapping the opponent's crossguard during a locked bind to wrench their weapon free.
           </p>
         </div>
 
         <div class="inset-panel p-2.5 rounded">
-          <div class="font-bold text-gold">3. Secondary Off-Hand Weapons</div>
+          <div class="font-bold text-gold">3. Mensur & Blade Leverage</div>
           <p class="text-steel-light" style="margin-top: 2px;">
-            <b>Steel Buckler:</b> High active deflection and brutal facial punch (Boselen).<br>
-            <b>Main Gauche:</b> Traps enemy blades in quillons and counter-stabs.<br>
-            <b>Highland Targe:</b> Spiked boss slam that shatters balance.<br>
-            <b>Fencing Cloak:</b> Ensnare the enemy steel to disable their next attack.<br>
-            <b>Rondel Dagger:</b> Slips into mail voiders and visor slits in close infighting.
-          </p>
-        </div>
-
-        <div class="inset-panel p-2.5 rounded">
-          <div class="font-bold text-gold">4. Anatomical Trauma Model</div>
-          <p class="text-steel-light" style="margin-top: 2px;">
-            Combatants have no abstract hit points. Carotid artery punctures trigger immediate arterial bleed. Skull concussions over 80 Joules cause immediate loss of consciousness. Severed leg tendons cause collapse to zero balance.
+            <b>Forte (Strong) over Foible (Weak):</b> Striking with or binding against the adversary's tip using your near-hilt forte guarantees leverage supremacy, throwing their tip off line and opening lethal ripostes.
           </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ================= VIEW 6: GOD CONSOLE ================= -->
-  <section id="view-god" class="view-content flex-1 overflow-y-auto p-3 flex-col" style="gap: 10px; background: #0c0d11;">
+  <!-- ================= VIEW 7: GOD CONSOLE ================= -->
+  <section id="view-god" class="view-content flex-1 overflow-y-auto p-3 flex-col" style="gap: 10px; background: #090a0d;">
     <div class="iron-panel p-3" style="border-radius: 8px;">
       <div class="flex-row items-center justify-between" style="border-bottom: 1px solid var(--border-color); padding-bottom: 6px; margin-bottom: 8px;">
         <span class="font-bold text-purple text-sm">⚡ DEVELOPER CONSOLE & GOD MODE</span>
@@ -621,9 +779,8 @@
         </button>
       </div>
 
-      <!-- Force Trauma Injection -->
       <div class="inset-panel p-2 rounded flex-col" style="gap: 6px; margin-bottom: 8px;">
-        <div class="text-xs font-bold text-gold">INJECT ANATOMICAL TRAUMA:</div>
+        <div class="text-xs font-bold text-gold">FORCE INJECT TRAUMA:</div>
         <div class="grid grid-cols-3 gap-1 text-xs">
           <select id="godWoundTarget" class="inset-panel p-1 rounded text-steel-light">
             <option value="enemy">Target: Foe</option>
@@ -647,9 +804,8 @@
         </button>
       </div>
 
-      <!-- Physics Telemetry Live Readout -->
       <div class="inset-panel p-2 rounded font-mono text-xs flex-col" style="gap: 3px;">
-        <div class="font-bold text-cyan" style="font-size: 11px; margin-bottom: 2px;">LAST EXCHANGE TELEMETRY:</div>
+        <div class="font-bold text-cyan" style="font-size: 11px; margin-bottom: 2px;">LIVE EXCHANGE TELEMETRY:</div>
         <div>• Striking Velocity: <span id="telemVel" class="text-steel-light">0.0 m/s</span></div>
         <div>• Kinetic Force: <span id="telemJoules" class="text-gold">0.0 Joules</span></div>
         <div>• Deflection Angle: <span id="telemAngle" class="text-cyan">0.0°</span></div>
@@ -667,21 +823,21 @@
         <span class="badge badge-gold" id="triageStageBadge">STAGE CLEARED</span>
       </div>
       <p class="text-xs text-steel-light" style="margin-bottom: 12px; line-height: 1.4;">
-        The arena master grants a brief respite before your next adversary. Choose one triage action to preserve your body or sharpen your steel:
+        Choose one triage action before your next adversary:
       </p>
 
       <div class="flex-col" style="gap: 8px; margin-bottom: 16px;">
         <button onclick="applyTriage('bandage')" class="btn-steel btn-blue" style="padding: 10px; align-items: flex-start; text-align: left;">
           <span class="text-xs font-bold text-emerald">1. Bandage Wounds & Suture Bleeding</span>
-          <span style="font-size: 10px; opacity: 0.8;">Cuts bleed rate by 50%, restores 25% balance stability.</span>
+          <span style="font-size: 10px; opacity: 0.8;">Cuts bleed rate by 50%, restores 30% balance.</span>
         </button>
         <button onclick="applyTriage('rest')" class="btn-steel btn-blue" style="padding: 10px; align-items: flex-start; text-align: left;">
           <span class="text-xs font-bold text-cyan">2. Catch Breath & Clear Head</span>
-          <span style="font-size: 10px; opacity: 0.8;">Fully restores stamina, clears 40% cranial concussion.</span>
+          <span style="font-size: 10px; opacity: 0.8;">Fully restores stamina, clears 45% cranial concussion.</span>
         </button>
         <button onclick="applyTriage('hone')" class="btn-steel btn-blue" style="padding: 10px; align-items: flex-start; text-align: left;">
           <span class="text-xs font-bold text-gold">3. Hone Blade & Oil Harness</span>
-          <span style="font-size: 10px; opacity: 0.8;">Grants +15% kinetic cut penetration on next battle.</span>
+          <span style="font-size: 10px; opacity: 0.8;">Grants +25% kinetic cut penetration on next battle.</span>
         </button>
         <button onclick="applyTriage('scavenge')" class="btn-steel btn-blue" style="padding: 10px; align-items: flex-start; text-align: left;">
           <span class="text-xs font-bold text-purple">4. Scavenge Slain Foe's Weapon</span>
@@ -718,39 +874,52 @@
     </div>
   </div>
 
-  <!-- Custom In-App Toast -->
   <div id="toast">Notification</div>
 
   <!-- ================= JAVASCRIPT GAME ENGINE ================= -->
   <script>
     /* =====================================================================
-       1. EXTENDED HISTORICAL ARMORY, OFF-HANDS & STYLES DATA
+       1. EXTENDED HISTORICAL ARMORY, OFF-HANDS & STYLES DATA (v5.0 EXPANSION)
        ===================================================================== */
 
     const STYLES = {
-      "Liechtenauer": { name: "German Liechtenauer", desc: "Vier Versetzen master cuts, winding in the bind, seizing the Vor.", bind: 20, counter: 15, void: 5, cut: 10 },
-      "Armizare": { name: "Italian Armizare (Fiore)", desc: "Close wrestling (abrazare), joint locks, dagger counters, half-sword hooks.", bind: 15, counter: 10, void: 10, grapple: 25 },
-      "Destreza": { name: "La Verdadera Destreza", desc: "Euclidean circles, angles of deflection, line of diameter thrusts.", bind: 10, counter: 15, void: 25, thrust: 15 },
-      "CapoFerro": { name: "Italian Capo Ferro", desc: "Linear thrusts, counter-time strikes (stesso tempo), swift voids.", bind: 5, counter: 25, void: 15, thrust: 20 },
-      "SztukaKrzyzowa": { name: "Polish Sztuka Krzyżowa", desc: "High-speed cross-cutting sabre with circular wrist-snaps.", bind: 15, counter: 15, void: 10, cut: 25 },
-      "KatoriShinto": { name: "Tenshin Shōden Katori Shintō-ryū", desc: "Low stances, explosive flow transitions, deceptive line changes.", bind: 10, counter: 20, void: 15, cut: 15 },
-      "Battojutsu": { name: "Iaijutsu / Battōjutsu", desc: "Instantaneous draw-cut counters, lethal unannounced strikes.", bind: 0, counter: 35, void: 10, cut: 20 },
-      "WudangJian": { name: "Wudang Jianfa", desc: "Fluid redirection, adhering to enemy steel, precise tendon cuts.", bind: 20, counter: 15, void: 20, thrust: 10 },
-      "Dandao": { name: "Chinese Dandao / Miaodao", desc: "Two-handed sweeping saber blending reach with heavy descending chops.", bind: 10, counter: 10, void: 15, cut: 20 },
-      "CateranBroadsword": { name: "Highland Broadsword (Cateran)", desc: "Basket-hilt circular cuts supported by heavy targe boss checks.", bind: 15, counter: 15, void: 5, cut: 15 },
-      "GeorgeSilver": { name: "George Silver Backsword", desc: "Four Governors (Judgment, Measure, Time, Place) with fast recoveries.", bind: 15, counter: 20, void: 15, cut: 10 },
-      "Smallsword": { name: "French Court Smallsword", desc: "Rapid point play, tierce/quarte parries, deceptive flèches.", bind: 5, counter: 30, void: 20, thrust: 25 },
-      "Janissary": { name: "Ottoman Janissary", desc: "Sweeping curved draw-cuts with retreating diagonal passes.", bind: 10, counter: 15, void: 20, cut: 20 },
-      "ShastarVidya": { name: "Indian Shastar Vidya", desc: "Penthar figure-eight motion with locked-wrist shearing draw-cuts.", bind: 15, counter: 15, void: 15, cut: 15 },
-      "Gladiatorial": { name: "Roman Thraex Gladiatorial", desc: "Shield rim hooks, curved sica inside cuts, smothering infighting.", bind: 20, counter: 10, void: 5, grapple: 20 },
-      "Messerfechten": { name: "Messerfechten (Lecküchner)", desc: "Nagel thumb-lug trapping, rapid disarms, brutal arm fractures.", bind: 25, counter: 10, void: 10, grapple: 20 },
-      "Bolognese": { name: "Bolognese Sidesword", desc: "Cut-and-thrust fencing combining versatile strikes with buckler binds.", bind: 15, counter: 20, void: 15, cut: 10 },
-      "Eskrima": { name: "Filipino Eskrima / Kali", desc: "Defanging the snake: rapid weapon-hand snipes and angular checks.", bind: 10, counter: 25, void: 20, cut: 15 },
-      "Montante": { name: "Iberian Montante", desc: "Massive orbital momentum clearing space against all opposition.", bind: 15, counter: 10, void: 0, cut: 30 },
-      "Holmganga": { name: "Viking Hólmganga", desc: "Aggressive shield-rim binds, boss traps, and heavy cleaves.", bind: 20, counter: 10, void: 10, grapple: 15 }
+      // Original 20 Styles (Retained)
+      "Liechtenauer": { name: "German Liechtenauer", desc: "Vier Versetzen master cuts, winding in the bind, seizing the Vor.", bind: 20, counter: 15, void: 5, cut: 10, grapple: 10 },
+      "Armizare": { name: "Italian Armizare (Fiore)", desc: "Close wrestling (abrazare), joint locks, dagger counters, half-sword hooks.", bind: 15, counter: 10, void: 10, grapple: 30 },
+      "Destreza": { name: "La Verdadera Destreza", desc: "Euclidean circles, angles of deflection, line of diameter thrusts.", bind: 10, counter: 15, void: 25, cut: 5, thrust: 20 },
+      "CapoFerro": { name: "Italian Capo Ferro", desc: "Linear thrusts, counter-time strikes (stesso tempo), swift voids.", bind: 5, counter: 25, void: 15, cut: 0, thrust: 25 },
+      "SztukaKrzyzowa": { name: "Polish Sztuka Krzyżowa", desc: "High-speed cross-cutting sabre with circular wrist-snaps.", bind: 15, counter: 15, void: 10, cut: 30, thrust: 0 },
+      "KatoriShinto": { name: "Tenshin Shōden Katori Shintō-ryū", desc: "Low stances, explosive flow transitions, deceptive line changes.", bind: 10, counter: 20, void: 15, cut: 20, thrust: 5 },
+      "Battojutsu": { name: "Iaijutsu / Battōjutsu", desc: "Instantaneous draw-cut counters, lethal unannounced strikes.", bind: 0, counter: 35, void: 10, cut: 25, thrust: 5 },
+      "WudangJian": { name: "Wudang Jianfa", desc: "Fluid redirection, adhering to enemy steel, precise tendon cuts.", bind: 20, counter: 15, void: 20, cut: 10, thrust: 15 },
+      "Dandao": { name: "Chinese Dandao / Miaodao", desc: "Two-handed sweeping saber blending reach with heavy descending chops.", bind: 10, counter: 10, void: 15, cut: 25, thrust: 5 },
+      "CateranBroadsword": { name: "Highland Broadsword (Cateran)", desc: "Basket-hilt circular cuts supported by heavy targe boss checks.", bind: 15, counter: 15, void: 5, cut: 20, grapple: 10 },
+      "GeorgeSilver": { name: "George Silver Backsword", desc: "Four Governors (Judgment, Measure, Time, Place) with fast recoveries.", bind: 15, counter: 20, void: 15, cut: 15, thrust: 10 },
+      "Smallsword": { name: "French Court Smallsword", desc: "Rapid point play, tierce/quarte parries, deceptive flèches.", bind: 5, counter: 30, void: 20, cut: 0, thrust: 30 },
+      "Janissary": { name: "Ottoman Janissary", desc: "Sweeping curved draw-cuts with retreating diagonal passes.", bind: 10, counter: 15, void: 20, cut: 25, thrust: 5 },
+      "ShastarVidya": { name: "Indian Shastar Vidya", desc: "Penthar figure-eight motion with locked-wrist shearing draw-cuts.", bind: 15, counter: 15, void: 15, cut: 20, grapple: 15 },
+      "Gladiatorial": { name: "Roman Thraex Gladiatorial", desc: "Shield rim hooks, curved sica inside cuts, smothering infighting.", bind: 20, counter: 10, void: 5, cut: 15, grapple: 25 },
+      "Messerfechten": { name: "Messerfechten (Lecküchner)", desc: "Nagel thumb-lug trapping, rapid disarms, brutal arm fractures.", bind: 25, counter: 10, void: 10, cut: 15, grapple: 25 },
+      "Bolognese": { name: "Bolognese Sidesword", desc: "Cut-and-thrust fencing combining versatile strikes with buckler binds.", bind: 15, counter: 20, void: 15, cut: 15, thrust: 15 },
+      "Eskrima": { name: "Filipino Eskrima / Kali", desc: "Defanging the snake: rapid weapon-hand snipes and angular checks.", bind: 10, counter: 25, void: 20, cut: 20, grapple: 15 },
+      "Montante": { name: "Iberian Montante", desc: "Massive orbital momentum clearing space against all opposition.", bind: 15, counter: 10, void: 0, cut: 35, thrust: 5 },
+      "Holmganga": { name: "Viking Hólmganga", desc: "Aggressive shield-rim binds, boss traps, and heavy cleaves.", bind: 20, counter: 10, void: 10, cut: 20, grapple: 20 },
+
+      // 10 Brand New Historical Disciplines (v5.0 Expansion)
+      "ThibaultDestreza": { name: "Thibault Academy of the Sword", desc: "Mystic circle geometry, proportional compass footwork, flawless centerline closure.", bind: 25, counter: 25, void: 20, cut: 5, thrust: 25 },
+      "MarozzoOpera": { name: "Achille Marozzo Opera Nova", desc: "Dardi school cut-and-thrust with two-handed spada and elaborate guards.", bind: 20, counter: 20, void: 10, cut: 20, thrust: 20 },
+      "TalhofferJudicial": { name: "Hans Talhoffer Judicial Duel", desc: "Vicious spiked shield clashes, halberd trips, and lethal pommel strikes.", bind: 25, counter: 15, void: 5, cut: 15, grapple: 35 },
+      "RingeckGloss": { name: "Sigmund Ringeck Fechtbuch", desc: "Precision winden, slicing into opening gaps, taking the Vor relentlessly.", bind: 30, counter: 20, void: 10, cut: 15, thrust: 20 },
+      "FabrisRapier": { name: "Salvator Fabris Rapier", desc: "Exaggerated forward leaning postures; counter-postures that kill on arrival.", bind: 10, counter: 35, void: 15, cut: 5, thrust: 30 },
+      "SikhGatka": { name: "Sikh Shastar Gatka", desc: "Explosive circular rhythmic footwork with heavy khanda chops.", bind: 15, counter: 15, void: 20, cut: 30, grapple: 10 },
+      "KrabiKrabong": { name: "Siamese Krabi-Krabong", desc: "Devastating double daab swords combined with crushing knees and elbows.", bind: 15, counter: 20, void: 15, cut: 25, grapple: 25 },
+      "HuttonSabre": { name: "Alfred Hutton Cold Steel", desc: "19th century military sabre cuts with high parries and point ripostes.", bind: 15, counter: 25, void: 15, cut: 20, thrust: 15 },
+      "GladiatorSecutor": { name: "Imperial Secutor Fencing", desc: "Heavy curved scutum wall with unrelenting forward line pressure.", bind: 30, counter: 10, void: 0, cut: 15, grapple: 30 },
+      "VignyCanne": { name: "Pierre Vigny Self Defense", desc: "Lethal infighting crook hooks, point jabs, and sweeping sweeps.", bind: 10, counter: 25, void: 25, cut: 15, grapple: 20 }
     };
 
     const OFFHANDS = {
+      // Original 12 Off-Hands (Retained)
       "none": { name: "None (Free Hand / Abrazare)", type: "free", desc: "Maximizes wrestling leverage, pommel strikes, and half-sword grips.", bind: 0, def: 0, special: "grapple" },
       "buckler": { name: "Steel Buckler", type: "shield", desc: "High active deflection, vicious facial punch (Boselen).", bind: 20, def: 25, special: "buckler_punch" },
       "mainGauche": { name: "Main Gauche / Parrying Dagger", type: "dagger", desc: "Quillon blade trapper, high bind advantage, quick thrust.", bind: 35, def: 15, special: "dagger_riposte" },
@@ -762,11 +931,21 @@
       "scutum": { name: "Roman Scutum / Tower Shield", type: "shield", desc: "Massive kinetic wall; negates cuts and shoves to Zufechten.", bind: 10, def: 50, special: "scutum_bash" },
       "seax": { name: "Left-Hand Seax / Sax", type: "blade", desc: "Broad hacking knife delivering vicious infighting lacerations.", bind: 10, def: 10, special: "seax_slash" },
       "madu": { name: "Indian Madu (Horn Buckler)", type: "shield", desc: "Dual blackbuck horn buckler with steel counter-jabs.", bind: 20, def: 20, special: "madu_jab" },
-      "hatchet": { name: "Light Throwing Hatchet / Axe", type: "axe", desc: "Hook enemy crossguards and deliver crushing close blows.", bind: 20, def: 10, special: "hatchet_hook" }
+      "hatchet": { name: "Light Throwing Hatchet / Axe", type: "axe", desc: "Hook enemy crossguards and deliver crushing close blows.", bind: 20, def: 10, special: "hatchet_hook" },
+
+      // 8 New Off-Hands (v5.0 Expansion)
+      "stechschild": { name: "German Stechschild (Duelling Shield)", type: "shield", desc: "Elongated spiked wooden shield built for Judicial Duels.", bind: 35, def: 40, special: "stechschild_hook" },
+      "parryingGauntlet": { name: "Steel Parrying Gauntlet", type: "gauntlet", desc: "Articulated steel glove that grabs the opponent's live blade.", bind: 40, def: 20, special: "gauntlet_catch" },
+      "gladiatorNet": { name: "Retiarius Weighted Net", type: "cloth", desc: "Weighted entanglement net to immobilize arms and trip legs.", bind: 30, def: 10, special: "net_entangle" },
+      "sai": { name: "Okinawan Sai", type: "dagger", desc: "Trident pronged metal truncheon that locks and fractures blades.", bind: 40, def: 20, special: "sai_lock" },
+      "jitte": { name: "Japanese Jitte", type: "truncheon", desc: "Single hook iron bar designed to catch katana edges and disarm.", bind: 35, def: 15, special: "jitte_hook" },
+      "pavisette": { name: "Archer's Pavisette", type: "shield", desc: "Fluted rib wood and canvas shield providing wide missile and cut deflection.", bind: 15, def: 45, special: "scutum_bash" },
+      "tridentDagger": { name: "Triple-Bladed Expanding Dagger", type: "dagger", desc: "Spring-loaded side blades that snap open to trap edges.", bind: 45, def: 15, special: "dagger_riposte" },
+      "misericordeOff": { name: "Misericorde Mercy Spike", type: "dagger", desc: "Ultra-narrow triangular stiletto for eye and joint punching.", bind: 10, def: 5, special: "rondel_thrust" }
     };
 
     const WEAPONS = {
-      // 20 Swords
+      // Original 20 Swords
       "typeXVIIIb": { name: "Oakeshott Type XVIIIb Longsword", cat: "Sword", reach: 2, mass: 1.4, cut: 75, thrust: 85, blunt: 40, bind: 20 },
       "typeXIV": { name: "Oakeshott Type XIV Arming Sword", cat: "Sword", reach: 1, mass: 1.1, cut: 70, thrust: 80, blunt: 30, bind: 15 },
       "zweihander": { name: "Zweihänder (Flamberge)", cat: "Sword", reach: 3, mass: 2.9, cut: 98, thrust: 70, blunt: 75, bind: 25 },
@@ -788,7 +967,7 @@
       "montante": { name: "Iberian Montante", cat: "Sword", reach: 3, mass: 3.2, cut: 100, thrust: 70, blunt: 80, bind: 25 },
       "spadroon": { name: "Military Spadroon", cat: "Sword", reach: 1, mass: 0.8, cut: 65, thrust: 75, blunt: 25, bind: 10 },
 
-      // 10 Short Swords
+      // Original 10 Short Swords
       "gladius": { name: "Roman Mainz Gladius", cat: "Short Sword", reach: 0, mass: 0.8, cut: 60, thrust: 88, blunt: 30, bind: 10 },
       "xiphos": { name: "Greek Xiphos", cat: "Short Sword", reach: 0, mass: 0.7, cut: 65, thrust: 80, blunt: 25, bind: 10 },
       "katzbalger": { name: "German Katzbalger", cat: "Short Sword", reach: 0, mass: 0.9, cut: 75, thrust: 55, blunt: 35, bind: 15 },
@@ -800,7 +979,7 @@
       "falcata": { name: "Iberian Falcata", cat: "Short Sword", reach: 0, mass: 1.0, cut: 86, thrust: 60, blunt: 45, bind: 15 },
       "kindjal": { name: "Caucasian Kindjal", cat: "Short Sword", reach: 0, mass: 0.6, cut: 70, thrust: 80, blunt: 20, bind: 10 },
 
-      // 20 Exotic Blades
+      // Original 20 Exotic Blades
       "khopesh": { name: "Egyptian Khopesh", cat: "Exotic Blade", reach: 1, mass: 1.3, cut: 82, thrust: 30, blunt: 45, bind: 25 },
       "sica": { name: "Thracian Sica", cat: "Exotic Blade", reach: 0, mass: 0.8, cut: 78, thrust: 70, blunt: 20, bind: 15 },
       "falx": { name: "Dacian Falx", cat: "Exotic Blade", reach: 2, mass: 2.0, cut: 95, thrust: 40, blunt: 60, bind: 20 },
@@ -822,7 +1001,7 @@
       "urumi": { name: "Indian Urumi (Whip-Sword)", cat: "Exotic Blade", reach: 2, mass: 0.7, cut: 85, thrust: 10, blunt: 10, bind: 5 },
       "ida": { name: "Yoruba Ida", cat: "Exotic Blade", reach: 1, mass: 1.2, cut: 84, thrust: 35, blunt: 40, bind: 15 },
 
-      // 10 Other Exotic Weapons
+      // Original 10 Other Exotic Weapons
       "kusarigama": { name: "Kusarigama", cat: "Exotic Weapon", reach: 2, mass: 1.2, cut: 70, thrust: 40, blunt: 65, bind: 30 },
       "meteorHammer": { name: "Meteor Hammer", cat: "Exotic Weapon", reach: 3, mass: 1.5, cut: 10, thrust: 20, blunt: 95, bind: 15 },
       "hookSwords": { name: "Chinese Shuang Gou (Hook Swords)", cat: "Exotic Weapon", reach: 1, mass: 1.4, cut: 70, thrust: 65, blunt: 30, bind: 35 },
@@ -832,75 +1011,117 @@
       "maduWeap": { name: "Indian Madu (Weapon)", cat: "Exotic Weapon", reach: 0, mass: 1.3, cut: 40, thrust: 80, blunt: 50, bind: 25 },
       "lucerne": { name: "Lucerne Hammer", cat: "Exotic Weapon", reach: 3, mass: 2.8, cut: 30, thrust: 90, blunt: 95, bind: 20 },
       "flail": { name: "Bohemian Flail", cat: "Exotic Weapon", reach: 2, mass: 2.2, cut: 20, thrust: 10, blunt: 98, bind: 5 },
-      "ngombe": { name: "African Ngombe Ngulu", cat: "Exotic Weapon", reach: 1, mass: 1.8, cut: 90, thrust: 30, blunt: 60, bind: 15 }
+      "ngombe": { name: "African Ngombe Ngulu", cat: "Exotic Weapon", reach: 1, mass: 1.8, cut: 90, thrust: 30, blunt: 60, bind: 15 },
+
+      // 30 Brand New Historical Weapons: Polearms, Axes, Warhammers & Maces (v5.0 Expansion)
+      "poleaxe": { name: "Burgundian Knightly Poleaxe", cat: "Polearm", reach: 2, mass: 2.6, cut: 85, thrust: 88, blunt: 92, bind: 30 },
+      "becDeCorbin": { name: "Bec de Corbin (Crow's Beak)", cat: "Warhammer", reach: 2, mass: 2.5, cut: 20, thrust: 95, blunt: 96, bind: 25 },
+      "halberd": { name: "Sempach Swiss Halberd", cat: "Polearm", reach: 3, mass: 2.9, cut: 95, thrust: 85, blunt: 70, bind: 25 },
+      "daneAxe": { name: "Viking Two-Handed Dane Axe", cat: "Axe", reach: 2, mass: 2.1, cut: 96, thrust: 20, blunt: 60, bind: 20 },
+      "flangedMace": { name: "Gothic Flanged Steel Mace", cat: "Mace", reach: 1, mass: 1.3, cut: 10, thrust: 20, blunt: 92, bind: 15 },
+      "horsemanPick": { name: "German War Pick (Horseman's)", cat: "Warhammer", reach: 1, mass: 1.2, cut: 20, thrust: 95, blunt: 80, bind: 15 },
+      "morningstar": { name: "Spiked Steel Morningstar", cat: "Mace", reach: 1, mass: 1.5, cut: 30, thrust: 40, blunt: 94, bind: 15 },
+      "partizan": { name: "Broad-Bladed Partisan", cat: "Polearm", reach: 3, mass: 2.4, cut: 80, thrust: 90, blunt: 40, bind: 30 },
+      "glaive": { name: "Flemish Glaive (Faussart)", cat: "Polearm", reach: 3, mass: 2.5, cut: 92, thrust: 75, blunt: 50, bind: 25 },
+      "billhookMil": { name: "English Military Bill", cat: "Polearm", reach: 3, mass: 2.6, cut: 88, thrust: 82, blunt: 65, bind: 35 },
+      "naginata": { name: "Japanese Naginata", cat: "Polearm", reach: 3, mass: 1.9, cut: 92, thrust: 75, blunt: 35, bind: 25 },
+      "guanDao": { name: "Chinese Yanyuedao (Guan Dao)", cat: "Polearm", reach: 3, mass: 3.5, cut: 98, thrust: 60, blunt: 75, bind: 25 },
+      "spearBoar": { name: "Winged Boar Spear", cat: "Polearm", reach: 3, mass: 1.8, cut: 40, thrust: 96, blunt: 30, bind: 30 },
+      "ahlsspiess": { name: "Swiss Awl-Pike (Ahlsspiess)", cat: "Polearm", reach: 3, mass: 2.0, cut: 10, thrust: 100, blunt: 25, bind: 25 },
+      "misericorde": { name: "Knightly Misericorde", cat: "Dagger", reach: 0, mass: 0.4, cut: 20, thrust: 95, blunt: 10, bind: 10 },
+      "bollockDagger": { name: "Bollock Dagger", cat: "Dagger", reach: 0, mass: 0.5, cut: 50, thrust: 90, blunt: 15, bind: 15 },
+      "earDagger": { name: "Hispano-Moresque Ear Dagger", cat: "Dagger", reach: 0, mass: 0.5, cut: 45, thrust: 92, blunt: 20, bind: 15 },
+      "stiletto": { name: "Milanese Stiletto Piercer", cat: "Dagger", reach: 0, mass: 0.3, cut: 10, thrust: 98, blunt: 10, bind: 10 },
+      "executionerSword": { name: "German Executioner's Sword", cat: "Sword", reach: 2, mass: 2.2, cut: 100, thrust: 0, blunt: 70, bind: 15 },
+      "estoc": { name: "Edgeless Armored Tuck (Estoc)", cat: "Sword", reach: 2, mass: 1.5, cut: 10, thrust: 100, blunt: 50, bind: 25 },
+      "brandistock": { name: "Italian Brandistock (Triple Spike)", cat: "Polearm", reach: 2, mass: 2.0, cut: 20, thrust: 96, blunt: 30, bind: 25 },
+      "maciejowskiCleaver": { name: "Maciejowski Bible Falchion", cat: "Sword", reach: 1, mass: 1.4, cut: 92, thrust: 40, blunt: 55, bind: 15 },
+      "tabar": { name: "Persian Saddle Axe (Tabarzin)", cat: "Axe", reach: 1, mass: 1.1, cut: 90, thrust: 25, blunt: 55, bind: 15 },
+      "guisarme": { name: "French Hooked Guisarme", cat: "Polearm", reach: 3, mass: 2.7, cut: 85, thrust: 80, blunt: 50, bind: 35 },
+      "ranseur": { name: "Feather-Spur Ranseur", cat: "Polearm", reach: 3, mass: 2.2, cut: 40, thrust: 92, blunt: 30, bind: 35 },
+      "sovnya": { name: "Russian Sovnya", cat: "Polearm", reach: 2, mass: 2.0, cut: 88, thrust: 75, blunt: 40, bind: 20 },
+      "lochaber": { name: "Scottish Lochaber Axe", cat: "Polearm", reach: 3, mass: 2.8, cut: 95, thrust: 70, blunt: 60, bind: 30 },
+      "shillelagh": { name: "Loaded Blackthorn Shillelagh", cat: "Mace", reach: 1, mass: 1.0, cut: 10, thrust: 30, blunt: 88, bind: 15 },
+      "chigo": { name: "Okinawan Chigiriki (Flail Staff)", cat: "Exotic Weapon", reach: 2, mass: 1.7, cut: 20, thrust: 40, blunt: 90, bind: 25 },
+      "roncone": { name: "Italian Corseca / Roncone", cat: "Polearm", reach: 3, mass: 2.4, cut: 70, thrust: 90, blunt: 45, bind: 30 }
     };
 
     const ARMORS = {
       "unarmored": { name: "Unarmored (Silk / Linen Shirt)", tier: "None", slashResist: 0, thrustResist: 0, bluntResist: 0, weight: 0 },
-      // 5 Light
+      // Light
       "gambeson": { name: "Quilted Linen Gambeson", tier: "Light", slashResist: 25, thrustResist: 15, bluntResist: 20, weight: 3 },
       "linothorax": { name: "Silk & Linen Linothorax", tier: "Light", slashResist: 30, thrustResist: 20, bluntResist: 15, weight: 4 },
       "cuirBouilli": { name: "Cuir Bouilli (Boiled Leather)", tier: "Light", slashResist: 35, thrustResist: 25, bluntResist: 25, weight: 5 },
       "armingDoublet": { name: "Arming Doublet w/ Voiders", tier: "Light", slashResist: 40, thrustResist: 30, bluntResist: 20, weight: 6 },
       "buffCoat": { name: "Buffalo Hide Buff Coat", tier: "Light", slashResist: 35, thrustResist: 20, bluntResist: 20, weight: 4 },
-      // 5 Medium
+      "leatherLamellar": { name: "Laced Hard Leather Lamellar", tier: "Light", slashResist: 45, thrustResist: 32, bluntResist: 28, weight: 7 },
+      // Medium
       "mailleHauberk": { name: "Riveted Maille Hauberk", tier: "Medium", slashResist: 75, thrustResist: 45, bluntResist: 30, weight: 10 },
       "coatOfPlates": { name: "Visby Coat of Plates", tier: "Medium", slashResist: 80, thrustResist: 65, bluntResist: 45, weight: 12 },
       "brigandine": { name: "Eastern Brigandine", tier: "Medium", slashResist: 82, thrustResist: 68, bluntResist: 50, weight: 11 },
       "tatamiDo": { name: "Japanese Tatami-dō", tier: "Medium", slashResist: 70, thrustResist: 55, bluntResist: 40, weight: 9 },
       "charAina": { name: "Ottoman Char-Aina (Four Mirrors)", tier: "Medium", slashResist: 80, thrustResist: 70, bluntResist: 55, weight: 11 },
-      // 5 Heavy
+      "loricaHamata": { name: "Roman Lorica Hamata (Doubled Mail)", tier: "Medium", slashResist: 78, thrustResist: 50, bluntResist: 35, weight: 11 },
+      "loricaSegmentata": { name: "Corbridge Lorica Segmentata", tier: "Medium", slashResist: 85, thrustResist: 75, bluntResist: 55, weight: 12 },
+      "steelLamellar": { name: "Steppe Lacquered Steel Lamellar", tier: "Medium", slashResist: 84, thrustResist: 70, bluntResist: 50, weight: 13 },
+      // Heavy
       "milanesePlate": { name: "Milanese Plate Harness", tier: "Heavy", slashResist: 95, thrustResist: 88, bluntResist: 70, weight: 22 },
       "gothicPlate": { name: "Gothic Fluted Plate", tier: "Heavy", slashResist: 96, thrustResist: 90, bluntResist: 72, weight: 21 },
       "maximilianPlate": { name: "Maximilian Fluted Harness", tier: "Heavy", slashResist: 98, thrustResist: 92, bluntResist: 75, weight: 24 },
       "blackAndWhite": { name: "Black-and-White Munition Plate", tier: "Heavy", slashResist: 90, thrustResist: 80, bluntResist: 65, weight: 18 },
-      "krugArmor": { name: "Indo-Persian Krug Armor", tier: "Heavy", slashResist: 92, thrustResist: 85, bluntResist: 68, weight: 19 }
+      "krugArmor": { name: "Indo-Persian Krug Armor", tier: "Heavy", slashResist: 92, thrustResist: 85, bluntResist: 68, weight: 19 },
+      "churburgHarness": { name: "Churburg #13 Transitional Harness", tier: "Heavy", slashResist: 93, thrustResist: 86, bluntResist: 68, weight: 20 }
     };
 
     const HELMS = {
       "unarmored": { name: "Unarmored (Bare Head)", tier: "None", slashResist: 0, thrustResist: 0, bluntResist: 0, faceExposed: true },
-      // 3 Light
+      // Light
       "cervelliere": { name: "Steel Cervelliere", tier: "Light", slashResist: 40, thrustResist: 35, bluntResist: 30, faceExposed: true },
       "spangenhelm": { name: "Open-Face Spangenhelm", tier: "Light", slashResist: 50, thrustResist: 45, bluntResist: 40, faceExposed: true },
       "paddedCoif": { name: "Padded Cap & Mail Coif", tier: "Light", slashResist: 45, thrustResist: 30, bluntResist: 35, faceExposed: true },
-      // 3 Medium
+      "secretCap": { name: "Concealed Iron Secret Cap", tier: "Light", slashResist: 42, thrustResist: 32, bluntResist: 32, faceExposed: true },
+      // Medium
       "normanNasal": { name: "Norman Nasal Helm", tier: "Medium", slashResist: 65, thrustResist: 55, bluntResist: 50, faceExposed: true },
       "barbuta": { name: "Italian Barbuta", tier: "Medium", slashResist: 75, thrustResist: 65, bluntResist: 60, faceExposed: false },
       "kettleHat": { name: "Kettle Hat (Eisenhut)", tier: "Medium", slashResist: 70, thrustResist: 55, bluntResist: 55, faceExposed: true },
-      // 3 Heavy
+      "kabuto": { name: "Japanese Kabuto w/ Mempo", tier: "Medium", slashResist: 80, thrustResist: 65, bluntResist: 58, faceExposed: false },
+      "romanGalea": { name: "Imperial Roman Galea", tier: "Medium", slashResist: 72, thrustResist: 58, bluntResist: 52, faceExposed: true },
+      // Heavy
       "sugarloaf": { name: "Sugarloaf Great Helm", tier: "Heavy", slashResist: 95, thrustResist: 88, bluntResist: 75, faceExposed: false },
       "salletBevor": { name: "German Sallet & Bevor", tier: "Heavy", slashResist: 96, thrustResist: 90, bluntResist: 78, faceExposed: false },
-      "armet": { name: "English Armet / Close Helm", tier: "Heavy", slashResist: 98, thrustResist: 92, bluntResist: 80, faceExposed: false }
+      "armet": { name: "English Armet / Close Helm", tier: "Heavy", slashResist: 98, thrustResist: 92, bluntResist: 80, faceExposed: false },
+      "hounskull": { name: "Hounskull Pig-Faced Bascinet", tier: "Heavy", slashResist: 97, thrustResist: 94, bluntResist: 76, faceExposed: false },
+      "frogMouth": { name: "Stechhelm (Frog-Mouth Helm)", tier: "Heavy", slashResist: 99, thrustResist: 96, bluntResist: 85, faceExposed: false }
     };
 
     /* =====================================================================
-       2. CAMPAIGN GAUNTLET 20 PROGRESSIVE HISTORICAL ADVERSARIES
+       2. CAMPAIGN GAUNTLET: 20 PROGRESSIVE HISTORICAL ADVERSARIES
        ===================================================================== */
     const CAMPAIGN_STAGES = [
       { name: "Levied Peasant Insurgent", style: "Messerfechten", weap: "messer", off: "none", arm: "unarmored", helm: "unarmored", desc: "Wild swings with an agricultural heavy knife. Zero armor." },
       { name: "Town Watch Militia", style: "GeorgeSilver", weap: "katzbalger", off: "buckler", arm: "gambeson", helm: "cervelliere", desc: "Sturdy buckler puncher with a mercenary katzbalger." },
       { name: "Thracian Peltast", style: "Gladiatorial", weap: "sica", off: "buckler", arm: "linothorax", helm: "spangenhelm", desc: "Curved sica hooks behind shields to slice neck arteries." },
-      { name: "Roman Legionary Veteran", style: "Gladiatorial", weap: "gladius", off: "scutum", arm: "mailleHauberk", helm: "normanNasal", desc: "Disciplined tower shield wall and devastating linear punching thrusts." },
+      { name: "Roman Legionary Veteran", style: "GladiatorSecutor", weap: "gladius", off: "scutum", arm: "loricaHamata", helm: "romanGalea", desc: "Disciplined tower shield wall and devastating linear punching thrusts." },
       { name: "Celtic Highland Reiver", style: "CateranBroadsword", weap: "claymore", off: "targe", arm: "buffCoat", helm: "unarmored", desc: "Fierce charges with a claymore backed by a spiked center boss." },
       { name: "Bolognese Sword-Brother", style: "Bolognese", weap: "sidesword", off: "buckler", arm: "armingDoublet", helm: "kettleHat", desc: "Fluid cut-and-thrust fencing with rapid buckler binds." },
-      { name: "Norse Hersir Berserkr", style: "Holmganga", weap: "typeXIV", off: "targe", arm: "mailleHauberk", helm: "spangenhelm", desc: "Unforgiving shield rim traps and high-kinetic chops." },
+      { name: "Norse Hersir Berserkr", style: "Holmganga", weap: "daneAxe", off: "targe", arm: "mailleHauberk", helm: "spangenhelm", desc: "Two-handed Danish battle axe cleaves with brutal percussive power." },
       { name: "Ottoman Sipahi Dismounted", style: "Janissary", weap: "kilic", off: "mainGauche", arm: "charAina", helm: "kettleHat", desc: "Forward flared kilic delivering shearing cleaves over defense." },
       { name: "Shaolin Rogue Disciple", style: "WudangJian", weap: "hookSwords", off: "none", arm: "linothorax", helm: "unarmored", desc: "Twin hook blades that snare weapons and slice tendons." },
       { name: "Visby Man-at-Arms", style: "Liechtenauer", weap: "typeXVIIIb", off: "rondel", arm: "coatOfPlates", helm: "kettleHat", desc: "Rigid longsword thrusts with coat-of-plates chest defense." },
-      { name: "Masterless Ronin", style: "KatoriShinto", weap: "katana", off: "wakizashi", arm: "tatamiDo", helm: "barbuta", desc: "Daisho dual wielding with explosive transitions and razor edges." },
+      { name: "Masterless Ronin", style: "KatoriShinto", weap: "katana", off: "wakizashi", arm: "tatamiDo", helm: "kabuto", desc: "Daisho dual wielding with explosive transitions and razor edges." },
       { name: "Polish Hussar Szlachcic", style: "SztukaKrzyzowa", weap: "karabela", off: "seax", arm: "brigandine", helm: "normanNasal", desc: "High velocity circular wrist cuts that bypass linear parries." },
       { name: "Spanish Bilbo Duelist", style: "Destreza", weap: "rapier", off: "cloak", arm: "buffCoat", helm: "barbuta", desc: "Geometric footwork with a swirling cloak to blind incoming blades." },
-      { name: "Swiss Reisläufer Mercenary", style: "Liechtenauer", weap: "swissDegen", off: "rondel", arm: "blackAndWhite", helm: "salletBevor", desc: "Hardened mercenary equipped with heavy municipal half-plate." },
+      { name: "Swiss Reisläufer Halberdier", style: "Liechtenauer", weap: "halberd", off: "none", arm: "blackAndWhite", helm: "salletBevor", desc: "Heavy kinetic halberd chops that crack open steel plate." },
       { name: "French Court Grand Duelist", style: "CapoFerro", weap: "colichemarde", off: "mainGauche", arm: "armingDoublet", helm: "barbuta", desc: "Stiff triangular blade and dagger trapping in microsecond tempos." },
       { name: "Iberian Greatsword Champion", style: "Montante", weap: "montante", off: "none", arm: "brigandine", helm: "salletBevor", desc: "Continuous unbroken orbital swings that crush incoming guards." },
-      { name: "Maratha Peshwa Warrior", style: "ShastarVidya", weap: "khanda", off: "madu", arm: "krugArmor", helm: "normanNasal", desc: "Heavy spatulate khanda with horned shield counter-punches." },
-      { name: "Venetian Condottiero Captain", style: "Armizare", weap: "typeXVIIIb", off: "lanternShield", arm: "milanesePlate", helm: "armet", desc: "Flawless Italian plate harness, lantern shield traps, and wrestling locks." },
-      { name: "Landsknecht Veteran Master", style: "Liechtenauer", weap: "zweihander", off: "rondel", arm: "maximilianPlate", helm: "salletBevor", desc: "Flamberge greatsword and fluted steel impervious to light cuts." },
-      { name: "The Iron Grandmaster", style: "Liechtenauer", weap: "zweihander", off: "rondel", arm: "gothicPlate", helm: "sugarloaf", desc: "The supreme avatar of steel. Full gothic fluting and fatal precision." }
+      { name: "Burgundian Man-at-Arms", style: "TalhofferJudicial", weap: "poleaxe", off: "rondel", arm: "milanesePlate", helm: "hounskull", desc: "Heavy knightly poleaxe hammer smashing armor joints and skulls." },
+      { name: "Venetian Condottiero Captain", style: "Armizare", weap: "estoc", off: "lanternShield", arm: "milanesePlate", helm: "armet", desc: "Flawless Italian plate harness, lantern shield traps, and edgeless armor tuck." },
+      { name: "Landsknecht Doppel-Söldner", style: "Liechtenauer", weap: "zweihander", off: "rondel", arm: "maximilianPlate", helm: "salletBevor", desc: "Flamberge greatsword and fluted steel impervious to light cuts." },
+      { name: "The Iron Grandmaster", style: "RingeckGloss", weap: "zweihander", off: "parryingGauntlet", arm: "gothicPlate", helm: "sugarloaf", desc: "The supreme avatar of steel. Full gothic fluting and fatal precision." }
     ];
 
     /* =====================================================================
-       3. AUDIO SYNTHESIZER & HAPTICS (ZERO ASSETS / OFFLINE)
+       3. SYNTHESIZER AUDIO & HAPTIC SYSTEM
        ===================================================================== */
     let audioCtx = null;
     let audioEnabled = true;
@@ -927,7 +1148,8 @@
         try {
           if (type === 'hit') navigator.vibrate([25, 30, 40]);
           else if (type === 'clash') navigator.vibrate(20);
-          else if (type === 'fatal') navigator.vibrate([60, 40, 90]);
+          else if (type === 'mordhau') navigator.vibrate([50, 60, 80]);
+          else if (type === 'fatal') navigator.vibrate([70, 40, 110]);
         } catch (e) {}
       }
     }
@@ -946,28 +1168,28 @@
 
         osc1.type = 'triangle';
         osc2.type = 'sine';
-        osc1.frequency.setValueAtTime(1200, now);
-        osc1.frequency.exponentialRampToValueAtTime(320, now + 0.3);
+        osc1.frequency.setValueAtTime(1400, now);
+        osc1.frequency.exponentialRampToValueAtTime(320, now + 0.32);
 
-        osc2.frequency.setValueAtTime(2400, now);
-        osc2.frequency.exponentialRampToValueAtTime(600, now + 0.2);
+        osc2.frequency.setValueAtTime(2800, now);
+        osc2.frequency.exponentialRampToValueAtTime(550, now + 0.22);
 
         gain.gain.setValueAtTime(0.35, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
 
         osc1.connect(gain);
         osc2.connect(gain);
         gain.connect(audioCtx.destination);
 
         osc1.start(now); osc2.start(now);
-        osc1.stop(now + 0.3); osc2.stop(now + 0.3);
+        osc1.stop(now + 0.32); osc2.stop(now + 0.32);
         triggerHaptic('clash');
       } else if (type === 'flesh') {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(160, now);
-        osc.frequency.exponentialRampToValueAtTime(35, now + 0.28);
+        osc.frequency.setValueAtTime(180, now);
+        osc.frequency.exponentialRampToValueAtTime(30, now + 0.28);
 
         gain.gain.setValueAtTime(0.45, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
@@ -977,20 +1199,35 @@
         osc.start(now);
         osc.stop(now + 0.28);
         triggerHaptic('hit');
-      } else if (type === 'thud') {
+      } else if (type === 'thud' || type === 'mordhau') {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(110, now);
-        osc.frequency.exponentialRampToValueAtTime(20, now + 0.25);
+        osc.frequency.setValueAtTime(120, now);
+        osc.frequency.exponentialRampToValueAtTime(20, now + 0.35);
 
-        gain.gain.setValueAtTime(0.5, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+        gain.gain.setValueAtTime(0.65, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
 
         osc.connect(gain);
         gain.connect(audioCtx.destination);
         osc.start(now);
-        osc.stop(now + 0.25);
+        osc.stop(now + 0.35);
+        triggerHaptic('mordhau');
+      } else if (type === 'pell') {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.exponentialRampToValueAtTime(60, now + 0.15);
+
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.15);
         triggerHaptic('hit');
       } else if (type === 'victory') {
         [523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
@@ -1010,16 +1247,26 @@
     }
 
     /* =====================================================================
-       4. FIGHTER INSTANTIATION & STATE MANAGEMENT
+       4. FIGHTER STATE, STANCES & DRILLS
        ===================================================================== */
     let isGodMode = false;
     let roundNumber = 1;
     let combatDistance = 'zufechten'; // 'zufechten', 'krieg', 'handarbeit'
-    let bladeLever = 'free'; // 'free', 'neutral_bind', 'player_forte', 'enemy_forte', 'snared'
+    let bladeLever = 'free'; // 'free', 'neutral_bind', 'player_forte', 'enemy_forte', 'snared', 'disarmed'
     let isCampaignActive = false;
-    let currentCampaignFloor = 1; // 1 to 20
+    let currentCampaignFloor = 1;
     let campaignScore = 0;
-    let campaignBuffHone = 0; // extra cut/thrust %
+    let campaignBuffHone = 0;
+
+    // Fechtschule Training Progression
+    let pellStrikesCount = 0;
+    let fechtschuleDisciplinePts = 0;
+    let fechtschuleRank = "Scholar"; // Scholar -> Free Scholar -> Assistant Master -> Grandmaster
+    let perks = {
+      zwerchhauMastery: false,
+      krumphauMastery: false,
+      disarmMastery: false
+    };
 
     let lastPhysics = { vel: 0, joules: 0, angle: 0, depth: 0, tempo: "Neutral" };
 
@@ -1027,6 +1274,7 @@
       return {
         name: name,
         isPlayer: isPlayer,
+        stance: isPlayer ? 'vomTag' : 'pflug',
         styleKey: styleKey,
         style: STYLES[styleKey] || STYLES["Liechtenauer"],
         weapKey: weapKey,
@@ -1042,6 +1290,7 @@
         bloodLoss: 0,
         concussion: 0,
         isGrounded: false,
+        isDisarmed: false,
         wounds: { head: [], neck: [], torso: [], rArm: [], lArm: [], legs: [] }
       };
     }
@@ -1070,32 +1319,51 @@
 
       const tabs = document.querySelectorAll('.tab-item');
       if (tabId === 'arena') tabs[0].classList.add('active');
-      else if (tabId === 'campaign') tabs[1].classList.add('active');
-      else if (tabId === 'armory') tabs[2].classList.add('active');
-      else if (tabId === 'leaderboard') { tabs[3].classList.add('active'); renderLeaderboard(); }
-      else if (tabId === 'codex') tabs[4].classList.add('active');
-      else if (tabId === 'god') tabs[5].classList.add('active');
+      else if (tabId === 'fechtschule') tabs[1].classList.add('active');
+      else if (tabId === 'campaign') tabs[2].classList.add('active');
+      else if (tabId === 'armory') tabs[3].classList.add('active');
+      else if (tabId === 'leaderboard') { tabs[4].classList.add('active'); renderLeaderboard(); }
+      else if (tabId === 'codex') tabs[5].classList.add('active');
+      else if (tabId === 'god') tabs[6].classList.add('active');
 
+      updateHUD();
+    }
+
+    function setPlayerStance(st) {
+      initAudio();
+      player.stance = st;
+      ['vomTag', 'ochs', 'pflug', 'alber'].forEach(s => {
+        const btn = document.getElementById('btnStance' + s.charAt(0).toUpperCase() + s.slice(1));
+        if (btn) btn.classList.remove('active');
+      });
+      const activeBtn = document.getElementById('btnStance' + st.charAt(0).toUpperCase() + st.slice(1));
+      if (activeBtn) activeBtn.classList.add('active');
+
+      showToast(`Stance adopted: ${st.toUpperCase()}`);
       updateHUD();
     }
 
     function updateHUD() {
       // Player HUD
-      document.getElementById('hudPlayerName').textContent = player.name + (player.isGrounded ? " (DOWN)" : "");
+      document.getElementById('hudPlayerName').textContent = player.name + (player.isGrounded ? " (DOWN)" : (player.isDisarmed ? " (UNARMED)" : ""));
       document.getElementById('hudPlayerBal').textContent = `Bal: ${Math.round(player.balance)}%`;
       const pStam = document.getElementById('hudPlayerStamBar');
       pStam.style.width = `${Math.max(0, player.stamina)}%`;
       pStam.style.backgroundColor = player.stamina < 30 ? "#b82b2b" : "#10b981";
       document.getElementById('hudPlayerBleed').textContent = `Bleed: ${Math.round(player.bloodLoss)}%`;
       document.getElementById('hudPlayerCondition').textContent = player.concussion > 35 ? `Dazed (${Math.round(player.concussion)}%)` : (player.isGrounded ? "Fallen" : "Steady");
+      document.getElementById('hudPlayerStance').textContent = player.stance.toUpperCase();
+      document.getElementById('hudPlayerWeaponTip').textContent = player.isDisarmed ? "Bare Hands" : player.weap.name;
 
       // Enemy HUD
-      document.getElementById('hudEnemyName').textContent = enemy.name + (enemy.isGrounded ? " (DOWN)" : "");
+      document.getElementById('hudEnemyName').textContent = enemy.name + (enemy.isGrounded ? " (DOWN)" : (enemy.isDisarmed ? " (UNARMED)" : ""));
       document.getElementById('hudEnemyBal').textContent = `Bal: ${Math.round(enemy.balance)}%`;
       const eStam = document.getElementById('hudEnemyStamBar');
       eStam.style.width = `${Math.max(0, enemy.stamina)}%`;
       document.getElementById('hudEnemyBleed').textContent = `Bleed: ${Math.round(enemy.bloodLoss)}%`;
       document.getElementById('hudEnemyCondition').textContent = enemy.concussion > 35 ? `Dazed (${Math.round(enemy.concussion)}%)` : (enemy.isGrounded ? "Fallen" : "Sound");
+      document.getElementById('hudEnemyStance').textContent = enemy.stance.toUpperCase();
+      document.getElementById('hudEnemyWeaponTip').textContent = enemy.isDisarmed ? "Bare Hands" : enemy.weap.name;
 
       // Distance & Blade Bind
       const dElem = document.getElementById('hudDistance');
@@ -1121,18 +1389,22 @@
         lElem.textContent = "Your Forte Over Foible";
         lElem.className = "font-mono font-bold text-emerald";
       } else if (bladeLever === 'enemy_forte') {
-        lElem.textContent = "Opponent Forte Over Weak";
+        lElem.textContent = "Opponent Forte Over Foible";
         lElem.className = "font-mono font-bold text-red";
       } else if (bladeLever === 'snared') {
-        lElem.textContent = "Opponent Blade Snared";
+        lElem.textContent = "Adversary Steel Snared";
         lElem.className = "font-mono font-bold text-cyan";
+      } else if (bladeLever === 'disarmed') {
+        lElem.textContent = "Adversary Disarmed";
+        lElem.className = "font-mono font-bold text-purple";
       }
 
       // God Badge & Header
       document.getElementById('godModeBadge').style.display = isGodMode ? 'inline-flex' : 'none';
       document.getElementById('headerModeBadge').textContent = isCampaignActive ? `CAMPAIGN: STAGE ${currentCampaignFloor}/20` : "ARENA DUEL";
+      document.getElementById('masteryRankBadge').textContent = fechtschuleRank.toUpperCase();
 
-      // Contextual Off-Hand Button text
+      // Dynamic Off-Hand button text
       const offBtnTitle = document.getElementById('dynamicOffhandTitle');
       const offBtnSub = document.getElementById('dynamicOffhandSub');
       const offType = player.off.special;
@@ -1150,7 +1422,7 @@
         offBtnTitle.textContent = "Cloak Wrap";
         offBtnSub.textContent = "Ensnare Steel";
       } else if (offType === 'rondel_thrust') {
-        offBtnTitle.textContent = "Rondel Chasm";
+        offBtnTitle.textContent = "Rondel Slip";
         offBtnSub.textContent = "Armor Joint Void";
       } else if (offType === 'lantern_spike') {
         offBtnTitle.textContent = "Lantern Spike";
@@ -1170,6 +1442,18 @@
       } else if (offType === 'hatchet_hook') {
         offBtnTitle.textContent = "Hatchet Hook";
         offBtnSub.textContent = "Rip Guard Down";
+      } else if (offType === 'stechschild_hook') {
+        offBtnTitle.textContent = "Stechschild Spike";
+        offBtnSub.textContent = "Judicial Impale";
+      } else if (offType === 'gauntlet_catch') {
+        offBtnTitle.textContent = "Gauntlet Catch";
+        offBtnSub.textContent = "Grab Live Blade";
+      } else if (offType === 'net_entangle') {
+        offBtnTitle.textContent = "Cast Net";
+        offBtnSub.textContent = "Ensnare Legs";
+      } else if (offType === 'sai_lock') {
+        offBtnTitle.textContent = "Sai Trap";
+        offBtnSub.textContent = "Fracture Blade";
       } else {
         offBtnTitle.textContent = "Grapple";
         offBtnSub.textContent = "Abrazare Takedown";
@@ -1201,21 +1485,26 @@
     function getAiAction() {
       if (enemy.isGrounded) return 'recover';
 
+      // Random AI stance shift
+      const stances = ['vomTag', 'ochs', 'pflug', 'alber'];
+      if (Math.random() < 0.25) enemy.stance = stances[Math.floor(Math.random() * stances.length)];
+
       const rand = Math.random();
       if (combatDistance === 'zufechten') {
-        if (enemy.weap.reach >= 2 && rand > 0.4) return 'thrust';
+        if (enemy.weap.reach >= 2 && rand > 0.35) return 'thrust';
         return rand > 0.5 ? 'cut_high' : 'close_in';
       } else if (combatDistance === 'krieg') {
         if (bladeLever === 'player_forte') return rand > 0.4 ? 'void_step' : 'bind';
         if (enemy.stamina < 25) return 'void_step';
-        if (rand < 0.2) return 'master_cut';
-        if (rand < 0.45) return 'cut_high';
-        if (rand < 0.7) return 'thrust';
+        if (rand < 0.18) return 'master_cut';
+        if (rand < 0.35) return 'cut_high';
+        if (rand < 0.55) return 'thrust';
+        if (rand < 0.70) return 'cut_mid';
         return 'bind';
       } else {
-        // Handarbeit
-        if (rand < 0.4) return 'pommel';
-        if (rand < 0.8) return 'grapple';
+        // Handarbeit infighting
+        if (rand < 0.35) return 'grapple';
+        if (rand < 0.65) return 'mordhau';
         return 'void_step';
       }
     }
@@ -1229,9 +1518,9 @@
       }
 
       if (player.isGrounded && act !== 'void_step') {
-        appendCombatLog(`<span class="text-gold font-bold">⚠️ Grounded!</span> You push off the earth through grit, burning stamina to regain stance.`);
+        appendCombatLog(`<span class="text-gold font-bold">⚠️ Grounded!</span> You push off the earth through grit, burning stamina to regain your stance.`);
         player.isGrounded = false;
-        player.balance = 60;
+        player.balance = 55;
         player.stamina = Math.max(10, player.stamina - 20);
         updateHUD();
         return;
@@ -1241,7 +1530,7 @@
       resolveRound(act, enemyAct);
       roundNumber++;
 
-      // Passive bleed and balance ticks
+      // Natural bleed ticks
       if (player.bloodLoss > 0 && !isGodMode) player.bloodLoss = Math.min(100, player.bloodLoss + 2.5);
       if (enemy.bloodLoss > 0) enemy.bloodLoss = Math.min(100, enemy.bloodLoss + 2.5);
 
@@ -1255,17 +1544,17 @@
         <span style="font-size: 10px;">${player.weap.name} vs ${enemy.weap.name}</span>
       </div>`;
 
-      // Stamina drain
-      player.stamina = Math.max(0, player.stamina - 7);
-      enemy.stamina = Math.max(0, enemy.stamina - 7);
+      // Stamina drains
+      player.stamina = Math.max(0, player.stamina - 6);
+      enemy.stamina = Math.max(0, enemy.stamina - 6);
 
-      // Handle Void Step
+      // Void Step
       if (pAct === 'void_step') {
         combatDistance = 'zufechten';
         bladeLever = 'free';
-        player.balance = Math.min(100, player.balance + 20);
-        player.stamina = Math.min(100, player.stamina + 22);
-        narrative += `<p class="text-gold">💨 <b>Void Step:</b> You step off line on a forty-five degree angle, breaking the bind to Zufechten to catch breath and steady your legs.</p>`;
+        player.balance = Math.min(100, player.balance + 22);
+        player.stamina = Math.min(100, player.stamina + 25);
+        narrative += `<p class="text-gold">💨 <b>Ausweichen (Void Step):</b> You spring off line, disengaging the bind back to Zufechten to catch breath and center gravity.</p>`;
         playSound('clash');
         lastPhysics = { vel: 1.8, joules: 0, angle: 90, depth: 0, tempo: "Nach (Disengaged)" };
         appendCombatLog(narrative);
@@ -1275,7 +1564,7 @@
       if (eAct === 'recover') {
         enemy.isGrounded = false;
         enemy.balance = 50;
-        narrative += `<p class="text-steel-mid">${enemy.name} scrambles up from the ground, breathing heavily.</p>`;
+        narrative += `<p class="text-steel-mid">${enemy.name} scrambles up from the earth, gasping for breath.</p>`;
       }
 
       // Distance Shifts
@@ -1285,57 +1574,96 @@
         combatDistance = 'krieg';
       }
 
-      // Kinematics calculations
-      const pMass = player.weap.mass;
-      const eMass = enemy.weap.mass;
-      const pVel = (12 + (player.stamina / 10) + player.weap.reach * 1.5);
-      const eVel = (12 + (enemy.stamina / 10) + enemy.weap.reach * 1.5);
+      // Kinematics calculations with Stance Multipliers
+      let pStanceVelMult = player.stance === 'vomTag' ? 1.25 : (player.stance === 'ochs' ? 1.05 : 1.0);
+      let eStanceVelMult = enemy.stance === 'vomTag' ? 1.25 : (enemy.stance === 'ochs' ? 1.05 : 1.0);
+
+      const pMass = player.isDisarmed ? 0.3 : player.weap.mass;
+      const eMass = enemy.isDisarmed ? 0.3 : enemy.weap.mass;
+      const pVel = (12 + (player.stamina / 10) + player.weap.reach * 1.5) * pStanceVelMult;
+      const eVel = (12 + (enemy.stamina / 10) + enemy.weap.reach * 1.5) * eStanceVelMult;
       const pJoules = 0.5 * pMass * (pVel * pVel) * (1 + campaignBuffHone / 100);
       const eJoules = 0.5 * eMass * (eVel * eVel);
 
-      // 1. Off-Hand Specialized Actions
+      // 1. ADVANCED HISTORICAL TECHNIQUE: MORDHAU (Murder Stroke)
+      if (pAct === 'mordhau') {
+        playSound('mordhau');
+        combatDistance = 'handarbeit';
+        const bluntDmg = player.weap.blunt * 1.25;
+        enemy.concussion = Math.min(100, enemy.concussion + (bluntDmg * 0.7));
+        enemy.balance = Math.max(0, enemy.balance - 50);
+        narrative += `<p class="text-amber font-bold">🔨 MORDHAU (MURDER STROKE): Inverting your sword by the blade, you swing the solid steel crossguard and heavy pommel like a warhammer directly into ${enemy.name}'s helm! Bone cracks under percussive trauma!</p>`;
+        lastPhysics = { vel: pVel * 0.9, joules: pJoules * 1.4, angle: 5, depth: 8, tempo: "Vor (Mordhau Clatter)" };
+        appendCombatLog(narrative);
+        return;
+      }
+
+      // 2. ADVANCED HISTORICAL TECHNIQUE: HALBSCHWERT (Half-Sword)
+      if (pAct === 'halbschwert') {
+        playSound('clash');
+        combatDistance = 'handarbeit';
+        narrative += `<p class="text-cyan font-bold">🗡️ HALBSCHWERT (HALF-SWORD): Gripping the center of your live blade with your gauntleted left hand, you guide the reinforced point into armor gaps!</p>`;
+        executePenetration(player, enemy, 'thrust', pJoules * 1.35, 'neck', narrative, true);
+        return;
+      }
+
+      // 3. ADVANCED HISTORICAL TECHNIQUE: ENTWFAFFNEN (Disarm)
+      if (pAct === 'disarm') {
+        playSound('clash');
+        const disarmBonus = perks.disarmMastery ? 25 : 0;
+        if (Math.random() * 100 < 45 + disarmBonus + player.style.grapple) {
+          enemy.isDisarmed = true;
+          bladeLever = 'disarmed';
+          narrative += `<p class="text-purple font-bold">🤼 ENTWFAFFNEN (DISARM): Slipping inside their guard, you lock their hilt with your forearm and lever the weapon violently from their grasp! The adversary is unarmed!</p>`;
+        } else {
+          narrative += `<p class="text-steel-mid">Disarm attempt thwarted as ${enemy.name} yanks back the hilt with brute force.</p>`;
+        }
+        appendCombatLog(narrative);
+        return;
+      }
+
+      // 4. Off-Hand Specialized Actions
       if (pAct === 'offhand_action') {
         const spec = player.off.special;
 
         if (spec === 'buckler_punch') {
           playSound('thud');
-          const bluntDmg = 45;
-          enemy.concussion = Math.min(100, enemy.concussion + bluntDmg);
+          enemy.concussion = Math.min(100, enemy.concussion + 45);
           enemy.balance = Math.max(0, enemy.balance - 40);
-          narrative += `<p class="text-gold font-bold">🛡️ BOSELEN (BUCKLER PUNCH): You thrust the iron rim of your buckler directly into ${enemy.name}'s facial bones! Concussive shockwave fractures bone.</p>`;
-          lastPhysics = { vel: 8.5, joules: 60, angle: 10, depth: 3, tempo: "Indes (Shield Punch)" };
+          narrative += `<p class="text-gold font-bold">🛡️ BOSELEN (BUCKLER PUNCH): You slam the heavy steel rim of your buckler into ${enemy.name}'s facial bones! Concussion rattles their cranium.</p>`;
           appendCombatLog(narrative);
           return;
         } else if (spec === 'dagger_riposte') {
           playSound('clash');
           bladeLever = 'player_forte';
           enemy.balance = Math.max(0, enemy.balance - 30);
-          narrative += `<p class="text-cyan font-bold">🗡️ MAIN GAUCHE TRAP: The flared quillons of your parrying dagger catch ${enemy.name}'s incoming edge in a vise grip! Centerline is yours.</p>`;
+          narrative += `<p class="text-cyan font-bold">🗡️ MAIN GAUCHE TRAP: The swept quillons of your parrying dagger entrap the enemy's edge in a vise grip! The centerline is yours.</p>`;
           executePenetration(player, enemy, 'thrust', pJoules, 'torso', narrative);
           return;
         } else if (spec === 'targe_slam') {
           playSound('thud');
           enemy.balance = 0;
           enemy.isGrounded = true;
-          narrative += `<p class="text-gold font-bold">🛡️ TARGE CHARGE: You slam the steel center spike and heavy wood of your targe into the foe's chest! ${enemy.name} crashes to the earth!</p>`;
+          narrative += `<p class="text-gold font-bold">🛡️ TARGE CHARGE: You drive the spiked iron boss of your targe into their breastplate! ${enemy.name} crashes to the dirt!</p>`;
           appendCombatLog(narrative);
           return;
         } else if (spec === 'cloak_snare') {
           playSound('clash');
           bladeLever = 'snared';
-          narrative += `<p class="text-cyan font-bold">🧥 CLOAK WRAP: You whip the weighted wool around the enemy's blade, snaring their weapon hand in heavy fabric folds!</p>`;
+          narrative += `<p class="text-cyan font-bold">🧥 CLOAK WRAP: You whip the weighted wool across the incoming steel, snaring the adversary's sword arm in heavy drapery!</p>`;
           appendCombatLog(narrative);
           return;
-        } else if (spec === 'rondel_thrust') {
-          combatDistance = 'handarbeit';
-          narrative += `<p class="text-purple font-bold">🗡️ RONDEL SLIP: Slipping under the guard in tight infighting, you drive the stiff triangular spike towards armor seams!</p>`;
-          executePenetration(player, enemy, 'thrust', pJoules * 1.2, 'neck', narrative, true);
+        } else if (spec === 'gauntlet_catch') {
+          playSound('clash');
+          bladeLever = 'player_forte';
+          narrative += `<p class="text-purple font-bold">🧤 LIVE BLADE GRAB: Your steel gauntlet clamps directly onto ${enemy.name}'s live steel! You arrest all momentum!</p>`;
+          appendCombatLog(narrative);
           return;
-        } else if (spec === 'scutum_bash') {
+        } else if (spec === 'net_entangle') {
           playSound('thud');
-          combatDistance = 'zufechten';
-          enemy.balance = Math.max(0, enemy.balance - 45);
-          narrative += `<p class="text-gold font-bold">🛡️ SCUTUM WALL: You drive your entire shoulder behind the tower shield, blasting ${enemy.name} clean back to Zufechten!</p>`;
+          enemy.balance = 0;
+          enemy.isGrounded = true;
+          narrative += `<p class="text-gold font-bold">🕸️ RETIARIUS CAST: The lead-weighted mesh wraps around ${enemy.name}'s legs and sword hand, dragging them into the dirt!</p>`;
           appendCombatLog(narrative);
           return;
         } else {
@@ -1344,30 +1672,31 @@
           if (player.balance + player.style.grapple > enemy.balance) {
             enemy.isGrounded = true;
             enemy.balance = 0;
-            narrative += `<p class="text-emerald font-bold">🤼 ABRAZARE TAKEDOWN: Under-hooking the elbow and wrapping the lead thigh, you throw ${enemy.name} hard against the earth!</p>`;
+            narrative += `<p class="text-emerald font-bold">🤼 ABRAZARE TAKEDOWN: Stepping deep into the bind, you underhook the knee and drive the adversary hard into the stone floor!</p>`;
           } else {
             player.balance = Math.max(10, player.balance - 20);
-            narrative += `<p class="text-steel-mid">Grappling clinch broken as both fencers push apart with crossguards.</p>`;
+            narrative += `<p class="text-steel-mid">Grappling clinch broken as both fencers shove back against crossed crossguards.</p>`;
           }
           appendCombatLog(narrative);
           return;
         }
       }
 
-      // 2. Bind & Lever Resolution
+      // 5. Bind & Leverage Resolution
       if (pAct === 'bind' || eAct === 'bind') {
         playSound('clash');
-        const pLever = (player.weap.bind + player.off.bind + player.style.bind) * (player.balance / 100);
+        const pLeverBonus = perks.krumphauMastery ? 15 : 0;
+        const pLever = (player.weap.bind + player.off.bind + player.style.bind + pLeverBonus) * (player.balance / 100);
         const eLever = (enemy.weap.bind + enemy.off.bind + enemy.style.bind) * (enemy.balance / 100);
 
         if (pLever > eLever + 10) {
           bladeLever = 'player_forte';
           enemy.balance = Math.max(0, enemy.balance - 25);
-          narrative += `<p class="text-emerald">⚔️ <b>Mastery of Forte:</b> You wind your forte over the enemy's weak, commanding their weapon wide and exposing their throat!</p>`;
+          narrative += `<p class="text-emerald">⚔️ <b>Mastery of Forte:</b> You command the center with your strong, displacing the enemy's weak blade and exposing their neck!</p>`;
         } else if (eLever > pLever + 10) {
           bladeLever = 'enemy_forte';
           player.balance = Math.max(0, player.balance - 25);
-          narrative += `<p class="text-red">⚠️ <b>Bind Collapsed:</b> ${enemy.name} crushes your blade under superior mechanical leverage!</p>`;
+          narrative += `<p class="text-red">⚠️ <b>Bind Collapsed:</b> ${enemy.name} overpowers your blade under heavy leverage!</p>`;
         } else {
           bladeLever = 'neutral_bind';
           narrative += `<p class="text-gold">⚔️ Steel grinds hard in the center. Both swords locked in tension.</p>`;
@@ -1377,22 +1706,23 @@
         return;
       }
 
-      // 3. Master Cut / Riposte
+      // 6. Master Cut / Winden
       if (pAct === 'master_cut') {
-        const bonus = player.style.counter + (bladeLever === 'player_forte' ? 25 : 0) + player.off.bind;
-        if (Math.random() * 100 < 50 + bonus) {
+        const zwerchBonus = perks.zwerchhauMastery ? 15 : 0;
+        const bonus = player.style.counter + (bladeLever === 'player_forte' ? 25 : 0) + player.off.bind + zwerchBonus;
+        if (Math.random() * 100 < 55 + bonus) {
           playSound('clash');
-          narrative += `<p class="text-emerald font-bold">⚔️ MASTER CUT (WINDEN): In the single tempo of the incoming attack, your edge displaces their point and shears cleanly home!</p>`;
-          executePenetration(player, enemy, 'cut', pJoules * 1.3, 'neck', narrative);
+          narrative += `<p class="text-emerald font-bold">⚔️ MEISTERHAU (WINDEN): In the single tempo of the incoming strike, your edge displaces their tip and shears cleanly into the throat!</p>`;
+          executePenetration(player, enemy, 'cut', pJoules * 1.35, 'neck', narrative);
           return;
         }
       }
 
-      // 4. Simultaneous Attacks
+      // 7. Standard Attack Resolution
       const pHitRoll = Math.random() * 100 < (60 + (bladeLever === 'player_forte' ? 25 : 0) - (player.concussion / 2));
       const eHitRoll = Math.random() * 100 < (55 + (bladeLever === 'enemy_forte' ? 25 : 0) - (bladeLever === 'snared' ? 35 : 0) - (enemy.concussion / 2));
 
-      if (bladeLever === 'snared') bladeLever = 'free'; // reset snare after turn
+      if (bladeLever === 'snared') bladeLever = 'free';
 
       let hitLanded = false;
 
@@ -1403,7 +1733,7 @@
         executePenetration(player, enemy, strikeType, pJoules, targetZone, narrative);
       }
 
-      if (eHitRoll && !enemy.isGrounded && enemy.bloodLoss < 95) {
+      if (eHitRoll && !enemy.isGrounded && enemy.bloodLoss < 95 && !enemy.isDisarmed) {
         hitLanded = true;
         const eTarget = eAct === 'cut_high' ? 'head' : (eAct === 'thrust' ? 'torso' : 'legs');
         const eType = eAct === 'thrust' ? 'thrust' : 'cut';
@@ -1412,7 +1742,7 @@
 
       if (!hitLanded) {
         playSound('clash');
-        narrative += `<p class="text-steel-mid">Blades collide in high velocity deflection! Steel rings as neither combatant finds flesh.</p>`;
+        narrative += `<p class="text-steel-mid">Blades meet in dynamic deflection! Sparks shower as neither fighter lands flesh.</p>`;
         bladeLever = 'neutral_bind';
         lastPhysics = { vel: pVel, joules: pJoules * 0.7, angle: 50, depth: 0, tempo: "Simul Deflection" };
         appendCombatLog(narrative);
@@ -1430,7 +1760,7 @@
       if (defender.off.def > 0 && Math.random() * 100 < defender.off.def) {
         playSound('clash');
         defender.balance = Math.max(0, defender.balance - (joules * 0.1));
-        appendCombatLog(baseNarrative + `<p class="text-cyan">🛡️ <b>SHIELD DEFLECTED:</b> ${defender.name} intercepts the strike flush on the ${defender.off.name}! Force dispersed.</p>`);
+        appendCombatLog(baseNarrative + `<p class="text-cyan">🛡️ <b>SHIELD INTERCEPTION:</b> ${defender.name} absorbs the blow squarely on the ${defender.off.name}! Force dispersed.</p>`);
         return;
       }
 
@@ -1459,7 +1789,7 @@
       const effectiveJoules = joules * angleMultiplier;
 
       lastPhysics = {
-        vel: Math.sqrt((2 * joules) / attacker.weap.mass),
+        vel: Math.sqrt((2 * Math.max(1, joules)) / attacker.weap.mass),
         joules: joules,
         angle: angle,
         depth: Math.max(0, (effectiveJoules - armorResist) * 0.85),
@@ -1469,40 +1799,40 @@
       if (effectiveJoules <= armorResist && !faceBypassed) {
         playSound('clash');
         defender.balance = Math.max(0, defender.balance - (joules * 0.15));
-        appendCombatLog(baseNarrative + `<p class="text-steel-light">🛡️ <b>ARMOR DEFLECTED:</b> Edge glances off ${defender.name}'s ${armorName} at a ${angle.toFixed(1)}° angle! Sparks fly.</p>`);
+        appendCombatLog(baseNarrative + `<p class="text-steel-light">🛡️ <b>ARMOR DEFLECTED:</b> Strike glances cleanly off ${defender.name}'s ${armorName} at a ${angle.toFixed(1)}° angle! Sparks scatter.</p>`);
         return;
       }
 
-      // Real Anatomical Penetration
+      // Anatomical trauma execution
       playSound('flesh');
       let text = "";
       if (zone === 'head') {
         if (faceBypassed && strikeType === 'thrust') {
-          text = `<b class="text-red font-bold">FATAL FACIAL PUNCTURE:</b> Blade drives straight through the unarmored visor into the cerebral cortex!`;
+          text = `<b class="text-red font-bold">FATAL FACIAL PUNCTURE:</b> Blade plunges through the open eye-slit into cranial cavity! Instant cessation of vital functions.`;
           defender.bloodLoss = 100;
         } else {
-          text = `<b class="text-red font-bold">CRANIAL SPLIT:</b> Hardened steel breaches skull bone! Severe concussive bleeding.`;
+          text = `<b class="text-red font-bold">CRANIAL SPLIT:</b> Blade breaches skull bone! Severe intracranial pressure and concussive shock.`;
           defender.concussion = 100;
           defender.bloodLoss += 40;
         }
       } else if (zone === 'neck') {
-        text = `<b class="text-red font-bold">CAROTID SEVERED:</b> Catastrophic shearing cut tears the carotid artery! Blood sprays under high pressure!`;
-        defender.bloodLoss += 65;
+        text = `<b class="text-red font-bold">CAROTID SEVERED:</b> Visceral shearing cut ruptures the carotid artery! Blood sprays under arterial pressure!`;
+        defender.bloodLoss += 70;
       } else if (zone === 'torso') {
         if (strikeType === 'thrust') {
-          text = `<b class="text-red">PULMONARY PUNCTURE:</b> Needle point plunges deep between the ribs, puncturing lungs!`;
+          text = `<b class="text-red">PULMONARY PUNCTURE:</b> Point plunges through the intercostal muscle into the lung wall!`;
           defender.bloodLoss += 35;
           defender.stamina = 0;
         } else {
-          text = `<b class="text-red">DEEP TORSO LACERATION:</b> Heavy cutting arc opens a visceral wound across the ribs.`;
-          defender.bloodLoss += 25;
+          text = `<b class="text-red">DEEP VISCERAL LACERATION:</b> Heavy cutting arc opens a traumatic wound across the ribs.`;
+          defender.bloodLoss += 28;
         }
       } else if (zone === 'rArm' || zone === 'lArm') {
-        text = `<b class="text-gold">TENDONS SEVERED:</b> Arm tendons cleanly parted by the razor edge! Grip strength collapses.`;
-        defender.stamina = Math.max(0, defender.stamina - 40);
-        defender.bloodLoss += 18;
+        text = `<b class="text-gold">BRACHIAL TENDONS PARTED:</b> Forearm tendons severed by the edge! Grip collapses instantly.`;
+        defender.stamina = Math.max(0, defender.stamina - 45);
+        defender.bloodLoss += 20;
       } else {
-        text = `<b class="text-gold">FEMORAL / KNEE CRUSH:</b> Leg bones fractured and knee tendons mangled. Balance ruined!`;
+        text = `<b class="text-gold">PATELLAR / FEMORAL RUPTURE:</b> Knee tendons mangled and bone splintered. Balance collapses!`;
         defender.balance = 0;
         defender.isGrounded = true;
         defender.bloodLoss += 25;
@@ -1549,7 +1879,83 @@
     }
 
     /* =====================================================================
-       7. CAMPAIGN ENGINE ("THE CRUCIBLE OF STEEL")
+       7. FECHTSCHULE & PELL TRAINING SYSTEM
+       ===================================================================== */
+
+    function strikePell(targetZone) {
+      initAudio();
+      playSound('pell');
+      pellStrikesCount++;
+      fechtschuleDisciplinePts += 5;
+
+      const pMass = player.weap.mass;
+      const vel = (14 + Math.random() * 4);
+      const joules = 0.5 * pMass * (vel * vel);
+      const alignment = 70 + Math.floor(Math.random() * 30);
+      const depth = (joules * (alignment / 100) * 0.15).toFixed(1);
+
+      document.getElementById('pellTarget').textContent = targetZone.toUpperCase();
+      document.getElementById('pellVel').textContent = `${vel.toFixed(1)} m/s`;
+      document.getElementById('pellJoules').textContent = `${joules.toFixed(1)} J`;
+      document.getElementById('pellAlignment').textContent = `${alignment}% True`;
+      document.getElementById('pellDepth').textContent = `${depth} mm`;
+
+      document.getElementById('statPellStrikes').textContent = pellStrikesCount;
+      document.getElementById('statDisciplinePts').textContent = fechtschuleDisciplinePts;
+
+      let feedback = "";
+      if (alignment > 90) feedback = "⚔️ Flawless edge alignment! The blade bites deeply without vibrating.";
+      else if (alignment > 75) feedback = "Solid impact. Maintain wrist stiffness through follow-through.";
+      else feedback = "Blade slapped flat slightly; align the crossguard with the trajectory plane.";
+      document.getElementById('pellFeedback').textContent = feedback;
+
+      // Check Rank Promotion
+      if (fechtschuleDisciplinePts >= 150 && fechtschuleRank === "Scholar") {
+        fechtschuleRank = "Free Scholar";
+        showToast("Promoted to Free Scholar!");
+      } else if (fechtschuleDisciplinePts >= 350 && fechtschuleRank === "Free Scholar") {
+        fechtschuleRank = "Assistant Master";
+        showToast("Promoted to Assistant Master!");
+      } else if (fechtschuleDisciplinePts >= 600 && fechtschuleRank === "Assistant Master") {
+        fechtschuleRank = "Grandmaster";
+        showToast("Promoted to Grandmaster of the Guild!");
+      }
+
+      document.getElementById('fechtschuleRankBadge').textContent = `RANK: ${fechtschuleRank.toUpperCase()}`;
+      document.getElementById('statMasteryTier').textContent = fechtschuleRank;
+      updateHUD();
+    }
+
+    function executeFechtbuchTrial(trialKey) {
+      initAudio();
+      if (trialKey === 'zwerch') {
+        if (fechtschuleDisciplinePts < 20) { showToast("Need 20 Discipline Points"); return; }
+        fechtschuleDisciplinePts -= 20;
+        perks.zwerchhauMastery = true;
+        document.getElementById('btnTrialZwerch').textContent = "Mastered ✓";
+        document.getElementById('btnTrialZwerch').disabled = true;
+        showToast("Perk Unlocked: +10% Master Cut Effectiveness");
+      } else if (trialKey === 'krump') {
+        if (fechtschuleDisciplinePts < 40) { showToast("Need 40 Discipline Points"); return; }
+        fechtschuleDisciplinePts -= 40;
+        perks.krumphauMastery = true;
+        document.getElementById('btnTrialKrump').textContent = "Mastered ✓";
+        document.getElementById('btnTrialKrump').disabled = true;
+        showToast("Perk Unlocked: +15% Forte Bind Leverage");
+      } else if (trialKey === 'disarm') {
+        if (fechtschuleDisciplinePts < 60) { showToast("Need 60 Discipline Points"); return; }
+        fechtschuleDisciplinePts -= 60;
+        perks.disarmMastery = true;
+        document.getElementById('btnTrialDisarm').textContent = "Mastered ✓";
+        document.getElementById('btnTrialDisarm').disabled = true;
+        showToast("Perk Unlocked: +20% Entwaffnen (Disarm) Success Rate");
+      }
+
+      document.getElementById('statDisciplinePts').textContent = fechtschuleDisciplinePts;
+    }
+
+    /* =====================================================================
+       8. CAMPAIGN ENGINE ("THE CRUCIBLE OF STEEL")
        ===================================================================== */
 
     function engageCampaignStage() {
@@ -1560,6 +1966,7 @@
       enemy = createFighter(stage.name, false, stage.style, stage.weap, stage.off, stage.arm, stage.helm);
       player.balance = 100;
       player.stamina = 100;
+      player.isDisarmed = false;
       roundNumber = 1;
       combatDistance = 'zufechten';
       bladeLever = 'free';
@@ -1567,7 +1974,7 @@
       const log = document.getElementById('combatLog');
       log.innerHTML = '';
       appendCombatLog(`<div class="p-3 iron-panel" style="border-radius: 6px;">
-        <div class="text-gold font-bold text-sm">🏆 CAMPAIGN STAGE ${currentCampaignFloor} / 20</div>
+        <div class="text-gold font-bold text-sm">🏆 THE CRUCIBLE: STAGE ${currentCampaignFloor} / 20</div>
         <p class="text-steel-light">You face <b>${enemy.name}</b> wielding ${enemy.weap.name} and ${enemy.off.name}.</p>
       </div>`);
 
@@ -1576,16 +1983,14 @@
     }
 
     function handleCampaignStageWon() {
-      campaignScore += (currentCampaignFloor * 250);
+      campaignScore += (currentCampaignFloor * 280);
       document.getElementById('campStatScore').textContent = `${campaignScore} pts`;
       document.getElementById('campStatFloors').textContent = `${currentCampaignFloor}/20`;
       document.getElementById('campaignProgressBar').style.width = `${(currentCampaignFloor / 20) * 100}%`;
 
       if (currentCampaignFloor >= 20) {
-        // Complete Victory!
-        openCampaignEndModal(true, "Conquered all 20 Champions of the Crucible!");
+        openCampaignEndModal(true, "Conquered all 20 historical champions of the Crucible!");
       } else {
-        // Open Triage Modal
         document.getElementById('triageStageBadge').textContent = `STAGE ${currentCampaignFloor} CLEARED`;
         document.getElementById('triageScavengeText').textContent = `Equip fallen ${enemy.name}'s ${enemy.weap.name}.`;
         document.getElementById('modalTriage').classList.add('open');
@@ -1594,16 +1999,16 @@
 
     function applyTriage(type) {
       if (type === 'bandage') {
-        player.bloodLoss = Math.max(0, player.bloodLoss - 45);
+        player.bloodLoss = Math.max(0, player.bloodLoss - 50);
         player.balance = Math.min(100, player.balance + 30);
-        showToast("Wounds Sutured: -45% Bleed");
+        showToast("Wounds Sutured: -50% Bleed");
       } else if (type === 'rest') {
         player.stamina = 100;
-        player.concussion = Math.max(0, player.concussion - 40);
-        showToast("Rested: Full Stamina / Clear Head");
+        player.concussion = Math.max(0, player.concussion - 45);
+        showToast("Rested: Full Stamina / Cleared Head");
       } else if (type === 'hone') {
-        campaignBuffHone += 20;
-        showToast("Blade Honed: +20% Next Damage");
+        campaignBuffHone += 25;
+        showToast("Blade Honed: +25% Next Damage");
       } else if (type === 'scavenge') {
         player.weapKey = enemy.weapKey;
         player.weap = enemy.weap;
@@ -1637,19 +2042,19 @@
     }
 
     function openCampaignEndModal(isWin, summary) {
-      document.getElementById('campEndHeader').textContent = isWin ? "🏆 CRUCIBLE CHAMPION!" : "💀 DEFEAT IN THE LISTS";
+      document.getElementById('campEndHeader').textContent = isWin ? "🏆 CRUCIBLE GRAND CHAMPION!" : "💀 DEFEAT IN THE LISTS";
       document.getElementById('campEndHeader').className = isWin ? "text-lg font-bold text-gold" : "text-lg font-bold text-red";
       document.getElementById('campEndSub').textContent = summary;
       document.getElementById('campEndFloors').textContent = `${isWin ? 20 : currentCampaignFloor} / 20`;
       document.getElementById('campEndScore').textContent = `${campaignScore} PTS`;
-      document.getElementById('campEndCause').textContent = isWin ? "Crown of Steel" : `Slain by ${enemy.name}`;
+      document.getElementById('campEndCause').textContent = isWin ? "Master of the Lists" : `Slain by ${enemy.name}`;
       document.getElementById('modalCampaignEnd').classList.add('open');
     }
 
     /* =====================================================================
-       8. LOCAL LEADERBOARD PERSISTENCE
+       9. LOCAL LEADERBOARD PERSISTENCE
        ===================================================================== */
-    const LEADERBOARD_KEY = 'kinetic_steel_leaderboard';
+    const LEADERBOARD_KEY = 'kinetic_steel_v5_leaderboard';
 
     function getLeaderboard() {
       try {
@@ -1667,7 +2072,7 @@
     }
 
     function submitLeaderboardRecord() {
-      const name = document.getElementById('campDuelistNameInput').value.trim() || "Nameless Duelist";
+      const name = document.getElementById('campDuelistNameInput').value.trim() || "Nameless Master";
       const record = {
         name: name,
         floor: currentCampaignFloor,
@@ -1697,7 +2102,7 @@
       container.innerHTML = '';
 
       if (list.length === 0) {
-        container.innerHTML = `<div class="p-3 text-center text-dim text-xs">No campaign records recorded yet. Complete or attempt The Crucible of Steel to log your name.</div>`;
+        container.innerHTML = `<div class="p-3 text-center text-dim text-xs">No campaign records yet. Battle through the Crucible to carve your name into history.</div>`;
         return;
       }
 
@@ -1711,7 +2116,7 @@
             <span class="font-mono font-bold text-cyan text-xs">${rec.score} pts</span>
           </div>
           <div class="flex-row items-center justify-between text-steel-light" style="font-size: 10px;">
-            <span>${rec.floor >= 20 ? '🏆 CHAMPION (20/20)' : `Floor ${rec.floor}/20`}</span>
+            <span>${rec.floor >= 20 ? '🏆 CRUCIBLE CHAMPION (20/20)' : `Floor ${rec.floor}/20`}</span>
             <span class="text-dim">${rec.date}</span>
           </div>
           <div class="text-dim truncate" style="font-size: 9px;">${rec.weap} & ${rec.off} • ${rec.style}</div>
@@ -1727,7 +2132,7 @@
     }
 
     /* =====================================================================
-       9. ARMORY & LOADOUT SETUP
+       10. ARMORY & UI SELECTIONS
        ===================================================================== */
 
     function populateSelects() {
@@ -1785,10 +2190,10 @@
       document.getElementById('offhandDescription').textContent = player.off.desc;
 
       document.getElementById('statWeaponWeight').textContent = `${player.weap.mass} kg / Reach ${player.weap.reach}`;
-      document.getElementById('statWeaponPower').textContent = `Cut ${player.weap.cut} / Thrust ${player.weap.thrust}`;
+      document.getElementById('statWeaponPower').textContent = `${player.weap.cut} / ${player.weap.thrust} / ${player.weap.blunt}`;
       document.getElementById('statWeaponBind').textContent = `+${player.weap.bind + player.off.bind} Bind`;
 
-      document.getElementById('statArmorSlash').textContent = `${player.arm.slashResist}% (${player.arm.name})`;
+      document.getElementById('statArmorSlash').textContent = `${player.arm.slashResist}% / ${player.arm.thrustResist}%`;
       document.getElementById('statHelmBlunt').textContent = `${player.helm.bluntResist}% (${player.helm.name})`;
     }
 
@@ -1801,6 +2206,7 @@
       player.bloodLoss = 0;
       player.concussion = 0;
       player.isGrounded = false;
+      player.isDisarmed = false;
       roundNumber = 1;
       combatDistance = 'zufechten';
       bladeLever = 'free';
@@ -1813,11 +2219,11 @@
       </div>`);
 
       switchTab('arena');
-      showToast("Arena Duel Started");
+      showToast("Arena Sparring Begun");
     }
 
     /* =====================================================================
-       10. GOD MODE DEV CONSOLE
+       11. GOD MODE SANDBOX
        ===================================================================== */
 
     function toggleGodInvulnerability() {
@@ -1846,6 +2252,7 @@
       tgt.bloodLoss = 0;
       tgt.concussion = 0;
       tgt.isGrounded = false;
+      tgt.isDisarmed = false;
       tgt.wounds = { head: [], neck: [], torso: [], rArm: [], lArm: [], legs: [] };
       updateHUD();
       showToast(`${tgt.name} Fully Restored`);
@@ -1869,7 +2276,7 @@
     }
 
     /* =====================================================================
-       11. INITIALIZATION ON WINDOW LOAD
+       12. INITIALIZATION ON WINDOW LOAD
        ===================================================================== */
     window.onload = function() {
       populateSelects();
